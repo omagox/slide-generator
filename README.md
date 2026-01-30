@@ -34,6 +34,7 @@ Gerador de slides para professores. A partir de um tema, nível de ensino e cont
 
    - `GOOGLE_API_KEY` — Chave da API Google AI (Gemini)
    - `TAVILY_API_KEY` — Chave da API Tavily (busca web)
+   - `ALLOWED_ORIGINS` — URLs permitidas para acessar a API. Caso não definida, o valor padrão é `http://localhost:5173`.
 
 5. **Inicie a API** (a partir da pasta `backend`):
 
