@@ -1,0 +1,326 @@
+llm_config:
+    model: "gemini-2.5-flash"
+    temperature: 0.3
+
+lesson_plan_prompt: |
+  Você é um especialista em educação e pedagogo com experiência em ensino. A partir das informações sobre a aula, gere um plano de aula detalhado, em tópicos, para um professor.
+    
+  [Exemplo]
+  Exemplo: Vamos supor que você precisa gerar um plano de aula sobre Revolução Francesa, para um nível de ensino fundamental.
+  
+  Pensamento:
+  -> Preciso pensar em pontos da Revolução Francesa que são essenciais para o entendimento do tema, como: Contexto Histórico, Principais Personagens, Fases da Revolução Francesa, Consequências e Impactos da Revolução.
+  -> Agora que tenho os tópicos principais, já posso montar o plano de aula adicionando mais subtópicos que são importantes para serem mencionados na aula, fazendo com que o conteúdo fique bem detalhado.
+
+  Resultado exemplo de resposta:
+  1. Contexto histórico
+  - Classe social (nobreza, clero, povo).  
+  - Crise financeira e descontentamento popular.  
+  - Inspiração das ideias iluministas.  
+  
+  2. Principais personagens envolvidos
+  - Luis XVI
+  - Maria Antonieta
+  - Rousseau
+  - Voltaire
+
+  3. Fases da Revolução Francesa
+  - Assembleia Nacional e Convocação dos Estados Gerais (1789).
+  - Queda da Bastilha (14 de julho de 1789).
+  - Declaração dos Direitos do Homem e do Cidadão (agosto de 1789).
+  - Monarquia Constitucional (1791).
+  - Período do Terror (1793-1794).
+  - Diretório (1795-1799).
+  - Ascensão de Napoleão Bonaparte (1799).
+
+  4. Impactos da Revolução
+  - Extinção da monarquia absoluta.
+  - Implantação da república na França.
+  - Reflexão sobre como a Revolução influenciou outras revoluções e movimentos democráticos.  
+      - Influência na Independência da América Latina
+      - Declaração dos Direitos Humanos
+  - Perguntar aos alunos: "Como vocês acham que a Revolução Francesa impacta a sociedade hoje?"
+
+  ---------------------------------------------------
+
+  [Informações sobre a aula]
+  Tema da aula: {class_topic}
+  Nível de ensino dos alunos: {class_grade}
+  Instruções adicionais sobre a aula: {class_additional_instructions}
+
+  [Passo a Passo para Construção do Plano de Aula]
+  1. Definir os tópicos principais que a aula deve ter, de acordo com o Tema da aula.
+  2. Definir os subtópicos que cada tópico deve ter.
+  3. Montar o plano de aula com todos os tópicos principais e subtópicos.
+  4. Revisar e ajustar (se necessário) o plano de aula para garantir que o conteúdo segue o que foi especificado na seção de [Informações sobre a aula].
+  
+  [Dicas]
+  - Não use markdown, nem coloque textos em negrito (**) ou itálico.
+  - Deixe explícito todos os conteúdos que devem ser abordados.
+  - Os tópicos devem ser apenas sobre conteúdos relacionados ao tema.
+  - Nunca adicione um tópico inicial de introdução e nem um tópico final de conclusão, foque apenas em tópicos e subtópicos do tema da aula.
+  - Utilize o [Exemplo] e o [Passo a Passo para Construção do Plano de Aula] como auxílio para a geração da sua reposta.
+  - Utilize o [Conteúdo Auxiliar da Internet] como uma base auxiliar de conhecimento para geração do plano de aula.
+
+  [Conteúdo Auxiliar da Internet]
+  {auxiliary_web_content}
+
+  ---------------------------------------------------
+
+  Pense cuidadosamente em cada etapa, meu emprego depende disso. Te darei 1 milhão de reais se responder corretamente.
+
+  Retorne apenas o plano de aula.
+
+generate_presentation_prompt: |
+  Você é um especialista em criação de apresentações. A partir do plano de aula recebido e uma lista de templates de slides, divida o conteúdo em slides para uma apresentação se baseando nos templates disponíveis e gere um JSON.
+
+  [Exemplo]
+  Supondo que você recebe o tema "Revolução industrial" e um plano de aula sobre esse tema.
+
+  Além disso, você vai ter uma lista de templates com seus IDs e suas descrições, por exemplo:
+  1 - Template básico com título principal e texto complementar descritivo.
+  2 - Template de comparação com dois tópicos lado a lado, cada um com título e conteúdo.
+  3 - Template com uma lista de cinco tópicos sem texto complementar.
+  
+  Então você deve separar o conteúdo do plano de aula em slides. Cada slide deve conter um título principal e a quantidade de tópicos necessária, baseado no template escolhido para aquele slide. Sua resposta final deve ser no formato do JSON abaixo.
+
+  ```JSON
+      [
+          {{
+              'templateID': 1,
+              'slideContent': {{
+                  'title': 'Objetivos da Aula',
+                  'text': 'Apresentar a Revolução Industrial e sua importância histórica, discutir as causas e consequências da Revolução Industrial e explorar as inovações tecnológicas e sociais que surgiram nesse período.'
+              }}
+              'slideImage': 'Imagem representando a Revolução Industrial, em preto e branco, com trabalhadores andando na rua, carros e fábricas ao redor.'
+          }},
+          {{
+              'templateID': 3,
+              'slideContent': {{
+                  'title': 'Principais Causas da Revolução Industrial',
+                  'topics': [
+                      'Mudanças na agricultura (Revolução Agrícola)',
+                      'Crescimento populacional',
+                      'Recursos naturais disponíveis (carvão e ferro)',
+                      'Avanços tecnológicos',
+                      'Aumento da demanda por produtos'
+                  ]
+              }}
+          }},
+          {{
+              'templateID': 2,
+              'slideContent': {{
+                  'title': 'Impacto das Invenções',
+                  'topics': [
+                      {{
+                          'title': 'Produção',
+                          'content': 'As máquinas aumentaram a produtividade e reduziram o trabalho manual nas fábricas.'
+                      }},
+                      {{
+                          'title': 'Transporte',
+                          'content': 'Locomotivas e navios a vapor aceleraram o transporte de pessoas e mercadorias.'
+                      }}
+                  ]
+              }}
+          }}
+      ]
+  ```
+
+  ----------
+
+  Tema da Apresentação: {class_topic}
+  Número de Slides da Apresentação: {number_of_slides}
+
+  [Plano de Aula]
+  {lesson_plan}
+
+  [Templates Disponíveis]
+  {templates_description}
+
+  [Formato da Resposta Final]
+  ```JSON
+      [
+          {{
+              'templateID': Número do template escolhido,
+              'slideContent': Objeto contendo o conteúdo do slide baseado na descrição do template referente ao templateID escolhido,
+              'slideImage': Campo opcional. Um texto descrevendo uma imagem referente ao tópico do slide, que faria sentido mostrar para os alunos
+          }},
+          {{
+              'templateID': Número do template escolhido,
+              'slideContent': Objeto contendo o conteúdo do slide baseado na descrição do template referente ao templateID escolhido,
+              'slideImage': Campo opcional. Um texto descrevendo uma imagem referente ao tópico do slide, que faria sentido mostrar para os alunos
+          }},
+          ...
+      ]
+  ```
+  
+  [Dicas]
+  - Você deve gerar uma apresentação com exatamente {number_of_slides} slides, divida o conteúdo da forma que achar melhor para se adequar a esse número.
+  - Gere o conteúdo do slide ("slideContent") baseado no template escolhido para aquele slide.
+  - Não existe uma formatação correta para objetivo contido no "slideContent", gere um objeto que faça sentido com a descrição do template.
+  - Você pode dividir um tópico presente no plano de aula em mais de um slide, caso necessário, mas lembre de respeitar o número máximo de {number_of_slides} slides no total.
+  - Você pode adicionar novos tópicos relacionados ao Tema da Apresentação, que não estão presentes no plano de aula, caso ache relevante.
+  - Não coloque "Continuação" em slides que sejam a continuação de outro, isso já está implícito. Apenas repita o título do slide anterior.
+  - Todo slide deve possuir um título principal, mesmo que a descrição não indique que esse título existe.
+  - A apresentação final será usada por um professor em suas aulas, então pense na forma que um professor gostaria de apresentar aquele conteúdo e gere todos os detalhes/informações necessárias.
+  - Mesmo que o template não indique que suporta imagens, você pode adicionar o campo 'slideImage' no objeto do slide, para indicar que faria sentido adicionar uma imagem que tem relação com o tópico do slide em questão.
+  - O campo slideImage é opcional e seu valor deve conter a descrição de uma imagem. Porém, você só deve usá-lo quando a imagem realmente for ajudar os alunos a entender melhor sobre o assunto. Evite colocar imagens em todos os slides. 
+  - Utilize o [Exemplo] como auxílio para a geração da sua reposta.
+  - Na geração do JSON, sempre utilize aspas simples.
+  - Sempre coloque o JSON dentro do ```JSON ``` como está especificado no [Formato da Resposta Final].
+
+  ----------
+
+  Pense cuidadosamente em cada etapa, meu emprego depende disso. Te darei 1 milhão de reais se responder corretamente.
+
+  Retorne apenas o conteúdo dos slides no formato especificado no [Formato da Resposta Final].
+
+fill_templates_prompt: |
+  Você é um especialista em criação de apresentações. Você vai receber um array de objetos com informações sobre os slides da apresentação e deve ajustar os objetos para retornar apenas o conteúdo necessário. Você deve preencher os valores da propriedade "generationTemplate" com as informações definidas da propriedade "slideContent" do objeto.
+
+  [Exemplo]
+  Supondo que você receba o seguinte array de objetos de templates referente a cada slide:
+
+  [
+      {{
+          'templateID': 1,
+          'slideContent': {{
+              'title': 'Conclusão',
+              'text': 'A Revolução Francesa transformou profundamente a sociedade, lançando bases para os direitos humanos e democráticos modernos. Sua relevância transcende gerações e continua a inspirar debates e reflexões.'
+          }},
+          'generationTemplate': {{
+              'title': 'Título principal',
+              'content': 'Texto complementar referente ao título'
+          }}
+      }},
+      {{
+          'templateID': 44,
+          'slideContent': {{
+              'title': 'Tarefa para Casa',
+              'concept': 'Os princípios da Revolução Francesa continuam relevantes?',
+              'examples': [
+                  {{
+                      'title': 'Exemplo 1',
+                      'description': 'Explique como a igualdade é aplicada na sua sociedade local.'
+                  }},
+                  {{
+                      title': 'Exemplo 2',
+                      'description': 'Relacione a liberdade com as liberdades constitucionais de hoje.'
+                  }},
+                  {{
+                      'title': 'Exemplo 3',
+                      'description': 'Debata o impacto da fraternidade na luta pelos direitos civis no século XXI.'
+                  }},
+                  {{
+                      'title': 'Exemplo 4',
+                      'description': 'Dê exemplos atuais de desigualdades que podem ser vistas como remanescentes do Antigo Regime.'
+                  }}
+              ]
+          }},
+          'generationTemplate': {{
+              'title': 'Título principal',
+              'concept': 'Conceito a ser explicado',
+              'examples': [
+                  {{
+                      'title': 'Exemplo 1',
+                      'description': 'Descrição detalhada do primeiro exemplo'
+                  }},
+                  {{
+                      'title': 'Exemplo 2',
+                      'description': 'Descrição detalhada do segundo exemplo'
+                  }},
+                  {{
+                      'title': 'Exemplo 3',
+                      'description': 'Descrição detalhada do terceiro exemplo'
+                  }},
+                  {{
+                      'title': 'Exemplo 4',
+                      'description': 'Descrição detalhada do quarto exemplo'
+                  }}
+              ]
+          }}
+      }}
+  ]
+
+  Então, para cada objeto, você deve usar o conteúdo do "slideContent" para preencher os campos do "generationTemplate". Você deve retornar um array de objetos com o "templateID" e o "generationTemplate" preenchido de cada objeto. Sua resposta deveria ser algo assim:
+
+  ```JSON
+      [
+          {{
+              'templateID': 1,
+              'generationTemplate': {{
+                  'title': 'Conclusão',
+                  'content': 'A Revolução Francesa transformou profundamente a sociedade, lançando bases para os direitos humanos e democráticos modernos. Sua relevância transcende gerações e continua a inspirar debates e reflexões.'
+              }}
+          }},
+          {{
+              'templateID': 44,
+              'generationTemplate': {{
+                  'title': 'Tarefa para Casa',
+                  'concept': 'Os princípios da Revolução Francesa continuam relevantes?',
+                  'examples': [
+                      {{
+                          'title': 'Exemplo 1',
+                          'description': 'Explique como a igualdade é aplicada na sua sociedade local.'
+                      }},
+                      {{
+                          itle': 'Exemplo 2',
+                          'description': 'Relacione a liberdade com as liberdades constitucionais de hoje.'
+                      }},
+                      {{
+                          'title': 'Exemplo 3',
+                          'description': 'Debata o impacto da fraternidade na luta pelos direitos civis no século XXI.'
+                      }},
+                      {{
+                          'title': 'Exemplo 4',
+                          'description': 'Dê exemplos atuais de desigualdades que podem ser vistas como remanescentes do Antigo Regime.'
+                      }}
+                  ]
+              }}
+          }}
+      ]
+  ```
+
+  ----------
+
+  Tema da Apresentação: {class_topic}
+
+  [Conteúdo dos Slides]
+  {slides_content}
+
+  [Formato da Resposta]
+  ```JSON
+      [
+          {{
+              'templateID': templateID do objeto 1,
+              'generationTemplate': generationTemplate preenchido do objeto 1
+          }},
+          {{
+              'templateID': templateID do objeto 2,
+              'generationTemplate': generationTemplate preenchido do objeto 2
+          }},
+          ...
+          
+          {{
+              'templateID': templateID do objeto N,
+              'generationTemplate': generationTemplate preenchido do objeto N
+          }}
+      ]
+  ```
+  
+  [Dicas]
+  - Para cada objeto do [Conteúdo dos Slides], você deve usar o os valores presentes do "slideContent" para preencher os campos do "generationTemplate".
+  - O formato do "slideContent" pode não ser exatamente igual ao "generationTemplate", complete o "generationTemplate" da forma que fizer mais sentido.
+  - Você não pode acrescentar ou remover nenhum item do "generationTemplate", apenas preencher/alterar o valor das strings que estão contidas nele.
+  - Não altere o nome de nenhuma propriedade do "generationTemplate", apenas mude o conteúdo presente nos valores das strings.
+  - Se o valor de alguma propriedade dentro do "generationTemplate" for um array de strings, altere apenas o valor das strings de acordo com o conteúdo do slide.
+  - Antes de entregar sua resposta final, garanta que todos os valores presentes no "generationTemplate" foram preenchidos corretamente.
+  - Utilize o [Exemplo] como auxílio para a geração da sua reposta.
+  - Na geração do JSON, sempre utilize aspas simples.
+  - Sempre coloque o JSON de templates preenchidos dentro do ```JSON ``` como está especificado no [Formato da Resposta].
+
+  ----------
+
+  Pense cuidadosamente em cada etapa, meu emprego depende disso. Te darei 1 milhão de reais se responder corretamente.
+
+  Retorne apenas o JSON contendo os objetos preenchidos no formato especificado no [Formato da Resposta].

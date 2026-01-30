@@ -1,0 +1,612 @@
+[
+  {
+    "id": 1,
+    "templateDescription": "Template básico com título principal e texto complementar descritivo.",
+    "templateProps": {
+      "title": "Título principal",
+      "content": "Texto complementar referente ao título"
+    }
+  },
+  {
+    "id": 2,
+    "templateDescription": "Template de comparação com dois tópicos lado a lado, cada um com título e conteúdo.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Primeiro tópico",
+          "content": "Descrição do primeiro tópico"
+        },
+        { "title": "Segundo tópico", "content": "Descrição do segundo tópico" }
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "templateDescription": "Template com uma lista de cinco tópicos sem texto complementar.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        "Primeiro tópico",
+        "Segundo tópico",
+        "Terceiro tópico",
+        "Quarto tópico",
+        "Quinto tópico"
+      ]
+    }
+  },
+  {
+    "id": 4,
+    "templateDescription": "Template com tópicos numerados e subtópicos em formato de lista.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Primeiro tópico",
+          "subtopics": ["Subtópico 1", "Subtópico 2", "Subtópico 3"]
+        },
+        {
+          "title": "Segundo tópico",
+          "subtopics": ["Subtópico A", "Subtópico B", "Subtópico C"]
+        }
+      ]
+    }
+  },
+  {
+    "id": 5,
+    "templateDescription": "Template com três tópicos em grid, cada tópico possui título e descrição.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Primeiro tópico",
+          "content": "Descrição do primeiro tópico"
+        },
+        { "title": "Segundo tópico", "content": "Descrição do segundo tópico" },
+        {
+          "title": "Terceiro tópico",
+          "content": "Descrição do terceiro tópico"
+        }
+      ]
+    }
+  },
+  {
+    "id": 6,
+    "templateDescription": "Template com lista centralizada com quatro tópicos.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        "Primeiro tópico",
+        "Segundo tópico",
+        "Terceiro tópico",
+        "Quarto tópico"
+      ]
+    }
+  },
+  {
+    "id": 7,
+    "templateDescription": "Template com dois tópicos com textos complementares, em formato de timeline vertical.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Primeiro tópico",
+          "content": "Conteúdo detalhado do primeiro tópico"
+        },
+        {
+          "title": "Segundo tópico",
+          "content": "Conteúdo detalhado do segundo tópico"
+        }
+      ]
+    }
+  },
+  {
+    "id": 8,
+    "templateDescription": "Template com lista de três tópicos e um texto complementar geral sobre os três tópicos.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": ["Primeiro tópico", "Segundo tópico", "Terceiro tópico"],
+      "content": "Texto complementar geral sobre os tópicos apresentados"
+    }
+  },
+  {
+    "id": 9,
+    "templateDescription": "Template de timeline horizontal com passos numerados e um texto complementar geral.",
+    "templateProps": {
+      "title": "Título principal",
+      "steps": [
+        { "title": "Primeiro passo" },
+        { "title": "Segundo passo" },
+        { "title": "Terceiro passo" }
+      ],
+      "content": "Texto complementar sobre o processo"
+    }
+  },
+  {
+    "id": 10,
+    "templateDescription": "Template de checklist com três tópicos marcados como concluídos.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": ["Item concluído 1", "Item concluído 2", "Item concluído 3"]
+    }
+  },
+  {
+    "id": 11,
+    "templateDescription": "Template com três tópicos em grid e texto complementar sobre os tópicos apresentados.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": ["Primeiro tópico", "Segundo tópico", "Terceiro tópico"],
+      "content": "Texto complementar sobre os tópicos apresentados"
+    }
+  },
+  {
+    "id": 12,
+    "templateDescription": "Template com lista de quatro tópicos. Cada tópico possui título e descrição.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Primeiro tópico",
+          "content": "Descrição detalhada do primeiro tópico"
+        },
+        {
+          "title": "Segundo tópico",
+          "content": "Descrição detalhada do segundo tópico"
+        },
+        {
+          "title": "Terceiro tópico",
+          "content": "Descrição detalhada do terceiro tópico"
+        },
+        {
+          "title": "Quarto tópico",
+          "content": "Descrição detalhada do quarto tópico"
+        }
+      ]
+    }
+  },
+  {
+    "id": 13,
+    "templateDescription": "Template com dois tópicos detalhados em colunas, incluindo um texto complementar adicional para cada tópico.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Primeiro tópico",
+          "content": "Conteúdo do primeiro tópico",
+          "additional": "Informação adicional"
+        },
+        {
+          "title": "Segundo tópico",
+          "content": "Conteúdo do segundo tópico",
+          "additional": "Informação adicional"
+        }
+      ]
+    }
+  },
+  {
+    "id": 14,
+    "templateDescription": "Template em com três tópicos formando uma pirâmide e um texto explicativo sobre a estrutura piramidal.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": ["Tópico base", "Tópico intermediário", "Tópico superior"],
+      "content": "Texto explicativo sobre a estrutura piramidal"
+    }
+  },
+  {
+    "id": 15,
+    "templateDescription": "Template de tabela comparativa com tópicos e detalhes organizados em linhas.",
+    "templateProps": {
+      "title": "Título principal",
+      "rows": [
+        {
+          "topic": "Primeiro tópico",
+          "details": "Detalhes do primeiro tópico"
+        },
+        { "topic": "Segundo tópico", "details": "Detalhes do segundo tópico" },
+        { "topic": "Terceiro tópico", "details": "Detalhes do terceiro tópico" }
+      ]
+    }
+  },
+  {
+    "id": 16,
+    "templateDescription": "Template com um tópico central em destaque com um ícone de estrela e algumas informações complementares.",
+    "templateProps": {
+      "title": "Título principal",
+      "topic": {
+        "title": "Tópico em destaque",
+        "content": "Conteúdo principal do tópico destacado",
+        "highlight": "Informação adicional em destaque"
+      }
+    }
+  },
+  {
+    "id": 17,
+    "templateDescription": "Template com quatro tópicos e com um texto complementar geral sobre os quatro tópicos.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        "Primeiro tópico",
+        "Segundo tópico",
+        "Terceiro tópico",
+        "Quarto tópico"
+      ],
+      "content": "Texto complementar sobre os quatro tópicos apresentados"
+    }
+  },
+  {
+    "id": 18,
+    "templateDescription": "Template problema-solução com dois tópicos conectados por seta indicativa.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Problema",
+          "content": "Descrição do problema identificado"
+        },
+        { "title": "Solução", "content": "Descrição da solução proposta" }
+      ]
+    }
+  },
+  {
+    "id": 19,
+    "templateDescription": "Template de processo com cinco passos numerados em lista vertical e com descrições.",
+    "templateProps": {
+      "title": "Título principal",
+      "steps": [
+        { "title": "Primeiro passo", "content": "Descrição do primeiro passo" },
+        { "title": "Segundo passo", "content": "Descrição do segundo passo" },
+        { "title": "Terceiro passo", "content": "Descrição do terceiro passo" },
+        { "title": "Quarto passo", "content": "Descrição do quarto passo" },
+        { "title": "Quinto passo", "content": "Descrição do quinto passo" }
+      ]
+    }
+  },
+  {
+    "id": 20,
+    "templateDescription": "Template com quatro tópicos lado a lado e com um texto complementar descritivo para cada tópico.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Passo 1",
+          "content": "Descrição do primeiro passo do ciclo"
+        },
+        {
+          "title": "Passo 2",
+          "content": "Descrição do segundo passo do ciclo"
+        },
+        {
+          "title": "Passo 3",
+          "content": "Descrição do terceiro passo do ciclo"
+        },
+        { "title": "Passo 4", "content": "Descrição do quarto passo do ciclo" }
+      ]
+    }
+  },
+  {
+    "id": 21,
+    "templateDescription": "Template com uma linha do tempo de três etapas, com uma descrição de cada etapa e com um texto complementar geral.",
+    "templateProps": {
+      "title": "Título principal",
+      "steps": [
+        {
+          "title": "Etapa 1",
+          "description": "Descrição da primeira etapa"
+        },
+        {
+          "title": "Etapa 2",
+          "description": "Descrição da segunda etapa"
+        },
+        {
+          "title": "Etapa 3",
+          "description": "Descrição da terceira etapa"
+        }
+      ],
+      "content": "Texto complementar explicando o contexto ou detalhes adicionais da linha do tempo."
+    }
+  },
+  {
+    "id": 22,
+    "templateDescription": "Template com dois tópicos destacados lado a lado, cada um com título, descrição e texto complementar.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Tópico 1",
+          "content": "Descrição detalhada do primeiro tópico",
+          "additional": "Informação complementar do tópico 1"
+        },
+        {
+          "title": "Tópico 2",
+          "content": "Descrição detalhada do segundo tópico",
+          "additional": "Informação complementar do tópico 2"
+        }
+      ]
+    }
+  },
+  {
+    "id": 23,
+    "templateDescription": "Template com quatro tópicos dispostos verticalmente em formato de checklist, com ícones circulares coloridos ao lado de cada item, acompanhados de título e descrição.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Tópico 1",
+          "content": "Descrição detalhada do primeiro tópico"
+        },
+        {
+          "title": "Tópico 2",
+          "content": "Descrição detalhada do segundo tópico"
+        },
+        {
+          "title": "Tópico 3",
+          "content": "Descrição detalhada do terceiro tópico"
+        },
+        {
+          "title": "Tópico 4",
+          "content": "Descrição detalhada do quarto tópico"
+        }
+      ]
+    }
+  },
+  {
+    "id": 24,
+    "templateDescription": "Template com seis tópicos distribuídos em três colunas, acompanhados de um texto complementar geral.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        "Tópico 1",
+        "Tópico 2",
+        "Tópico 3",
+        "Tópico 4",
+        "Tópico 5",
+        "Tópico 6"
+      ],
+      "content": "Texto complementar explicativo sobre os tópicos apresentados acima."
+    }
+  },
+  {
+    "id": 25,
+    "templateDescription": "Template com dois tópicos principais, cada um com uma lista de três subtópicos relacionados.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Tópico 1",
+          "subtopics": ["Subtópico 1.1", "Subtópico 1.2", "Subtópico 1.3"]
+        },
+        {
+          "title": "Tópico 2",
+          "subtopics": ["Subtópico 2.1", "Subtópico 2.2", "Subtópico 2.3"]
+        }
+      ]
+    }
+  },
+  {
+    "id": 26,
+    "templateDescription": "Template com destaque centralizado para um único tópico com descrição e texto complementar. O tópico é associado a um ícone visual de atenção, como se fosse um tópico bem importante.",
+    "templateProps": {
+      "title": "Título principal",
+      "topic": {
+        "title": "Título do tópico em destaque",
+        "content": "Conteúdo principal explicativo sobre o tópico selecionado",
+        "highlight": "Informação complementar ou observação importante"
+      }
+    }
+  },
+  {
+    "id": 27,
+    "templateDescription": "Template com foco na apresentação de quatro objetivos de aprendizagem da aula, no formato de uma lista enumerada.",
+    "templateProps": {
+      "title": "Título principal",
+      "objectives": [
+        "Objetivo de aprendizagem 1",
+        "Objetivo de aprendizagem 2",
+        "Objetivo de aprendizagem 3",
+        "Objetivo de aprendizagem 4"
+      ]
+    }
+  },
+  {
+    "id": 28,
+    "templateDescription": "Template para apresentação de um termo com sua definição destacada e uma lista de três exemplos.",
+    "templateProps": {
+      "title": "Título principal",
+      "term": "Termo ou conceito a ser definido",
+      "definition": "Descrição clara e detalhada do termo apresentado.",
+      "examples": [
+        "Exemplo 1 sobre o termo",
+        "Exemplo 2 sobre o termo",
+        "Exemplo 3 sobre o termo"
+      ]
+    }
+  },
+  {
+    "id": 29,
+    "templateDescription": "Template Indisponível",
+    "templateProps": {}
+  },
+  {
+    "id": 30,
+    "templateDescription": "Template de exemplos práticos, com um tópico principal no topo, uma explicação do conceito e quatro exemplos, cada exemplo com título e descrição.",
+    "templateProps": {
+      "title": "Título principal",
+      "concept": "Conceito a ser explicado",
+      "examples": [
+        {
+          "title": "Exemplo 1",
+          "description": "Descrição detalhada do primeiro exemplo"
+        },
+        {
+          "title": "Exemplo 2",
+          "description": "Descrição detalhada do segundo exemplo"
+        },
+        {
+          "title": "Exemplo 3",
+          "description": "Descrição detalhada do terceiro exemplo"
+        },
+        {
+          "title": "Exemplo 4",
+          "description": "Descrição detalhada do quarto exemplo"
+        }
+      ]
+    }
+  },
+  {
+    "id": 31,
+    "templateDescription": "Template para comparação lado a lado de dois tópicos, cada um com uma lista de 3 subtópicos relacionados para ajudar na comparação.",
+    "templateProps": {
+      "title": "Título principal",
+      "items": [
+        {
+          "title": "Tópico 1",
+          "characteristics": [
+            "Subtópico 1 do tópico 1",
+            "Subtópico 2 do tópico 1",
+            "Subtópico 3 do tópico 1"
+          ]
+        },
+        {
+          "title": "Tópico 2",
+          "characteristics": [
+            "Subtópico 1 do tópico 2",
+            "Subtópico 2 do tópico 2",
+            "Subtópico 3 do tópico 2"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": 32,
+    "templateDescription": "Template para estudo de caso com um cenário detalhado destacado e uma lista numerada de com 3 perguntas para análise do cenário apresentado.",
+    "templateProps": {
+      "title": "Título principal",
+      "scenario": "Descrição detalhada do cenário apresentado para análise.",
+      "questions": [
+        "Pergunta 1 sobre o cenário",
+        "Pergunta 2 sobre o cenário",
+        "Pergunta 3 sobre o cenário"
+      ]
+    }
+  },
+  {
+    "id": 33,
+    "templateDescription": "Template para apresentação de uma fórmula matemática ou científica, possuindo um campo para a fórmula, a descrição de cada uma das variáveis envolvidas e um exemplo curto de aplicação.",
+    "templateProps": {
+      "title": "Título principal",
+      "formula": "Fórmula apresentada (ex: E = mc²)",
+      "variables": [
+        { "symbol": "E", "meaning": "Energia total" },
+        { "symbol": "m", "meaning": "Massa do objeto" },
+        { "symbol": "c", "meaning": "Velocidade da luz no vácuo" }
+      ],
+      "example": "Exemplo prático da aplicação da fórmula com valores numéricos."
+    }
+  },
+  {
+    "id": 34,
+    "templateDescription": "Template com um título principal centralizado e um texto explicativo sobre o título.",
+    "templateProps": {
+      "title": "Título principal",
+      "content": "Texto explicativo sobre o tópico apresentado, com linguagem clara e objetiva."
+    }
+  },
+  {
+    "id": 35,
+    "templateDescription": "Template visual para exibir quatro etapas de um processo com círculos numerados (1, 2, 3 e 4). Cada etapa tem uma descrição curta.",
+    "templateProps": {
+      "title": "Título principal",
+      "steps": [
+        {
+          "title": "Etapa 1",
+          "content": "Descrição breve da primeira etapa do processo."
+        },
+        {
+          "title": "Etapa 2",
+          "content": "Descrição breve da segunda etapa do processo."
+        },
+        {
+          "title": "Etapa 3",
+          "content": "Descrição breve da terceira etapa do processo."
+        },
+        {
+          "title": "Etapa 4",
+          "content": "Descrição breve da quarta etapa do processo."
+        }
+      ]
+    }
+  },
+  {
+    "id": 36,
+    "templateDescription": "Template com seis tópicos numerados exibidos em grid. Sem texto complementar ou descrição.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        "Tópico 1",
+        "Tópico 2",
+        "Tópico 3",
+        "Tópico 4",
+        "Tópico 5",
+        "Tópico 6"
+      ]
+    }
+  },
+  {
+    "id": 37,
+    "templateDescription": "Template com três tópicos, cada um com título, subtítulo e texto complementar.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Título do Tópico 1",
+          "content": "Texto explicativo principal do tópico 1.",
+          "additional": "Informação adicional ou exemplo complementar ao tópico 1."
+        },
+        {
+          "title": "Título do Tópico 2",
+          "content": "Texto explicativo principal do tópico 2.",
+          "additional": "Informação adicional ou exemplo complementar ao tópico 2."
+        },
+        {
+          "title": "Título do Tópico 3",
+          "content": "Texto explicativo principal do tópico 3.",
+          "additional": "Informação adicional ou exemplo complementar ao tópico 3."
+        }
+      ]
+    }
+  },
+  {
+    "id": 38,
+    "templateDescription": "Template ideal para dar destaque a uma pergunta sobre o tema. Contém um espaço para a pergunta e um texto complementar.",
+    "templateProps": {
+      "title": "Pergunta principal",
+      "content": "Texto complementar da pergunta principal"
+    }
+  },
+  {
+    "id": 39,
+    "templateDescription": "Template com quatro tópicos dispostos em duas colunas. Cada tópico possui um texto complementar.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Título do Tópico 1",
+          "content": "Texto explicativo principal do tópico 1."
+        },
+        {
+          "title": "Título do Tópico 2",
+          "content": "Texto explicativo principal do tópico 2."
+        },
+        {
+          "title": "Título do Tópico 3",
+          "content": "Texto explicativo principal do tópico 3."
+        },
+        {
+          "title": "Título do Tópico 4",
+          "content": "Texto explicativo principal do tópico 4."
+        }
+      ]
+    }
+  }
+]
