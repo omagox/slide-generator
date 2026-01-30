@@ -1,4 +1,7 @@
+import os
+
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 from models.types import SlideRequest, Slide
 from generator.generator import SlideGenerator
@@ -6,6 +9,15 @@ from generator.generator import SlideGenerator
 from src.logger import logger
 
 app = FastAPI(title="Slide Generator API")
+
+cors_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 slideGenerator = SlideGenerator()
 
