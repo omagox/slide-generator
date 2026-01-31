@@ -1,4 +1,6 @@
 import React from "react";
+import { FiArrowRight } from "react-icons/fi";
+
 import type { FormulaProps } from "./types";
 
 const defaultVariable = { symbol: "x", meaning: "Significado da variável" };
@@ -31,17 +33,17 @@ export default function Template33(props: Partial<FormulaProps>) {
   return (
     <div
       style={{ transform: preview ? "scale(0.3)" : undefined }}
-      className="w-full aspect-video bg-white p-8 rounded-lg shadow-lg"
+      className="w-full aspect-video bg-white p-8 rounded-lg shadow-lg flex flex-col items-center justify-center"
     >
-      <h1 className="text-3xl font-bold text-black mb-8 text-center">
+      <h1 className="text-3xl font-bold text-black mb-5 text-center">
         {title}
       </h1>
-      <div className="max-w-4xl mx-auto space-y-6">
-        <div className="text-center bg-gray-50 p-8 rounded-lg">
-          <h2 className="text-2xl font-bold mb-4" style={{ color: "#1277bc" }}>
+      <div className="max-w-4xl mx-auto space-y-4">
+        <div className="text-center bg-gray-50 p-3 pt-2 rounded-lg">
+          <h2 className="text-xl font-bold mb-2" style={{ color: "#1277bc" }}>
             Fórmula
           </h2>
-          <div className="text-4xl font-mono font-bold text-black">
+          <div className="text-2xl font-mono font-bold text-black">
             {formula}
           </div>
         </div>
@@ -55,14 +57,15 @@ export default function Template33(props: Partial<FormulaProps>) {
             </h3>
             <div className="space-y-2">
               {safeVariables.map((variable, index) => (
-                <div key={index} className="flex items-center space-x-3">
+                <div key={index} className="flex items-center space-x-2">
                   <span
-                    className="font-mono font-bold text-lg"
+                    className="font-mono font-bold text-sm"
                     style={{ color: "#ab1551" }}
                   >
                     {variable.symbol}
                   </span>
-                  <span className="text-gray-700">= {variable.meaning}</span>
+                  <FiArrowRight className="text-[#ab1551]" />
+                  <span className="text-gray-700 text-xs">{variable.meaning}</span>
                 </div>
               ))}
             </div>
@@ -70,12 +73,12 @@ export default function Template33(props: Partial<FormulaProps>) {
           {example && (
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3
-                className="text-lg font-semibold mb-3"
+                className="text-lg font-semibold mb-1"
                 style={{ color: "#1277bc" }}
               >
                 Exemplo
               </h3>
-              <p className="text-gray-700">{example}</p>
+              <p className="text-gray-700 text-sm">{example}</p>
             </div>
           )}
         </div>

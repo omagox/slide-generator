@@ -1,5 +1,5 @@
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from typing import Optional
 
 class SlideTypeEnum(str, Enum):
@@ -19,3 +19,16 @@ class Slide(BaseModel):
     title: str
     content: dict
     image: Optional[str] = None
+    question: Optional[OptionalQuestion] = None
+
+class OptionalQuestion(BaseModel):
+    statement: str
+    options: list[str] = Field(..., max_length=4)
+    correct_answer: int = Field(..., ge=0)
+    slide_number: int
+
+    @model_validator(mode='after')
+    def correct_answer_in_range(self):
+        if self.correct_answer >= len(self.options):
+            raise ValueError('correct_answer deve ser índice válido em options')
+        return self

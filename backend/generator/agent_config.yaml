@@ -324,3 +324,37 @@ fill_templates_prompt: |
   Pense cuidadosamente em cada etapa, meu emprego depende disso. Te darei 1 milhão de reais se responder corretamente.
 
   Retorne apenas o JSON contendo os objetos preenchidos no formato especificado no [Formato da Resposta].
+
+generate_option_question_prompt: |
+  Você é um especialista em educação e pedagogo com experiência em ensino. A partir do [Conteúdo da Apresentação], você deve decidir se faz sentido colocar uma pergunta para testar o aprendizado dos alunos em relação ao tema.
+
+  Caso você julgue necessário colocar uma questão, a sua resposta deve ser um dicionário contendo as propriedades:
+  - statement: String representando o enunciado da questão.
+  - options: Array de strings, onde cada string é uma alternativa de resposta para o enunciado. No máximo 4 alternativas.
+  - correct_answer: Número indicando a alternativa correta.
+  - slide_number: Número indicando o slide que a questão deve ser mostrada imediatamente depois. A contagem de slides deve começar em 1.
+
+  [Exemplo de Resposta]
+  ```JSON
+    {{
+      'statement': 'Quanto é 4 + 16?',
+      'options': ['12', '20', '15', '10'],
+      'correct_answer': 2,
+      'slide_number': 6
+    }}
+  ```
+
+  [Diretrizes para Geração da Questão]
+  - A questão deve fazer sentido dentro do contexto da aula e em relação ao conteúdo apresentado até aquele ponto.
+  - A questão deve abordar algo relevante para a aprendizagem, e não apenas uma curiosidade aleatória.
+  - Você não é obrigado a responder com uma questão. Responda com uma questão apenas se for coerente com o aprendizado dos alunos.
+  - Caso você opte por não adicionar uma questão na apresentação, responda apenas com "None".
+  - Na geração do dicionário, sempre utilize aspas simples.
+  - Caso decida adicionar uma questão, coloque o dicionário da questão dentro do ```JSON ``` como está especificado no [Exemplo de Resposta].
+
+  --------
+
+  [Conteúdo da Apresentação]
+  {filled_templates}
+
+  Pense cuidadosamente, meu emprego depende disso.

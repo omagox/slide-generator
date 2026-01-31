@@ -26,11 +26,11 @@ export default function Template19(props: Partial<ProcessProps>) {
       <h1 className="text-3xl font-bold text-black mb-8 text-center">
         {title}
       </h1>
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="max-w-3xl mx-auto space-y-3">
         {steps.slice(0, 5).map((step, index) => (
           <div
             key={index}
-            className="flex items-start space-x-4 bg-gray-50 rounded-lg"
+            className="flex items-start space-x-3 bg-gray-50 rounded-lg p-1"
           >
             <div
               className="w-6 h-6 rounded-full flex items-center justify-center"
@@ -39,7 +39,7 @@ export default function Template19(props: Partial<ProcessProps>) {
               <span className="text-white text-sm">{index + 1}</span>
             </div>
             <div>
-              <h2 className="font-semibold text-black mb-1">{step.title}</h2>
+              <h2 className="font-semibold text-black">{step.title}</h2>
               <p className="text-gray-600 text-sm">{step.content}</p>
             </div>
           </div>

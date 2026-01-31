@@ -37,7 +37,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+    <div className="min-h-screen flex items-center justify-center p-6">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white rounded-xl shadow-md p-8 space-y-6"

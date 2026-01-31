@@ -188,3 +188,10 @@ export interface KeyPointsProps {
   }[]
   preview?: boolean
 }
+
+export interface OptionalQuestionProps {
+  statement: string;
+  options: string[];
+  correct_answer: number;
+  preview?: boolean;
+}
