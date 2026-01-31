@@ -67,6 +67,55 @@ def extract_object_array(content: str):
             "Bloco ```JSON``` contém estrutura inválida."
         ) from ast_error
 
+
+def extract_object_dict(content: str) -> dict[str, Any] | None:
+    """
+    Extrai um dicionário (objeto) que esteja dentro de um bloco:
+
+    ```JSON
+    { ... }
+    ```
+
+    Não falha se o bloco ou a estrutura estiverem inválidos, apenas retorna None.
+    Aceita tanto JSON (aspas duplas) quanto literais Python (aspas simples).
+    """
+    match = re.search(
+        r"```JSON\s*(.*?)\s*```",
+        content,
+        re.DOTALL | re.IGNORECASE
+    )
+
+    if not match:
+        logger.info("Nenhuma questão para adicionar...")
+        return None
+
+    json_block = match.group(1).strip()
+
+    if not json_block.startswith('{') or not json_block.endswith('}'):
+        logger.warning("Ocorreu um erro na extração da questão...")
+        return None
+
+    try:
+        return json.loads(json_block)
+    except json.JSONDecodeError as json_error:
+        logger.warning(
+            "Falha ao parsear a questão como JSON (linha %s, coluna %s). Tentando Python literal.",
+            json_error.lineno,
+            json_error.colno
+        )
+
+    try:
+        result = ast.literal_eval(json_block)
+
+        if not isinstance(result, dict):
+            logger.warning("Ocorreu um erro na extração da questão...")
+            return None
+
+        return result
+    except (SyntaxError, ValueError) as ast_error:
+        logger.warning("Ocorreu um erro na extração da questão...")
+        return None
+
 def get_templates_descriptions() -> str:
     slides = []
     file_path = os.path.join(os.path.dirname(__file__), 'templates', 'slidesTemplates.json')

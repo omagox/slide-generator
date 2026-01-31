@@ -1,6 +1,7 @@
 import json
 
-from models.types import Slide, SlideTypeEnum
+from pydantic import ValidationError
+from models.types import Slide, SlideTypeEnum, OptionalQuestion
 
 from src.logger import logger
 
@@ -15,6 +16,7 @@ from generator.config import (
 from generator.utils import (
     read_yaml,
     extract_object_array,
+    extract_object_dict,
     get_templates_descriptions,
     get_templates_generation_content,
     get_templates_generation_image,
@@ -35,6 +37,7 @@ class SlideGenerator:
         self.lesson_plan_prompt = self.agent_config["lesson_plan_prompt"]
         self.generate_presentation_prompt = self.agent_config["generate_presentation_prompt"]
         self.fill_templates_prompt = self.agent_config["fill_templates_prompt"]
+        self.generate_option_question_prompt = self.agent_config["generate_option_question_prompt"]
 
         self.llm = ChatGoogleGenerativeAI(
             model=self.agent_config["llm_config"]["model"],
@@ -89,7 +92,7 @@ class SlideGenerator:
 
         return response.content
 
-    def get_filled_templates(self, slides_content, class_topic) -> str:
+    def generate_templates_content(self, slides_content, class_topic) -> str:
         prompt = self.fill_templates_prompt.format(
             class_topic=class_topic,
             slides_content=slides_content
@@ -98,6 +101,22 @@ class SlideGenerator:
         messages = [
             SystemMessage(
                 content="Você é um especialista em criação de apresentações. Você deve preencher os valores do objeto com o conteúdo dos slides."
+            ),
+            HumanMessage(content=prompt),
+        ]
+
+        response = self.llm.invoke(messages)
+
+        return response.content
+
+    def generate_optional_question(self, filled_templates) -> str:
+        prompt = self.generate_option_question_prompt.format(
+            filled_templates=filled_templates
+        )
+
+        messages = [
+            SystemMessage(
+                content="Você é um especialista em educação e pedagogo com experiência em ensino. A partir do [Conteúdo da Apresentação], você deve decidir se faz sentido colocar uma pergunta para testar o aprendizado dos alunos em relação ao tema."
             ),
             HumanMessage(content=prompt),
         ]
@@ -126,7 +145,7 @@ class SlideGenerator:
             templates_generation_images_chunk = get_templates_generation_image(templates_array_chunk)
             
             logger.info("Filling presentation templates %s to %s.", i, i + FILL_TEMPLATES_CHUNK_SIZE)
-            filled_templates_chunk = self.get_filled_templates(templates_generation_content_chunk, class_topic)
+            filled_templates_chunk = self.generate_templates_content(templates_generation_content_chunk, class_topic)
             filled_templates_chunk_json = extract_object_array(filled_templates_chunk)
 
             for idx, filled_template in enumerate(filled_templates_chunk_json):
@@ -139,6 +158,27 @@ class SlideGenerator:
         logger.info("Adding mandatory slides (introduction, agenda and conclusion) to presentation...")
         templates_titles = get_filled_templates_titles(filled_templates)
         presentation_intro_title, presentation_intro_description, presentation_agenda = self.get_static_slides_info(class_topic, templates_titles)
+
+        optional_question = self.generate_optional_question(filled_templates)
+        optional_question_dict = extract_object_dict(optional_question)
+        if optional_question_dict is not None:
+            try:
+                optional_question_dict = OptionalQuestion.model_validate(optional_question_dict).model_dump()
+            except ValidationError as e:
+                logger.warning("Error when validating optional question type: %s", e)
+                optional_question_dict = None
+
+        if optional_question_dict is not None:
+            slide_index = optional_question_dict["slide_number"] - 1
+            if 0 <= slide_index < len(filled_templates):
+                filled_templates[slide_index]["question"] = optional_question_dict
+            else:
+                logger.warning(
+                    "Optional question slide_number=%s out of range (filled_templates length=%s), skipping.",
+                    optional_question_dict["slide_number"],
+                    len(filled_templates),
+                )
+
         filled_templates = adding_static_slides_to_presentation(filled_templates, presentation_intro_title, presentation_intro_description, presentation_agenda)
 
         presentation = []
@@ -160,7 +200,8 @@ class SlideGenerator:
                     "templateID": template["templateID"],
                     "templateContent": template["generationTemplate"]
                 },
-                image=template.get("image")
+                image=template.get("image"),
+                question=template.get("question")
             )
             
             presentation.append(formatted_template)

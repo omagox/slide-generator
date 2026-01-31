@@ -1,34 +1,49 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import type { Slide } from "../types/global";
-import { normalizeSlidesFromApi } from "../lib/utils";
+import type {
+  Slide,
+  AddSlideModalInfo,
+  NormalizedSlide,
+} from "../types/global";
+import { normalizeSlidesFromApi, addQuestionSlide } from "../lib/utils";
 
-import { MdFullscreen } from "react-icons/md";
+import { MdFullscreen, MdOutlineLibraryAdd } from "react-icons/md";
 import JsxParser from "react-jsx-parser";
 
 import componentsMap from "../templates/templatesMap";
+import AddSlideModal from "../components/AddSlideModal";
 
 const PresentationPage = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const slidesFromState = (location.state as { slides?: Slide[] } | null)
-      ?.slides;
+  const location = useLocation();
+  const navigate = useNavigate();
+  const slidesFromState = (location.state as { slides?: Slide[] } | null)
+    ?.slides;
 
   const [totalHeight, setTotalHeight] = useState<number | null>(null);
   const [slideDivWidth, setSlideDivWidth] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [showAddSlideModal, setShowAddSlideModal] = useState(false);
+  const [addSlideModalInfo, setAddSlideModalInfo] =
+    useState<AddSlideModalInfo | null>(null);
   const fullscreenDivRef = useRef(null);
 
-  const presentationSlides = useMemo(() => {
-    if (!slidesFromState?.length) return [];
-    return normalizeSlidesFromApi(slidesFromState);
+  const [presentationSlides, setPresentationSlides] = useState<
+    NormalizedSlide[]
+  >(() =>
+    slidesFromState?.length ? normalizeSlidesFromApi(slidesFromState) : [],
+  );
+
+  useEffect(() => {
+    if (slidesFromState?.length) {
+      setPresentationSlides(normalizeSlidesFromApi(slidesFromState));
+    }
   }, [slidesFromState]);
 
-    useEffect(() => {
-      if (!slidesFromState?.length) {
-        navigate("/", { replace: true });
-      }
-    }, [slidesFromState, navigate]);
+  useEffect(() => {
+    if (!slidesFromState?.length) {
+      navigate("/", { replace: true });
+    }
+  }, [slidesFromState, navigate]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -148,29 +163,50 @@ const PresentationPage = () => {
             const scale = Math.min(availW / 920, availH / 518);
 
             return (
-              <div
-                key={slide.id}
-                className="flex justify-center items-center"
-                style={{ height: totalHeight ?? window.innerHeight }}
-              >
-                {/* Container Full HD */}
+              <React.Fragment key={slide.id}>
                 <div
-                  style={{
-                    width: 920,
-                    height: 518,
-                    transform: `scale(${scale})`,
-                    transformOrigin: "center",
-                  }}
+                  className="flex justify-center items-center"
+                  style={{ height: totalHeight ?? window.innerHeight }}
                 >
-                  <JsxParser
-                    components={componentsMap}
-                    jsx={getComponentString(
-                      slide.canvas.generationTemplate,
-                      slide.canvas.templateID,
-                    )}
-                  />
+                  {/* Container Full HD */}
+                  <div
+                    style={{
+                      width: 920,
+                      height: 518,
+                      transform: `scale(${scale})`,
+                      transformOrigin: "center",
+                    }}
+                  >
+                    <JsxParser
+                      components={componentsMap}
+                      jsx={getComponentString(
+                        slide.canvas.generationTemplate,
+                        slide.canvas.templateID,
+                      )}
+                    />
+                  </div>
                 </div>
-              </div>
+                {(slide.image != null || slide.question != null) && (
+                  <div className="flex justify-center items-center">
+                    <button
+                      className="py-1.5 flex items-center justify-center rounded-md w-[70px] bg-[#dedfe2] hover:bg-[#caccd1] cursor-pointer transition-all"
+                      title="Adicionar slide"
+                      onClick={() => {
+                        setAddSlideModalInfo({
+                          image: slide.image ?? null,
+                          question: slide.question ?? null,
+                          insertAfterIndex: presentationSlides.findIndex(
+                            (s) => s.id === slide.id,
+                          ),
+                        });
+                        setShowAddSlideModal(true);
+                      }}
+                    >
+                      <MdOutlineLibraryAdd className="w-5 h-5 text-[#727272]" />
+                    </button>
+                  </div>
+                )}
+              </React.Fragment>
             );
           })}
         </div>
@@ -209,6 +245,26 @@ const PresentationPage = () => {
           })()}
         </div>
       )}
+      <AddSlideModal
+        isOpen={showAddSlideModal}
+        onClose={() => {
+          setShowAddSlideModal(false);
+          setAddSlideModalInfo(null);
+        }}
+        handleAddQuestionSlide={() => {
+          const question = addSlideModalInfo?.question;
+          const insertAfter = addSlideModalInfo?.insertAfterIndex ?? null;
+          if (question == null || insertAfter == null) return;
+
+          setPresentationSlides(
+            addQuestionSlide(presentationSlides, question, insertAfter),
+          );
+          setShowAddSlideModal(false);
+          setAddSlideModalInfo(null);
+        }}
+        handleAddImageSlide={() => {}}
+        slide={addSlideModalInfo}
+      />
     </div>
   );
 };

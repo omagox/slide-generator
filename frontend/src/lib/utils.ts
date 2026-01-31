@@ -1,21 +1,47 @@
-import type { Slide } from "../types/global";
+import type { Slide, OptionalQuestion, NormalizedSlide } from "../types/global";
 
-export function normalizeSlidesFromApi(slides: Slide[]): Array<{
-    id: number;
-    canvas: { templateID: number; generationTemplate: Record<string, unknown> };
-  }> {
-    return slides.map((slide, index) => {
-      const content = slide.content as {
-        templateID?: number;
-        templateContent?: Record<string, unknown>;
-      };
-      const templateID = content?.templateID ?? 1;
-      const generationTemplate = content?.templateContent ?? {
-        title: slide.title,
-      };
-      return {
-        id: index,
-        canvas: { templateID, generationTemplate },
-      };
-    });
-  }
+const QUESTION_SLIDE_TEMPLATE = 54
+
+export function normalizeSlidesFromApi(slides: Slide[]): NormalizedSlide[] {
+  return slides.map((slide, index) => {
+    const content = slide.content as {
+      templateID?: number;
+      templateContent?: Record<string, unknown>;
+    };
+    const templateID = content?.templateID ?? 1;
+    const generationTemplate = content?.templateContent ?? {
+      title: slide.title,
+    };
+
+    return {
+      id: index,
+      canvas: { templateID, generationTemplate },
+      image: slide.image ?? null,
+      question: slide.question ?? null,
+    };
+  });
+}
+
+export function addQuestionSlide(
+  slides: NormalizedSlide[],
+  question: OptionalQuestion,
+  insertAfterIndex: number,
+): NormalizedSlide[] {
+  const newSlide: NormalizedSlide = {
+    id: insertAfterIndex + 1,
+    canvas: {
+      templateID: QUESTION_SLIDE_TEMPLATE,
+      generationTemplate: {
+        statement: question.statement,
+        options: question.options,
+        correct_answer: question.correct_answer,
+      },
+    },
+    image: null,
+    question,
+  };
+
+  const nextSlides = [...slides];
+  nextSlides.splice(insertAfterIndex + 1, 0, newSlide);
+  return nextSlides.map((slide, index) => ({ ...slide, id: index }));
+}
