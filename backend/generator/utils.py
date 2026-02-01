@@ -18,7 +18,7 @@ def read_yaml(file_path: str) -> dict[str, Any]:
     path = Path(file_path)
 
     if not path.exists():
-        raise FileNotFoundError(f"Arquivo de configuração não encontrado: {file_path}")
+        raise FileNotFoundError(f"Configuration file not found: {file_path}")
 
     with open(path, "r", encoding="utf-8") as file:
         data = yaml.safe_load(file)
@@ -26,15 +26,15 @@ def read_yaml(file_path: str) -> dict[str, Any]:
 
 def extract_object_array(content: str):
     """
-    Extrai um array de objetos que esteja dentro de um bloco:
-    
+    Extracts an array of objects from a block:
+
     ```JSON
     [ ... ]
     ```
 
-    Falha explicitamente se o bloco ou a estrutura estiverem inválidos.
+    Explicitly fails if the block or structure is invalid.
     """
-    
+
     match = re.search(
         r"```JSON\s*(.*?)\s*```",
         content,
@@ -42,18 +42,18 @@ def extract_object_array(content: str):
     )
 
     if not match:
-        raise ValueError("Bloco ```JSON``` não encontrado.")
+        raise ValueError("Block ```JSON``` not found.")
 
     json_block = match.group(1).strip()
 
     if not json_block.startswith('[') or not json_block.endswith(']'):
-        raise ValueError("O bloco JSON não contém um array.")
+        raise ValueError("The JSON block does not contain an array.")
 
     try:
         return json.loads(json_block)
     except json.JSONDecodeError as json_error:
         logger.warning(
-            "Falha ao parsear como JSON (linha %s, coluna %s). Tentando Python literal.",
+            "Failed to parse as JSON (line %s, column %s). Trying Python literal.",
             json_error.lineno,
             json_error.colno
         )
@@ -61,24 +61,24 @@ def extract_object_array(content: str):
     try:
         return ast.literal_eval(json_block)
     except (SyntaxError, ValueError) as ast_error:
-        logger.error("Falha ao parsear bloco como JSON ou Python literal.")
-        logger.error("Conteúdo do bloco:\n%s", json_block)
+        logger.error("Failed to parse block as JSON or Python literal.")
+        logger.error("Block content:\n%s", json_block)
 
         raise ValueError(
-            "Bloco ```JSON``` contém estrutura inválida."
+            "Block ```JSON``` contains invalid structure."
         ) from ast_error
 
 
 def extract_dictionary(content: str) -> dict[str, Any] | None:
     """
-    Extrai um dicionário (objeto) que esteja dentro de um bloco:
+    Extracts a dictionary (object) from a block:
 
     ```JSON
     { ... }
     ```
 
-    Não falha se o bloco ou a estrutura estiverem inválidos, apenas retorna None.
-    Aceita tanto JSON (aspas duplas) quanto literais Python (aspas simples).
+    Does not fail if the block or structure is invalid, just returns None.
+    Accepts both JSON (double quotes) and Python literals (single quotes).
     """
     match = re.search(
         r"```JSON\s*(.*?)\s*```",
@@ -87,20 +87,20 @@ def extract_dictionary(content: str) -> dict[str, Any] | None:
     )
 
     if not match:
-        logger.info("Nenhum objeto encontrado...")
+        logger.info("No object found...")
         return None
 
     json_block = match.group(1).strip()
 
     if not json_block.startswith('{') or not json_block.endswith('}'):
-        logger.warning("Ocorreu um erro na extração do objeto...")
+        logger.warning("Error extracting object...")
         return None
 
     try:
         return json.loads(json_block)
     except json.JSONDecodeError as json_error:
         logger.warning(
-            "Falha ao parsear o objeto como JSON (linha %s, coluna %s). Tentando Python literal.",
+            "Failed to parse object as JSON (line %s, column %s). Trying Python literal.",
             json_error.lineno,
             json_error.colno
         )
@@ -109,12 +109,12 @@ def extract_dictionary(content: str) -> dict[str, Any] | None:
         result = ast.literal_eval(json_block)
 
         if not isinstance(result, dict):
-            logger.warning("Ocorreu um erro na extração do objeto...")
+            logger.warning("Error extracting object...")
             return None
 
         return result
     except (SyntaxError, ValueError) as ast_error:
-        logger.warning("Ocorreu um erro na extração do objeto...")
+        logger.warning("Error extracting object...")
         return None
 
 def get_templates_descriptions() -> str:
