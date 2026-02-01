@@ -150,6 +150,5 @@ slide-generator/
 - Implementar retries em caso de falhas na geração de slides.
 - Integrar com um banco de dados para armazenar os resultados das gerações.
 - Aperfeiçoar os templates para garantir uma estilização 100% consistente.
-- Exibir mensagens de status sobre o progresso da geração (em ambos os endpoints), para diminuir a ansiedade do usuário.
 - Disponibilizar funcionalidade para exportação de apresentação.
 - Ajustar os prompts para evitar o uso de markdown ou adaptar o frontend para interpretar corretamente delimitadores de formatação (por exemplo, **valor** para negrito).
