@@ -6,7 +6,6 @@ from models.types import Slide, SlideTypeEnum, OptionalQuestion
 from src.logger import logger
 
 from generator.config import (
-    GENERATOR_FOLDER,
     TAVILY_API_KEY,
     GENERATOR_AGENT_CONFIG_PATH,
     FILL_TEMPLATES_CHUNK_SIZE,
@@ -16,12 +15,20 @@ from generator.config import (
 from generator.utils import (
     read_yaml,
     extract_object_array,
-    extract_object_dict,
+    extract_dictionary,
     get_templates_descriptions,
+    get_template_generation_content,
     get_templates_generation_content,
     get_templates_generation_image,
     get_filled_templates_titles,
-    adding_static_slides_to_presentation
+    get_introduction_slide,
+    get_agenda_slide,
+    get_conclusion_slide,
+    streaming_new_slide_event,
+    streaming_optional_question_event,
+    stream_introduction_slide,
+    stream_agenda_slide,
+    stream_conclusion_slide
 )
 
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -38,6 +45,7 @@ class SlideGenerator:
         self.generate_presentation_prompt = self.agent_config["generate_presentation_prompt"]
         self.fill_templates_prompt = self.agent_config["fill_templates_prompt"]
         self.generate_option_question_prompt = self.agent_config["generate_option_question_prompt"]
+        self.fill_one_template_prompt = self.agent_config["fill_one_template_prompt"]
 
         self.llm = ChatGoogleGenerativeAI(
             model=self.agent_config["llm_config"]["model"],
@@ -109,6 +117,23 @@ class SlideGenerator:
 
         return response.content
 
+    def generate_one_template_content(self, slide_content, class_topic) -> str:
+        prompt = self.fill_one_template_prompt.format(
+            class_topic=class_topic,
+            slide_content=slide_content
+        )
+
+        messages = [
+            SystemMessage(
+                content="Você é um especialista em criação de apresentações. Você deve preencher os valores da propriedade 'generationTemplate' com as informações definidas da propriedade 'slideContent' do objeto."
+            ),
+            HumanMessage(content=prompt),
+        ]
+
+        response = self.llm.invoke(messages)
+
+        return response.content
+
     def generate_optional_question(self, filled_templates) -> str:
         prompt = self.generate_option_question_prompt.format(
             filled_templates=filled_templates
@@ -124,13 +149,6 @@ class SlideGenerator:
         response = self.llm.invoke(messages)
 
         return response.content
-
-    def get_static_slides_info(self, class_topic, templates_titles) -> tuple[str, str, list[str]]:
-        presentation_intro_title = class_topic
-        presentation_intro_description = f"Apresentação sobre {class_topic}"
-        presentation_agenda = templates_titles
-
-        return presentation_intro_title, presentation_intro_description, presentation_agenda
 
     def generate_presentation(self, lesson_plan, class_topic, number_of_slides) -> list[Slide]:
         templates_description = get_templates_descriptions()
@@ -157,10 +175,9 @@ class SlideGenerator:
         
         logger.info("Adding mandatory slides (introduction, agenda and conclusion) to presentation...")
         templates_titles = get_filled_templates_titles(filled_templates)
-        presentation_intro_title, presentation_intro_description, presentation_agenda = self.get_static_slides_info(class_topic, templates_titles)
 
         optional_question = self.generate_optional_question(filled_templates)
-        optional_question_dict = extract_object_dict(optional_question)
+        optional_question_dict = extract_dictionary(optional_question)
         if optional_question_dict is not None:
             try:
                 optional_question_dict = OptionalQuestion.model_validate(optional_question_dict).model_dump()
@@ -179,7 +196,10 @@ class SlideGenerator:
                     len(filled_templates),
                 )
 
-        filled_templates = adding_static_slides_to_presentation(filled_templates, presentation_intro_title, presentation_intro_description, presentation_agenda)
+        introduction_slide = get_introduction_slide(class_topic, f"Apresentação sobre {class_topic}")
+        agenda_slide = get_agenda_slide(templates_titles)
+        conclusion_slide = get_conclusion_slide()
+        filled_templates = [introduction_slide, agenda_slide] + filled_templates + [conclusion_slide]
 
         presentation = []
         for idx, template in enumerate(filled_templates):
@@ -206,7 +226,60 @@ class SlideGenerator:
             
             presentation.append(formatted_template)
 
-        with open(GENERATOR_FOLDER.parent / "presentation.json", "w", encoding="utf-8") as f:
-            json.dump([s.model_dump() for s in presentation], f, ensure_ascii=False, indent=2)
-
         return presentation
+
+    def generate_presentation_stream(self, lesson_plan, class_topic, number_of_slides):
+        yield from stream_introduction_slide(class_topic)
+
+        templates_description = get_templates_descriptions()
+        presentation_content = self.generate_presentation_content(lesson_plan, class_topic, templates_description, number_of_slides)
+        presentation_content_array = extract_object_array(presentation_content)
+        
+        templates_titles = []
+        filled_templates = []
+        for idx, template in enumerate(presentation_content_array):
+            logger.info("Filling presentation template %s.", idx + 1)
+            
+            template_generation_content = get_template_generation_content(template)
+            template_generation_image = template.get("slideImage", None)
+
+            filled_template = self.generate_one_template_content(template_generation_content, class_topic)
+            filled_template_dict = extract_dictionary(filled_template)
+
+            if filled_template_dict is None:
+                logger.error("Failed to extract dictionary for slide %s, skipping.", idx + 1)
+                continue
+
+            templates_titles.append(filled_template_dict["generationTemplate"]["title"])
+            filled_templates.append(filled_template_dict)
+
+            new_slide_payload = Slide(
+                type=SlideTypeEnum("content"),
+                title=filled_template_dict["generationTemplate"]["title"],
+                content={
+                    "templateID": filled_template_dict["templateID"],
+                    "templateContent": filled_template_dict["generationTemplate"]
+                },
+                image=template_generation_image,
+                question=None
+            )
+
+            logger.info("Streaming slide %s.", idx + 1)
+            yield streaming_new_slide_event(new_slide_payload)
+        
+        yield from stream_agenda_slide(templates_titles)
+        yield from stream_conclusion_slide()
+
+        optional_question = self.generate_optional_question(filled_templates)
+        optional_question_dict = extract_dictionary(optional_question)
+        if optional_question_dict is not None:
+            try:
+                optional_question_dict = OptionalQuestion.model_validate(optional_question_dict).model_dump()
+            except ValidationError as e:
+                logger.warning("Error when validating optional question type: %s", e)
+                optional_question_dict = None
+
+        if optional_question_dict is not None:
+            yield streaming_optional_question_event(optional_question_dict)
+
+        logger.info("Presentation generated!")

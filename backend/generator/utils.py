@@ -8,6 +8,7 @@ from typing import Any
 from pathlib import Path
 
 from src.logger import logger
+from models.types import Slide, SlideTypeEnum
 
 TEMPLATE_ID_TITLE = 1
 TEMPLATE_ID_CONCLUSION = 1
@@ -68,7 +69,7 @@ def extract_object_array(content: str):
         ) from ast_error
 
 
-def extract_object_dict(content: str) -> dict[str, Any] | None:
+def extract_dictionary(content: str) -> dict[str, Any] | None:
     """
     Extrai um dicionário (objeto) que esteja dentro de um bloco:
 
@@ -86,20 +87,20 @@ def extract_object_dict(content: str) -> dict[str, Any] | None:
     )
 
     if not match:
-        logger.info("Nenhuma questão para adicionar...")
+        logger.info("Nenhum objeto encontrado...")
         return None
 
     json_block = match.group(1).strip()
 
     if not json_block.startswith('{') or not json_block.endswith('}'):
-        logger.warning("Ocorreu um erro na extração da questão...")
+        logger.warning("Ocorreu um erro na extração do objeto...")
         return None
 
     try:
         return json.loads(json_block)
     except json.JSONDecodeError as json_error:
         logger.warning(
-            "Falha ao parsear a questão como JSON (linha %s, coluna %s). Tentando Python literal.",
+            "Falha ao parsear o objeto como JSON (linha %s, coluna %s). Tentando Python literal.",
             json_error.lineno,
             json_error.colno
         )
@@ -108,12 +109,12 @@ def extract_object_dict(content: str) -> dict[str, Any] | None:
         result = ast.literal_eval(json_block)
 
         if not isinstance(result, dict):
-            logger.warning("Ocorreu um erro na extração da questão...")
+            logger.warning("Ocorreu um erro na extração do objeto...")
             return None
 
         return result
     except (SyntaxError, ValueError) as ast_error:
-        logger.warning("Ocorreu um erro na extração da questão...")
+        logger.warning("Ocorreu um erro na extração do objeto...")
         return None
 
 def get_templates_descriptions() -> str:
@@ -171,29 +172,26 @@ def get_filled_templates_titles(filled_templates: list[dict]) -> list[str]:
 
     return titles
 
-def adding_static_slides_to_presentation(
-    filled_templates: list[dict],
-    presentation_intro_title: str,
-    presentation_intro_description: str,
-    presentation_agenda: list[str]
-) -> list[dict]:
-    title_slide = {
+def get_introduction_slide(presentation_intro_title: str, presentation_intro_description: str) -> dict:
+    return {
         'templateID': TEMPLATE_ID_TITLE,
         'generationTemplate': {
             'title': presentation_intro_title,
             'content': presentation_intro_description
         }
     }
-    
-    agenda_slide = {
+
+def get_agenda_slide(agenda_topics: list[str]) -> dict:
+    return {
         'templateID': TEMPLATE_ID_AGENDA,
         'generationTemplate': {
             'title': 'Roteiro da Aula',
-            'topics': presentation_agenda
+            'topics': agenda_topics
         }
     }
-    
-    final_slide = {
+
+def get_conclusion_slide() -> dict:
+    return {
         'templateID': TEMPLATE_ID_CONCLUSION,
         'generationTemplate': {
             'title': 'Fim...',
@@ -201,4 +199,84 @@ def adding_static_slides_to_presentation(
         }
     }
 
-    return [title_slide, agenda_slide] + filled_templates + [final_slide]
+### STREAMING AUXILIARY FUNCTIONS ###
+
+def get_template_generation_content(template: dict) -> dict:
+    slidesTemplates = []
+    file_path = os.path.join(os.path.dirname(__file__), 'templates', 'slidesTemplates.json')
+
+    template_generation_content = {
+        "templateID": template["templateID"],
+        "generationTemplate": {},
+        "slideContent": template["slideContent"]
+    }
+
+    with open(file_path, 'r', encoding='utf-8') as file:
+        slidesTemplates = json.load(file)
+
+    template = next((item for item in slidesTemplates if item["id"] == template["templateID"]), None)
+
+    if template:
+        template_generation_content["generationTemplate"] = template['templateProps']
+
+    return template_generation_content
+
+def streaming_optional_question_event(data: dict) -> str:
+    if hasattr(data, "model_dump"):
+        data = data.model_dump()
+
+    return f"|OPTIONAL_QUESTION: {json.dumps(data, ensure_ascii=False)}|\n"
+
+def streaming_new_slide_event(data: dict) -> str:
+    if hasattr(data, "model_dump"):
+        data = data.model_dump()
+
+    return f"|NEW_SLIDE: {json.dumps(data, ensure_ascii=False)}|\n"
+    
+def stream_introduction_slide(class_topic):
+    introduction_slide = get_introduction_slide(class_topic, f"Apresentação sobre {class_topic}")
+
+    introduction_slide_payload = Slide(
+        type=SlideTypeEnum("title"),
+        title=introduction_slide["generationTemplate"]["title"],
+        content={
+            "templateID": introduction_slide["templateID"],
+            "templateContent": introduction_slide["generationTemplate"]
+        },
+        image=None,
+        question=None
+    )
+    
+    yield streaming_new_slide_event(introduction_slide_payload)
+
+def stream_agenda_slide(agenda_topics):
+    agenda_slide = get_agenda_slide(agenda_topics)
+
+    agenda_slide_payload = Slide(
+        type=SlideTypeEnum("agenda"),
+        title=agenda_slide["generationTemplate"]["title"],
+        content={
+            "templateID": agenda_slide["templateID"],
+            "templateContent": agenda_slide["generationTemplate"]
+        },
+        image=None,
+        question=None
+    )
+    
+    yield streaming_new_slide_event(agenda_slide_payload)
+
+def stream_conclusion_slide():
+    conslusion_slide = get_conclusion_slide()
+
+    conslusion_slide_payload = Slide(
+        type=SlideTypeEnum("conclusion"),
+        title=conslusion_slide["generationTemplate"]["title"],
+        content={
+            "templateID": conslusion_slide["templateID"],
+            "templateContent": conslusion_slide["generationTemplate"]
+        },
+        image=None,
+        question=None
+    )
+    
+    yield streaming_new_slide_event(conslusion_slide_payload)

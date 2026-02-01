@@ -325,6 +325,66 @@ fill_templates_prompt: |
 
   Retorne apenas o JSON contendo os objetos preenchidos no formato especificado no [Formato da Resposta].
 
+fill_one_template_prompt: |
+  Você é um especialista em criação de apresentações. Você vai receber um objeto com informações sobre um slide de uma apresentação e deve ajustar o objeto para retornar apenas o conteúdo necessário. Você deve preencher os valores da propriedade "generationTemplate" com as informações definidas da propriedade "slideContent" do objeto.
+
+  [Exemplo]
+  Supondo que você receba o seguinte objeto:
+
+  {{
+    'templateID': 1,
+    'slideContent': {{
+        'title': 'Conclusão',
+        'text': 'A Revolução Francesa transformou profundamente a sociedade, lançando bases para os direitos humanos e democráticos modernos. Sua relevância transcende gerações e continua a inspirar debates e reflexões.'
+    }},
+    'generationTemplate': {{
+        'title': 'Título principal',
+        'content': 'Texto complementar referente ao título'
+    }}
+  }},
+
+  Então, você deve usar o conteúdo do "slideContent" para preencher os campos do "generationTemplate". Você deve retornar um objeto com o "templateID" e o "generationTemplate". Sua resposta deveria ser algo assim:
+
+  ```JSON
+      {{
+          'templateID': 1,
+          'generationTemplate': {{
+              'title': 'Conclusão',
+              'content': 'A Revolução Francesa transformou profundamente a sociedade, lançando bases para os direitos humanos e democráticos modernos. Sua relevância transcende gerações e continua a inspirar debates e reflexões.'
+          }}
+      }}
+  ```
+
+  ----------
+
+  Tema da Apresentação: {class_topic}
+
+  [Conteúdo do Slide]
+  {slide_content}
+
+  [Formato da Resposta]
+  ```JSON
+      {{
+        'templateID': templateID do objeto,
+        'generationTemplate': generationTemplate preenchido do objeto
+      }}
+  ```
+  
+  [Dicas]
+  - Você deve usar o os valores presentes do "slideContent" para preencher os campos do "generationTemplate".
+  - O formato do "slideContent" pode não ser exatamente igual ao "generationTemplate", complete o "generationTemplate" da forma que fizer mais sentido.
+  - Você não pode acrescentar ou remover nenhum item do "generationTemplate", apenas preencher/alterar o valor das strings que estão contidas nele.
+  - Não altere o nome de nenhuma propriedade do "generationTemplate", apenas mude o conteúdo presente nos valores das strings.
+  - Se o valor de alguma propriedade dentro do "generationTemplate" for um array de strings, altere apenas o valor das strings de acordo com o conteúdo do slide.
+  - Antes de entregar sua resposta final, garanta que todos os valores presentes no "generationTemplate" foram preenchidos corretamente.
+  - Utilize o [Exemplo] como auxílio para a geração da sua reposta.
+  - Na geração do objeto, sempre utilize aspas simples.
+  - Sempre coloque o dicionário da questão dentro do ```JSON ``` como está especificado no [Formato da Resposta].
+
+  ----------
+
+  Pense cuidadosamente em cada etapa, meu emprego depende disso. Te darei 1 milhão de reais se responder corretamente.
+
 generate_option_question_prompt: |
   Você é um especialista em educação e pedagogo com experiência em ensino. A partir do [Conteúdo da Apresentação], você deve decidir se faz sentido colocar uma pergunta para testar o aprendizado dos alunos em relação ao tema.
 
