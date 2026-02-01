@@ -1,4 +1,3 @@
-import React from "react";
 import type { DefinitionProps } from "./types";
 
 const defaultDefinitionProps: DefinitionProps = {

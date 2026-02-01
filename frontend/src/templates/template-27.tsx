@@ -1,4 +1,3 @@
-import React from "react";
 import type { LearningObjectivesProps } from "./types";
 
 const defaultLearningObjectives: LearningObjectivesProps = {

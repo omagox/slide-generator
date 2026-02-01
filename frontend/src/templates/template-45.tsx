@@ -1,4 +1,3 @@
-import React from "react";
 import type { ExampleProps } from "./types";
 
 export default function Template45({

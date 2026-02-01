@@ -1,4 +1,3 @@
-import React from "react";
 import type { HighlightProps } from "./types";
 
 const defaultHighlight: HighlightProps = {

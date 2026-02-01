@@ -1,4 +1,3 @@
-import React from "react";
 import type { TableProps } from "./types";
 
 const defaults: TableProps = {

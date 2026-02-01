@@ -1,4 +1,3 @@
-import React from "react";
 import type { FormulaProps } from "./types";
 
 export default function Template48({

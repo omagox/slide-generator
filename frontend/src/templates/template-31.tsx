@@ -1,4 +1,3 @@
-import React from "react";
 import type { ComparisonProps } from "./types";
 
 const defaultComparisonItem = {

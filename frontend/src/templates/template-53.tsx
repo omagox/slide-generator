@@ -1,4 +1,3 @@
-import React from "react";
 import type { ProcessProps } from "./types";
 
 export default function Template53({ title, steps, preview }: ProcessProps) {

@@ -1,4 +1,3 @@
-import React from "react";
 import type { DetailedTopicsProps } from "./types";
 
 type SafeDetailedTopicsProps = Partial<DetailedTopicsProps>;

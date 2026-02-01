@@ -1,4 +1,3 @@
-import React from "react";
 import type { TwoTopicsProps } from "./types";
 
 export default function Template44({ title, topics, preview }: TwoTopicsProps) {

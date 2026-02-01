@@ -1,4 +1,3 @@
-import React from "react";
 import type { TwoTopicsProps } from "./types";
 
 type SafeTwoTopicsProps = Partial<TwoTopicsProps>;

@@ -1,4 +1,3 @@
-import React from "react";
 import type { SingleTopicProps } from "./types";
 
 export default function Template52({

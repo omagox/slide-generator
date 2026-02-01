@@ -1,4 +1,3 @@
-import React from "react";
 import type { TimelineProps } from "./types";
 
 const defaults: TimelineProps = {

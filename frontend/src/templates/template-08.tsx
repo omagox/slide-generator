@@ -1,4 +1,3 @@
-import React from "react";
 import type { MixedContentProps } from "./types";
 
 const defaults: MixedContentProps = {

@@ -1,4 +1,3 @@
-import React from "react";
 import type { ExampleProps } from "./types";
 
 const defaultExampleItem = {

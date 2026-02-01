@@ -1,4 +1,3 @@
-import React from "react";
 import type { CaseStudyProps } from "./types";
 
 export default function Template47({

@@ -1,4 +1,3 @@
-import React from "react";
 import type { TopicsWithSubtopicsProps } from "./types";
 
 const defaults: TopicsWithSubtopicsProps = {

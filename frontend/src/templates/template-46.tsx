@@ -1,4 +1,3 @@
-import React from "react";
 import type { ComparisonProps } from "./types";
 
 export default function Template46({ title, items, preview }: ComparisonProps) {
