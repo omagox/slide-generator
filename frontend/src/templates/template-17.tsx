@@ -11,7 +11,7 @@ const defaults: MixedContentProps = {
 export default function Template17(props: Partial<MixedContentProps>) {
   const { title, topics, content, preview } = { ...defaults, ...props };
 
-  const colors = ["#1277bc", "#ab1551", "#6b7280", "#1277bc"];
+  const colors = ["#1277bc", "#58a3a1", "#6b7280", "#1277bc"];
 
   return (
     <div

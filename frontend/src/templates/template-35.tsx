@@ -21,7 +21,7 @@ export default function Template35(props: Partial<ProcessProps>) {
       defaultProcessProps.steps,
   };
 
-  const colors = ["#1277bc", "#ab1551", "#6b7280", "#1277bc"];
+  const colors = ["#1277bc", "#58a3a1", "#6b7280", "#1277bc"];
 
   return (
     <div

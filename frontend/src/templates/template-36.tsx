@@ -23,7 +23,7 @@ export default function Template36(props: Partial<MultipleTopicsProps>) {
       : defaultMultipleTopicsProps.topics,
   };
 
-  const colors = ["#1277bc", "#ab1551", "#6b7280"];
+  const colors = ["#1277bc", "#58a3a1", "#6b7280"];
 
   return (
     <div

@@ -20,7 +20,7 @@ export default function Template50({
           <div className="absolute left-8 top-0 bottom-0 w-1 bg-gray-300"></div>
           <div className="space-y-8">
             {steps.slice(0, 4).map((step, index) => {
-              const colors = ["#1277bc", "#ab1551", "#6b7280", "#1277bc"];
+              const colors = ["#1277bc", "#58a3a1", "#6b7280", "#1277bc"];
               return (
                 <div
                   key={index}

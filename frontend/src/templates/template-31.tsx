@@ -43,7 +43,7 @@ export default function Template31(props: Partial<ComparisonProps>) {
           <div key={index} className="bg-gray-50 p-6 rounded-lg">
             <h2
               className="text-xl font-semibold mb-4 text-center"
-              style={{ color: index === 0 ? "#1277bc" : "#ab1551" }}
+              style={{ color: index === 0 ? "#1277bc" : "#58a3a1" }}
             >
               {item.title}
             </h2>
@@ -53,7 +53,7 @@ export default function Template31(props: Partial<ComparisonProps>) {
                   <div
                     className="w-3 h-3 rounded-full"
                     style={{
-                      backgroundColor: index === 0 ? "#1277bc" : "#ab1551",
+                      backgroundColor: index === 0 ? "#1277bc" : "#58a3a1",
                     }}
                   ></div>
                   <span className="text-gray-700">{char}</span>

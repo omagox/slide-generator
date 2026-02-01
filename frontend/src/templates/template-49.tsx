@@ -31,7 +31,7 @@ export default function Template49({ title, items, preview }: AgendaProps) {
               <div
                 className="w-16 h-16 rounded-lg flex flex-col items-center justify-center text-white font-bold"
                 style={{
-                  backgroundColor: index % 2 === 0 ? "#1277bc" : "#ab1551",
+                  backgroundColor: index % 2 === 0 ? "#1277bc" : "#58a3a1",
                 }}
               >
                 <span className="text-xs">TEMPO</span>
@@ -48,7 +48,7 @@ export default function Template49({ title, items, preview }: AgendaProps) {
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
                 style={{
-                  backgroundColor: index % 2 === 0 ? "#ab1551" : "#1277bc",
+                  backgroundColor: index % 2 === 0 ? "#58a3a1" : "#1277bc",
                 }}
               >
                 {index + 1}

@@ -12,7 +12,7 @@ export default function Template53({ title, steps, preview }: ProcessProps) {
       </h1>
       <div className="grid grid-cols-2 gap-8">
         {steps.slice(0, 4).map((step, index) => {
-          const colors = ["#1277bc", "#ab1551", "#6b7280", "#1277bc"];
+          const colors = ["#1277bc", "#58a3a1", "#6b7280", "#1277bc"];
           return (
             <div key={index} className="flex items-center space-x-4">
               <div

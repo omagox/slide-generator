@@ -20,10 +20,10 @@ export default function Template24(props: Partial<MixedContentProps>) {
 
   const colors = [
     "#1277bc",
-    "#ab1551",
+    "#58a3a1",
     "#6b7280",
     "#1277bc",
-    "#ab1551",
+    "#58a3a1",
     "#6b7280",
   ];
 

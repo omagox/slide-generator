@@ -10,7 +10,7 @@ const defaults: MultipleTopicsProps = {
 export default function Template06(props: Partial<MultipleTopicsProps>) {
   const { title, topics, preview } = { ...defaults, ...props };
 
-  const colors = ["#1277bc", "#ab1551", "#6b7280", "#1277bc"];
+  const colors = ["#1277bc", "#58a3a1", "#6b7280", "#1277bc"];
 
   return (
     <div

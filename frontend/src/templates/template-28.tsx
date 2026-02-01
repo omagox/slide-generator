@@ -38,7 +38,7 @@ export default function Template28(props: Partial<DefinitionProps>) {
             <div>
               <h3
                 className="text-lg font-semibold mb-3"
-                style={{ color: "#ab1551" }}
+                style={{ color: "#58a3a1" }}
               >
                 Exemplos:
               </h3>
@@ -47,7 +47,7 @@ export default function Template28(props: Partial<DefinitionProps>) {
                   <li key={index} className="flex items-center space-x-2">
                     <div
                       className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: "#ab1551" }}
+                      style={{ backgroundColor: "#58a3a1" }}
                     ></div>
                     <span className="text-gray-600">{example}</span>
                   </li>

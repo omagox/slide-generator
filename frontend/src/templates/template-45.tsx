@@ -25,7 +25,7 @@ export default function Template45({
       </div>
       <div className="grid grid-cols-2 gap-6">
         {examples.slice(0, 4).map((example, index) => {
-          const colors = ["#1277bc", "#ab1551", "#6b7280", "#1277bc"];
+          const colors = ["#1277bc", "#58a3a1", "#6b7280", "#1277bc"];
           return (
             <div key={index} className="p-6 bg-gray-50 rounded-lg">
               <div className="flex items-center space-x-3 mb-3">

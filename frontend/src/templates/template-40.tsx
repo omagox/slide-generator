@@ -47,7 +47,7 @@ export default function Template40(props: Partial<TopicWithDetailsProps>) {
                 <div
                   className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-sm"
                   style={{
-                    backgroundColor: index % 2 === 0 ? "#ab1551" : "#1277bc",
+                    backgroundColor: index % 2 === 0 ? "#58a3a1" : "#1277bc",
                   }}
                 >
                   {index + 1}

@@ -44,11 +44,11 @@ export default function Template30(props: Partial<ExampleProps>) {
           <div
             key={index}
             className="bg-gray-50 p-5 rounded-lg border-l-4"
-            style={{ borderLeftColor: index % 2 === 0 ? "#1277bc" : "#ab1551" }}
+            style={{ borderLeftColor: index % 2 === 0 ? "#1277bc" : "#58a3a1" }}
           >
             <h3
               className="text-lg font-semibold mb-3"
-              style={{ color: index % 2 === 0 ? "#1277bc" : "#ab1551" }}
+              style={{ color: index % 2 === 0 ? "#1277bc" : "#58a3a1" }}
             >
               Exemplo {index + 1}: {example.title}
             </h3>

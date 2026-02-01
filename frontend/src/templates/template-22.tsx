@@ -13,7 +13,7 @@ const defaults: DetailedTopicsProps = {
 export default function Template22(props: Partial<DetailedTopicsProps>) {
   const { title, topics, preview } = { ...defaults, ...props };
 
-  const colors = ["#1277bc", "#ab1551"];
+  const colors = ["#1277bc", "#58a3a1"];
 
   return (
     <div

@@ -45,11 +45,11 @@ export default function Template42(props: Partial<TwoTopicsProps>) {
         <div className="w-1/2 pl-4">
           <div
             className="bg-gray-50 p-6 rounded-lg border-t-4"
-            style={{ borderTopColor: "#ab1551" }}
+            style={{ borderTopColor: "#58a3a1" }}
           >
             <h2
               className="text-xl font-semibold mb-4"
-              style={{ color: "#ab1551" }}
+              style={{ color: "#58a3a1" }}
             >
               {topics[1].title}
             </h2>

@@ -47,7 +47,7 @@ export default function Template32(props: Partial<CaseStudyProps>) {
         <div>
           <h2
             className="text-xl font-semibold mb-4"
-            style={{ color: "#ab1551" }}
+            style={{ color: "#58a3a1" }}
           >
             Questões para Análise
           </h2>
@@ -56,7 +56,7 @@ export default function Template32(props: Partial<CaseStudyProps>) {
               <div key={index} className="flex items-start space-x-3">
                 <div
                   className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                  style={{ backgroundColor: "#ab1551" }}
+                  style={{ backgroundColor: "#58a3a1" }}
                 >
                   {index + 1}
                 </div>

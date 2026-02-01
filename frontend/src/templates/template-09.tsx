@@ -15,16 +15,14 @@ const defaults: TimelineProps = {
 export default function Template09(props: Partial<TimelineProps>) {
   const { title, steps, content, preview } = { ...defaults, ...props };
 
-  const colors = ["#1277bc", "#ab1551", "#6b7280"];
+  const colors = ["#1277bc", "#58a3a1", "#6b7280"];
 
   return (
     <div
       style={{ transform: preview ? "scale(0.3)" : "" }}
       className="w-full aspect-video bg-white p-8 rounded-lg shadow-lg flex flex-col justify-between items-center"
     >
-      <h1 className="text-3xl font-bold text-black text-center">
-        {title}
-      </h1>
+      <h1 className="text-3xl font-bold text-black text-center">{title}</h1>
       <div className="flex justify-between items-start gap-4">
         {steps.slice(0, 3).map((step, index) => (
           <div key={index} className="flex-1 text-center">

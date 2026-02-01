@@ -29,7 +29,7 @@ export default function Template39(props: Partial<DetailedTopicsProps>) {
       </h1>
       <div className="w-full grid grid-cols-2 gap-6">
         {topics.slice(0, 4).map((topic, index) => {
-          const colors = ["#1277bc", "#ab1551", "#6b7280", "#1277bc"];
+          const colors = ["#1277bc", "#58a3a1", "#6b7280", "#1277bc"];
           return (
             <div
               key={index}

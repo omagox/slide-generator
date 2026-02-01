@@ -34,7 +34,7 @@ export default function Template27(props: Partial<LearningObjectivesProps>) {
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
                 style={{
-                  backgroundColor: index % 2 === 0 ? "#1277bc" : "#ab1551",
+                  backgroundColor: index % 2 === 0 ? "#1277bc" : "#58a3a1",
                 }}
               >
                 {index + 1}

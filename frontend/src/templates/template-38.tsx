@@ -34,7 +34,7 @@ export default function Template38(props: Partial<SingleTopicProps>) {
             ></div>
             <div
               className="w-4 h-4 rounded-full"
-              style={{ backgroundColor: "#ab1551" }}
+              style={{ backgroundColor: "#58a3a1" }}
             ></div>
             <div className="w-4 h-4 rounded-full bg-gray-400"></div>
           </div>

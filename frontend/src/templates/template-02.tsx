@@ -38,11 +38,11 @@ export default function Template02(props: SafeTwoTopicsProps) {
         </div>
         <div
           className="bg-gray-50 p-6 rounded-lg border-l-4"
-          style={{ borderLeftColor: "#ab1551" }}
+          style={{ borderLeftColor: "#58a3a1" }}
         >
           <h2
             className="text-xl font-semibold mb-3"
-            style={{ color: "#ab1551" }}
+            style={{ color: "#58a3a1" }}
           >
             {topics[1]?.title}
           </h2>

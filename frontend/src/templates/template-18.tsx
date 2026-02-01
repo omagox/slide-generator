@@ -37,18 +37,18 @@ export default function Template18(props: Partial<TwoTopicsProps>) {
         <div className="mx-8">
           <div
             className="w-12 h-12 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: "#ab1551" }}
+            style={{ backgroundColor: "#58a3a1" }}
           >
             <span className="text-white text-xl">→</span>
           </div>
         </div>
         <div
           className="flex-1 bg-gray-50 p-6 rounded-lg border-l-4"
-          style={{ borderLeftColor: "#ab1551" }}
+          style={{ borderLeftColor: "#58a3a1" }}
         >
           <h2
             className="text-xl font-semibold mb-4"
-            style={{ color: "#ab1551" }}
+            style={{ color: "#58a3a1" }}
           >
             {topics[1]?.title}
           </h2>

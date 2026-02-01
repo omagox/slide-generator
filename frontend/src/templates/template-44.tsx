@@ -26,18 +26,18 @@ export default function Template44({ title, topics, preview }: TwoTopicsProps) {
         <div className="w-2/12 flex justify-center">
           <div
             className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-2xl"
-            style={{ backgroundColor: "#ab1551" }}
+            style={{ backgroundColor: "#58a3a1" }}
           >
             VS
           </div>
         </div>
         <div
           className="w-5/12 h-full bg-gray-50 rounded-lg p-6 border-l-4"
-          style={{ borderLeftColor: "#ab1551" }}
+          style={{ borderLeftColor: "#58a3a1" }}
         >
           <h2
             className="text-xl font-semibold mb-4 text-center"
-            style={{ color: "#ab1551" }}
+            style={{ color: "#58a3a1" }}
           >
             {topics[1]?.title}
           </h2>

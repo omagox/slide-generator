@@ -12,7 +12,7 @@ const defaults: TopicsWithSubtopicsProps = {
 
 export default function Template25(props: Partial<TopicsWithSubtopicsProps>) {
   const { title, topics, preview } = { ...defaults, ...props };
-  const colors = ["#1277bc", "#ab1551"];
+  const colors = ["#1277bc", "#58a3a1"];
 
   return (
     <div

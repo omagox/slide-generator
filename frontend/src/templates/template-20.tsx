@@ -14,7 +14,7 @@ const defaults: DetailedTopicsProps = {
 export default function Template20(props: Partial<DetailedTopicsProps>) {
   const { title, topics, preview } = { ...defaults, ...props };
 
-  const colors = ["#1277bc", "#ab1551", "#6b7280"];
+  const colors = ["#1277bc", "#58a3a1", "#6b7280"];
 
   return (
     <div

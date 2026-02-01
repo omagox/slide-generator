@@ -30,7 +30,7 @@ export default function Template34(props: Partial<SingleTopicProps>) {
         </p>
         <div
           className="mt-8 w-32 h-1 rounded"
-          style={{ backgroundColor: "#ab1551" }}
+          style={{ backgroundColor: "#58a3a1" }}
         ></div>
       </div>
     </div>

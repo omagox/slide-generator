@@ -51,7 +51,7 @@ export default function Template33(props: Partial<FormulaProps>) {
           <div>
             <h3
               className="text-lg font-semibold mb-4"
-              style={{ color: "#ab1551" }}
+              style={{ color: "#58a3a1" }}
             >
               Onde:
             </h3>
@@ -60,12 +60,14 @@ export default function Template33(props: Partial<FormulaProps>) {
                 <div key={index} className="flex items-center space-x-2">
                   <span
                     className="font-mono font-bold text-sm"
-                    style={{ color: "#ab1551" }}
+                    style={{ color: "#58a3a1" }}
                   >
                     {variable.symbol}
                   </span>
-                  <FiArrowRight className="text-[#ab1551]" />
-                  <span className="text-gray-700 text-xs">{variable.meaning}</span>
+                  <FiArrowRight className="text-[#58a3a1]" />
+                  <span className="text-gray-700 text-xs">
+                    {variable.meaning}
+                  </span>
                 </div>
               ))}
             </div>

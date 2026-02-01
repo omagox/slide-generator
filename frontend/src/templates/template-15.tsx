@@ -46,7 +46,7 @@ export default function Template15(props: Partial<TableProps>) {
                 >
                   <td
                     className="p-4 font-semibold"
-                    style={{ color: index % 2 === 0 ? "#1277bc" : "#ab1551" }}
+                    style={{ color: index % 2 === 0 ? "#1277bc" : "#58a3a1" }}
                   >
                     {row.topic}
                   </td>

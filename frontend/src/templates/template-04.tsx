@@ -16,7 +16,7 @@ const defaultValues: TopicsWithSubtopicsProps = {
 
 export default function Template04(props: SafeTopicsWithSubtopicsProps) {
   const { title, topics, preview } = { ...defaultValues, ...props };
-  const colors = ["#1277bc", "#ab1551"];
+  const colors = ["#1277bc", "#58a3a1"];
 
   return (
     <div

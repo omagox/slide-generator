@@ -29,7 +29,7 @@ export default function Template43(props: Partial<ProcessProps>) {
       <div className="flex justify-center">
         <div className="space-y-6 max-w-2xl w-full">
           {steps.slice(0, 4).map((step, index) => {
-            const colors = ["#1277bc", "#ab1551", "#6b7280", "#1277bc"];
+            const colors = ["#1277bc", "#58a3a1", "#6b7280", "#1277bc"];
             return (
               <div key={index} className="flex items-center space-x-6">
                 <div

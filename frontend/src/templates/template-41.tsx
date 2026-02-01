@@ -29,7 +29,7 @@ export default function Template41(props: Partial<ProcessProps>) {
       </h1>
       <div className="grid grid-cols-3 gap-6 w-full">
         {steps.slice(0, 3).map((step, index) => {
-          const colors = ["#1277bc", "#ab1551", "#6b7280"];
+          const colors = ["#1277bc", "#58a3a1", "#6b7280"];
           return (
             <div key={index} className="text-center">
               <div

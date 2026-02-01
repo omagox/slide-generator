@@ -4,8 +4,16 @@ import type { DetailedTopicsProps } from "./types";
 const defaults: DetailedTopicsProps = {
   title: "Título padrão",
   topics: [
-    { title: "Tópico 1", content: "Conteúdo do tópico 1", additional: "Informação adicional 1" },
-    { title: "Tópico 2", content: "Conteúdo do tópico 2", additional: "Informação adicional 2" },
+    {
+      title: "Tópico 1",
+      content: "Conteúdo do tópico 1",
+      additional: "Informação adicional 1",
+    },
+    {
+      title: "Tópico 2",
+      content: "Conteúdo do tópico 2",
+      additional: "Informação adicional 2",
+    },
   ],
   preview: false,
 };
@@ -13,7 +21,7 @@ const defaults: DetailedTopicsProps = {
 export default function Template13(props: Partial<DetailedTopicsProps>) {
   const { title, topics, preview } = { ...defaults, ...props };
 
-  const colors = ["#1277bc", "#ab1551"];
+  const colors = ["#1277bc", "#58a3a1"];
 
   return (
     <div

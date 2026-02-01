@@ -13,7 +13,7 @@ export default function Template51({ title, steps, preview }: ProcessProps) {
       <div className="flex justify-center">
         <div className="space-y-6 max-w-3xl">
           {steps.slice(0, 4).map((step, index) => {
-            const colors = ["#1277bc", "#ab1551", "#6b7280", "#1277bc"];
+            const colors = ["#1277bc", "#58a3a1", "#6b7280", "#1277bc"];
             return (
               <div key={index} className="flex items-start space-x-6">
                 <div className="flex flex-col items-center">

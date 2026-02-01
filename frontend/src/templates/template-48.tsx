@@ -32,11 +32,11 @@ export default function Template48({
             <h3 className="text-xl font-semibold mb-4 flex items-center space-x-2">
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center text-white"
-                style={{ backgroundColor: "#ab1551" }}
+                style={{ backgroundColor: "#58a3a1" }}
               >
                 <span className="text-sm">?</span>
               </div>
-              <span style={{ color: "#ab1551" }}>Variáveis</span>
+              <span style={{ color: "#58a3a1" }}>Variáveis</span>
             </h3>
             <div className="space-y-3">
               {variables.map((variable, index) => (
@@ -46,7 +46,7 @@ export default function Template48({
                 >
                   <span
                     className="font-mono font-bold text-xl w-8"
-                    style={{ color: "#ab1551" }}
+                    style={{ color: "#58a3a1" }}
                   >
                     {variable.symbol}
                   </span>
