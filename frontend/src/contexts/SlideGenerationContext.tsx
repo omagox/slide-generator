@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import type { SlideRequest, Slide } from "../types/global";
 
@@ -11,6 +17,10 @@ interface SlideGenerationContextType {
   handleDefaultGeneration: (request: SlideRequest) => Promise<void>;
   error: string | null;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
+  generationProgress: {
+    message: string;
+    progress: number;
+  } | null;
 }
 
 const SlideGenerationContext = createContext<SlideGenerationContextType | null>(
@@ -24,6 +34,10 @@ export const SlideGenerationProvider: React.FC<{
 
   const [slides, setSlides] = useState<Slide[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [generationProgress, setGenerationProgress] = useState<{
+    message: string;
+    progress: number;
+  } | null>(null);
 
   const readerRef = useRef<ReadableStreamDefaultReader | null>(null);
 
@@ -35,6 +49,14 @@ export const SlideGenerationProvider: React.FC<{
 
   const handleStreamingGeneration = async (request: SlideRequest) => {
     reset();
+
+    setGenerationProgress({
+      message: "Iniciando geração dos slides...",
+      progress: 0,
+    });
+
+    let currentStep = 0;
+    let totalSteps = request.n_slides + 3;
 
     try {
       let firstSlideReceived = false;
@@ -72,6 +94,25 @@ export const SlideGenerationProvider: React.FC<{
           firstSlideReceived = true;
           navigate("/presentation");
         }
+
+        currentStep += 1;
+
+        if (currentStep == totalSteps) {
+          setGenerationProgress({
+            message: "Finalizando...",
+            progress: 98,
+          });
+        } else {
+          const safeCurrentStep = Math.max(1, currentStep);
+
+          setGenerationProgress({
+            message: `Passo ${safeCurrentStep} de ${totalSteps}`,
+            progress: Math.min(
+              100,
+              Math.max(0, (safeCurrentStep / totalSteps) * 100),
+            ),
+          });
+        }
       }
     } catch (err) {
       setError(
@@ -79,6 +120,14 @@ export const SlideGenerationProvider: React.FC<{
       );
       navigate("/");
       console.error(err);
+    } finally {
+      setGenerationProgress({
+        message: `Geração concluída!`,
+        progress: 100,
+      });
+      setTimeout(() => {
+        setGenerationProgress(null);
+      }, 3500);
     }
   };
 
@@ -104,7 +153,8 @@ export const SlideGenerationProvider: React.FC<{
         handleStreamingGeneration,
         handleDefaultGeneration,
         error,
-        setError
+        setError,
+        generationProgress,
       }}
     >
       {children}

@@ -62,7 +62,6 @@ const PresentationPage = () => {
 
   useEffect(() => {
     presentationSlidesRef.current = presentationSlides;
-    console.log(presentationSlides);
   }, [presentationSlides]);
 
   useEffect(() => {
