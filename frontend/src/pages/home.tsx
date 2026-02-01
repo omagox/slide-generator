@@ -45,7 +45,7 @@ const HomePage = () => {
     setLoading(true);
 
     if (useStreaming) {
-      handleStreamingGeneration(request);
+      await handleStreamingGeneration(request);
     } else {
       await handleDefaultGeneration(request);
     }

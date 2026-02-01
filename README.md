@@ -2,6 +2,8 @@
 
 Gerador de slides para professores. A partir de um tema, nível de ensino e contexto, a API gera um plano de aula e um deck de slides pronto para uso.
 
+Vídeo de Demonstração: https://youtu.be/q8HzxYJ1ilU
+
 ## Pré-requisitos
 
 ### Backend
@@ -141,3 +143,13 @@ slide-generator/
 2. **Planejamento da apresentação**: Com base nesse plano de aula, é estruturado um planejamento da apresentação: uma lista de objetos, onde cada objeto representa um slide e inclui o ID do template, o conteúdo principal do slide e, caso necessário, uma sugestão de imagem relacionada ao tema. (`generate_presentation_content`)
 3. **Adaptação aos templates**: O conteúdo desses slides inicialmente pode não estar perfeitamente no formato dos templates. Por isso, cada slide passa por uma etapa de adaptação para preencher corretamente todos os campos do template correspondente. (`generate_templates_content`)
 4. **Questão avaliativa opcional**: Com todos os templates devidamente preenchidos, a apresentação está praticamente pronta. Para finalizar, o conteúdo é analisado por uma LLM que avalia se faz sentido incluir uma questão avaliativa no decorrer da apresentação. Caso seja pertinente, a questão é gerada e inserida na apresentação no momento apropriado. (`generate_optional_question`)
+
+## Possíveis Melhorias Futuras
+- Implementar um tratamento mais eficiente para a criação da agenda, especialmente em casos de slides extensos. Avaliar a possibilidade de utilizar uma chamada específica à LLM para divisão em tópicos mais concisos.
+- Permitir a adição de novos slides baseado nas queries de imagens geradas.
+- Implementar retries em caso de falhas na geração de slides.
+- Integrar com um banco de dados para armazenar os resultados das gerações.
+- Aperfeiçoar os templates para garantir uma estilização 100% consistente.
+- Exibir mensagens de status sobre o progresso da geração (em ambos os endpoints), para diminuir a ansiedade do usuário.
+- Disponibilizar funcionalidade para exportação de apresentação.
+- Ajustar os prompts para evitar o uso de markdown ou adaptar o frontend para interpretar corretamente delimitadores de formatação (por exemplo, **valor** para negrito).
