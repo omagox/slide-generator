@@ -41,11 +41,11 @@ class SlideGenerator:
         logger.info("Initializing SlideGenerator...")
         self.agent_config = read_yaml(str(GENERATOR_AGENT_CONFIG_PATH))
 
-        self.lesson_plan_prompt = self.agent_config["lesson_plan_prompt"]
-        self.generate_presentation_prompt = self.agent_config["generate_presentation_prompt"]
-        self.fill_templates_prompt = self.agent_config["fill_templates_prompt"]
-        self.generate_option_question_prompt = self.agent_config["generate_option_question_prompt"]
-        self.fill_one_template_prompt = self.agent_config["fill_one_template_prompt"]
+        self.lesson_plan_prompt: str = self.agent_config["lesson_plan_prompt"]
+        self.generate_presentation_prompt: str = self.agent_config["generate_presentation_prompt"]
+        self.fill_templates_prompt: str = self.agent_config["fill_templates_prompt"]
+        self.generate_option_question_prompt: str = self.agent_config["generate_option_question_prompt"]
+        self.fill_one_template_prompt: str = self.agent_config["fill_one_template_prompt"]
 
         self.llm = ChatGoogleGenerativeAI(
             model=self.agent_config["llm_config"]["model"],
@@ -55,7 +55,7 @@ class SlideGenerator:
         self.tavilyClient = TavilyClient(TAVILY_API_KEY)
         logger.info("SlideGenerator initialized!")
 
-    def generate_lesson_plan(self, class_topic, class_grade, class_additional_instructions) -> str:
+    def generate_lesson_plan(self, class_topic: str, class_grade: str, class_additional_instructions: str) -> str:
         logger.info("Generating lesson plan...")
         auxiliary_web_content = self.tavilyClient.search(
             query=f"Preciso dar uma aula sobre o assunto '{class_topic}' para alunos do nível '{class_grade}', quero que você me traga uma lista de tópicos que são importantes referentes a esse assunto.",
@@ -80,7 +80,7 @@ class SlideGenerator:
 
         return response.content
 
-    def generate_presentation_content(self, lesson_plan, class_topic, templates_description, number_of_slides) -> str:
+    def generate_presentation_content(self, lesson_plan: str, class_topic: str, templates_description: str, number_of_slides: int) -> str:
         logger.info("Generating the presentation content...")
         prompt = self.generate_presentation_prompt.format(
             class_topic=class_topic,
@@ -100,7 +100,7 @@ class SlideGenerator:
 
         return response.content
 
-    def generate_templates_content(self, slides_content, class_topic) -> str:
+    def generate_templates_content(self, slides_content: str, class_topic: str) -> str:
         prompt = self.fill_templates_prompt.format(
             class_topic=class_topic,
             slides_content=slides_content
@@ -117,7 +117,7 @@ class SlideGenerator:
 
         return response.content
 
-    def generate_one_template_content(self, slide_content, class_topic) -> str:
+    def generate_one_template_content(self, slide_content: dict, class_topic: str) -> str:
         prompt = self.fill_one_template_prompt.format(
             class_topic=class_topic,
             slide_content=slide_content
@@ -134,7 +134,7 @@ class SlideGenerator:
 
         return response.content
 
-    def generate_optional_question(self, filled_templates) -> str:
+    def generate_optional_question(self, filled_templates: list[dict]) -> str:
         prompt = self.generate_option_question_prompt.format(
             filled_templates=filled_templates
         )
@@ -150,7 +150,7 @@ class SlideGenerator:
 
         return response.content
 
-    def generate_presentation(self, lesson_plan, class_topic, number_of_slides) -> list[Slide]:
+    def generate_presentation(self, lesson_plan: str, class_topic: str, number_of_slides: int) -> list[Slide]:
         templates_description = get_templates_descriptions()
         presentation_content = self.generate_presentation_content(lesson_plan, class_topic, templates_description, number_of_slides)
         presentation_content_array = extract_object_array(presentation_content)
@@ -228,7 +228,7 @@ class SlideGenerator:
 
         return presentation
 
-    def generate_presentation_stream(self, lesson_plan, class_topic, number_of_slides):
+    def generate_presentation_stream(self, lesson_plan: str, class_topic: str, number_of_slides: int):
         yield from stream_introduction_slide(class_topic)
 
         templates_description = get_templates_descriptions()
