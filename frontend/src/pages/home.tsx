@@ -5,11 +5,14 @@ import type { SlideRequest } from "../types/global";
 import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 
 const HomePage = () => {
-  const { handleStreamingGeneration, handleDefaultGeneration } =
-    useSlideGeneration();
+  const {
+    handleStreamingGeneration,
+    handleDefaultGeneration,
+    error,
+    setError,
+  } = useSlideGeneration();
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const [topic, setTopic] = useState("");
   const [grade, setGrade] = useState("");
@@ -24,6 +27,19 @@ const HomePage = () => {
       context: context.trim() || undefined,
       n_slides: nSlides,
     };
+
+    if (!request.topic) {
+      setError("O tema da aula é obrigatório.");
+      return;
+    }
+    if (!request.grade) {
+      setError("O nível/ano dos alunos é obrigatório.");
+      return;
+    }
+    if (!request.n_slides || request.n_slides < 1 || request.n_slides > 30) {
+      setError("O número de slides deve ser entre 1 e 30.");
+      return;
+    }
 
     setError(null);
     setLoading(true);
@@ -54,7 +70,6 @@ const HomePage = () => {
             type="text"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            required
             placeholder="Ex: Fotosíntese"
             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-slate-400 outline-none"
           />
@@ -72,7 +87,6 @@ const HomePage = () => {
             type="text"
             value={grade}
             onChange={(e) => setGrade(e.target.value)}
-            required
             placeholder="Ex: 6º ano, Ensino Médio"
             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-slate-400 outline-none"
           />

@@ -27,6 +27,13 @@ export function addQuestionSlide(
   question: OptionalQuestion,
   insertAfterIndex: number,
 ): NormalizedSlide[] {
+  const nextSlides = slides.map((slide, i) => {
+    if (i === insertAfterIndex) {
+      return { ...slide, question: null };
+    }
+    return slide;
+  });
+
   const newSlide: NormalizedSlide = {
     id: insertAfterIndex + 1,
     canvas: {
@@ -38,10 +45,9 @@ export function addQuestionSlide(
       },
     },
     image: null,
-    question,
+    question: null,
   };
 
-  const nextSlides = [...slides];
   nextSlides.splice(insertAfterIndex + 1, 0, newSlide);
   return nextSlides.map((slide, index) => ({ ...slide, id: index }));
 }

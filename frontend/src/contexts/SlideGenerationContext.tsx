@@ -9,6 +9,8 @@ interface SlideGenerationContextType {
   slides: Slide[];
   handleStreamingGeneration: (request: SlideRequest) => Promise<void>;
   handleDefaultGeneration: (request: SlideRequest) => Promise<void>;
+  error: string | null;
+  setError: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const SlideGenerationContext = createContext<SlideGenerationContextType | null>(
@@ -21,6 +23,7 @@ export const SlideGenerationProvider: React.FC<{
   const navigate = useNavigate();
 
   const [slides, setSlides] = useState<Slide[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const readerRef = useRef<ReadableStreamDefaultReader | null>(null);
 
@@ -50,7 +53,8 @@ export const SlideGenerationProvider: React.FC<{
 
         if (chunk.type == "question") {
           // It is necessary to add +2 because the question numbering does not count the introduction, agenda, and conclusion slides.
-          const slideIndex = (chunk.content.slide_number ?? slides.length) - 1 + 2;
+          const slideIndex =
+            (chunk.content.slide_number ?? slides.length) - 1 + 2;
           setSlides((prevSlides) => {
             if (slideIndex < 0 || slideIndex >= prevSlides.length)
               return prevSlides;
@@ -70,16 +74,27 @@ export const SlideGenerationProvider: React.FC<{
         }
       }
     } catch (err) {
-      throw err;
+      setError(
+        "Ocorreu um erro ao gerar os slides. Por favor, tente novamente.",
+      );
+      navigate("/");
+      console.error(err);
     }
   };
 
   const handleDefaultGeneration = async (request: SlideRequest) => {
     reset();
 
-    const response = await generateSlides(request);
-    setSlides(response);
-    navigate("/presentation");
+    try {
+      const response = await generateSlides(request);
+      setSlides(response);
+      navigate("/presentation");
+    } catch (err) {
+      setError(
+        "Ocorreu um erro ao gerar os slides. Por favor, tente novamente.",
+      );
+      console.error(err);
+    }
   };
 
   return (
@@ -88,6 +103,8 @@ export const SlideGenerationProvider: React.FC<{
         slides,
         handleStreamingGeneration,
         handleDefaultGeneration,
+        error,
+        setError
       }}
     >
       {children}

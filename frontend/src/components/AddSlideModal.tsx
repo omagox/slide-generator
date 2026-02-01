@@ -46,10 +46,11 @@ const AddSlideModal = ({
           {hasImage && (
             <button
               type="button"
-              className="py-2.5 px-4 cursor-pointer rounded-lg bg-slate-800 text-white font-medium hover:bg-slate-700 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors outline-none"
+              disabled
+              className="py-2.5 px-4 cursor-not-allowed opacity-40 rounded-lg bg-slate-800 text-white font-medium focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors outline-none"
               onClick={handleAddImageSlide}
             >
-              Slide de imagem
+              Slide de imagem (Indisponível)
             </button>
           )}
         </div>
