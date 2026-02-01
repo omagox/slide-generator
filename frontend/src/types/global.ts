@@ -19,6 +19,7 @@ export interface OptionalQuestion {
   statement: string;
   options: string[];
   correct_answer: number;
+  slide_number?: number;
 }
 
 export type NormalizedSlide = {

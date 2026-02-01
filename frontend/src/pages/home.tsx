@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { generateSlides } from "../lib/api";
+import { useState } from "react";
+
 import type { SlideRequest } from "../types/global";
 
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
+
 const HomePage = () => {
-  const navigate = useNavigate();
+  const { handleStreamingGeneration, handleDefaultGeneration } =
+    useSlideGeneration();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -12,36 +15,29 @@ const HomePage = () => {
   const [grade, setGrade] = useState("");
   const [context, setContext] = useState("");
   const [nSlides, setNSlides] = useState(10);
+  const [useStreaming, setUseStreaming] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    const request: SlideRequest = {
+      topic: topic.trim(),
+      grade: grade.trim(),
+      context: context.trim() || undefined,
+      n_slides: nSlides,
+    };
+
     setError(null);
     setLoading(true);
 
-    try {
-      const request: SlideRequest = {
-        topic: topic.trim(),
-        grade: grade.trim(),
-        context: context.trim() || undefined,
-        n_slides: nSlides,
-      };
-      const slides = await generateSlides(request);
-      navigate("/presentation", { state: { slides } });
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Erro ao gerar apresentação.",
-      );
-    } finally {
-      setLoading(false);
+    if (useStreaming) {
+      handleStreamingGeneration(request);
+    } else {
+      await handleDefaultGeneration(request);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md bg-white rounded-xl shadow-md p-8 space-y-6"
-      >
+      <div className="w-full max-w-md bg-white rounded-xl shadow-md p-8 space-y-6">
         <h1 className="text-2xl font-semibold text-slate-800 text-center">
           Gerador de Apresentações
         </h1>
@@ -119,6 +115,19 @@ const HomePage = () => {
           <p className="mt-1 text-xs text-slate-500">Entre 1 e 30</p>
         </div>
 
+        <div className="flex items-center gap-2">
+          <input
+            id="streaming"
+            type="checkbox"
+            checked={useStreaming}
+            onChange={(e) => setUseStreaming(e.target.checked)}
+            className="h-4 w-4 rounded border-slate-300"
+          />
+          <label htmlFor="streaming" className="text-sm text-slate-700">
+            Gerar slides com streaming.
+          </label>
+        </div>
+
         {error && (
           <div className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
             {error}
@@ -126,13 +135,13 @@ const HomePage = () => {
         )}
 
         <button
-          type="submit"
+          onClick={handleSubmit}
           disabled={loading}
           className="w-full cursor-pointer py-3 px-4 bg-slate-800 text-white font-medium rounded-lg hover:bg-slate-700 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
         >
           {loading ? "Gerando..." : "Gerar Apresentação"}
         </button>
-      </form>
+      </div>
     </div>
   );
 };

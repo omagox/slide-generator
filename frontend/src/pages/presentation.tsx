@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import type {
-  Slide,
-  AddSlideModalInfo,
-  NormalizedSlide,
-} from "../types/global";
+import { useNavigate } from "react-router-dom";
+
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
+
+import type { AddSlideModalInfo, NormalizedSlide } from "../types/global";
 import { normalizeSlidesFromApi, addQuestionSlide } from "../lib/utils";
 
 import { MdFullscreen, MdOutlineLibraryAdd } from "react-icons/md";
@@ -14,10 +13,9 @@ import componentsMap from "../templates/templatesMap";
 import AddSlideModal from "../components/AddSlideModal";
 
 const PresentationPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const slidesFromState = (location.state as { slides?: Slide[] } | null)
-    ?.slides;
+
+  const { slides } = useSlideGeneration();
 
   const [totalHeight, setTotalHeight] = useState<number | null>(null);
   const [slideDivWidth, setSlideDivWidth] = useState<number | null>(null);
@@ -29,21 +27,19 @@ const PresentationPage = () => {
 
   const [presentationSlides, setPresentationSlides] = useState<
     NormalizedSlide[]
-  >(() =>
-    slidesFromState?.length ? normalizeSlidesFromApi(slidesFromState) : [],
-  );
+  >(() => (slides?.length ? normalizeSlidesFromApi(slides) : []));
 
   useEffect(() => {
-    if (slidesFromState?.length) {
-      setPresentationSlides(normalizeSlidesFromApi(slidesFromState));
+    if (slides?.length) {
+      setPresentationSlides(normalizeSlidesFromApi(slides));
     }
-  }, [slidesFromState]);
+  }, [slides]);
 
   useEffect(() => {
-    if (!slidesFromState?.length) {
+    if (!slides?.length) {
       navigate("/", { replace: true });
     }
-  }, [slidesFromState, navigate]);
+  }, [slides, navigate]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
