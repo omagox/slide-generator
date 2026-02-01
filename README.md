@@ -4,6 +4,9 @@ Gerador de slides para professores. A partir de um tema, nível de ensino e cont
 
 Vídeo de Demonstração: https://youtu.be/q8HzxYJ1ilU
 
+Também fiz um deploy no Vercel (frontend) + Render (backend), o link para acessar o frontend é esse: https://slide-generator-neon.vercel.app/
+Obs.: Desativei o projeto do backend no Render, para não correr o risco de gastarem a chave de API, já que não existe autenticação.
+
 ## Pré-requisitos
 
 ### Backend
