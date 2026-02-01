@@ -226,6 +226,7 @@ class SlideGenerator:
             
             presentation.append(formatted_template)
 
+        logger.info("Presentation generated!")
         return presentation
 
     def generate_presentation_stream(self, lesson_plan: str, class_topic: str, number_of_slides: int):

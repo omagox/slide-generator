@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useSlideGeneration } from "../contexts/SlideGenerationContext";
@@ -17,29 +23,71 @@ const PresentationPage = () => {
 
   const { slides } = useSlideGeneration();
 
+  const [localSlides, setLocalSlides] = useState<NormalizedSlide[]>([]);
+
   const [totalHeight, setTotalHeight] = useState<number | null>(null);
   const [slideDivWidth, setSlideDivWidth] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showAddSlideModal, setShowAddSlideModal] = useState(false);
   const [addSlideModalInfo, setAddSlideModalInfo] =
     useState<AddSlideModalInfo | null>(null);
-  const fullscreenDivRef = useRef(null);
 
-  const [presentationSlides, setPresentationSlides] = useState<
-    NormalizedSlide[]
-  >(() => (slides?.length ? normalizeSlidesFromApi(slides) : []));
+  const fullscreenDivRef = useRef(null);
+  const presentationSlidesRef = useRef<NormalizedSlide[]>([]);
+  const slidesFromContextRef = useRef<NormalizedSlide[]>([]);
+  const previousNormalizedSlidesRef = useRef<NormalizedSlide[]>([]);
+
+  const normalizedSlidesFromContext = useMemo(() => {
+    return slides?.length ? normalizeSlidesFromApi(slides) : [];
+  }, [slides]);
+
+  const presentationSlides = useMemo(() => {
+    return localSlides.length > 0 ? localSlides : normalizedSlidesFromContext;
+  }, [localSlides, normalizedSlidesFromContext]);
 
   useEffect(() => {
-    if (slides?.length) {
-      setPresentationSlides(normalizeSlidesFromApi(slides));
+    if (normalizedSlidesFromContext.length > 0) {
+      const hasChanged =
+        JSON.stringify(normalizedSlidesFromContext) !==
+        JSON.stringify(previousNormalizedSlidesRef.current);
+      if (hasChanged) {
+        previousNormalizedSlidesRef.current = normalizedSlidesFromContext;
+        slidesFromContextRef.current = normalizedSlidesFromContext;
+        if (localSlides.length > 0) {
+          setTimeout(() => setLocalSlides([]), 0);
+        }
+      }
     }
-  }, [slides]);
+  }, [normalizedSlidesFromContext, localSlides.length]);
+
+  useEffect(() => {
+    presentationSlidesRef.current = presentationSlides;
+    console.log(presentationSlides);
+  }, [presentationSlides]);
 
   useEffect(() => {
     if (!slides?.length) {
       navigate("/", { replace: true });
     }
   }, [slides, navigate]);
+
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (!document.fullscreenElement) return;
+
+    const numberOfSlides = presentationSlidesRef.current.length;
+
+    if (event.key === "ArrowLeft") {
+      setCurrentSlide((prev) => Math.max(prev - 1, 0));
+    } else if (event.key === "ArrowRight") {
+      setCurrentSlide((prev) => {
+        if (prev === numberOfSlides - 1) {
+          document.exitFullscreen?.call(document);
+          return 0;
+        }
+        return prev + 1;
+      });
+    }
+  }, []);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -70,45 +118,37 @@ const PresentationPage = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
-
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (!document.fullscreenElement) return;
-
-    const numberOfSlides = presentationSlides.length;
-
-    if (event.key === "ArrowLeft") {
-      setCurrentSlide((prev) => Math.max(prev - 1, 0));
-    } else if (event.key === "ArrowRight") {
-      setCurrentSlide((prev) => {
-        if (prev === numberOfSlides - 1) {
-          document.exitFullscreen?.call(document);
-          window.removeEventListener("keydown", handleKeyDown);
-          return 0;
-        }
-        return prev + 1;
-      });
-    }
-  };
+  }, [handleKeyDown]);
 
   const handleToggleFullscreen = () => {
-    const elem: any = fullscreenDivRef.current;
+    const elem = fullscreenDivRef.current;
 
     if (!document.fullscreenElement) {
       setCurrentSlide(0);
-      (
-        elem.requestFullscreen ||
-        elem.webkitRequestFullscreen ||
-        elem.mozRequestFullScreen ||
-        elem.msRequestFullscreen
-      )?.call(elem);
+      if (elem) {
+        const elemWithFullscreen = elem as HTMLElement & {
+          requestFullscreen?: () => Promise<void>;
+          webkitRequestFullscreen?: () => void;
+          mozRequestFullScreen?: () => void;
+          msRequestFullscreen?: () => void;
+        };
+        if (elemWithFullscreen.requestFullscreen) {
+          elemWithFullscreen.requestFullscreen();
+        } else if (elemWithFullscreen.webkitRequestFullscreen) {
+          elemWithFullscreen.webkitRequestFullscreen();
+        } else if (elemWithFullscreen.mozRequestFullScreen) {
+          elemWithFullscreen.mozRequestFullScreen();
+        } else if (elemWithFullscreen.msRequestFullscreen) {
+          elemWithFullscreen.msRequestFullscreen();
+        }
+      }
     } else {
       document.exitFullscreen?.call(document);
     }
   };
 
   function getComponentString(
-    data: Record<string, any>,
+    data: Record<string, unknown>,
     id: number,
     preview: boolean = false,
   ): string {
@@ -151,11 +191,9 @@ const PresentationPage = () => {
       >
         <div className="w-full flex flex-col items-center">
           {presentationSlides.map((slide) => {
-            // Disponível para o slide considerando padding
             const availW = (slideDivWidth ?? window.innerWidth) - 32;
             const availH = (totalHeight ?? window.innerHeight) - 32;
 
-            // Escala proporcional para caber na tela
             const scale = Math.min(availW / 920, availH / 518);
 
             return (
@@ -164,7 +202,6 @@ const PresentationPage = () => {
                   className="flex justify-center items-center"
                   style={{ height: totalHeight ?? window.innerHeight }}
                 >
-                  {/* Container Full HD */}
                   <div
                     style={{
                       width: 920,
@@ -207,40 +244,45 @@ const PresentationPage = () => {
           })}
         </div>
       </div>
-      {presentationSlides?.length > 0 && (
-        <div
-          ref={fullscreenDivRef}
-          className="w-screen h-screen bg-black flex items-center justify-center"
-          style={{ position: "absolute", top: -999999, left: -999999 }}
-        >
-          {(() => {
-            const scale = Math.min(
-              window.innerWidth / 920,
-              window.innerHeight / 518,
-            );
+      {presentationSlides?.length > 0 &&
+        currentSlide >= 0 &&
+        currentSlide < presentationSlides.length && (
+          <div
+            ref={fullscreenDivRef}
+            className="w-screen h-screen bg-black flex items-center justify-center"
+            style={{ position: "absolute", top: -999999, left: -999999 }}
+          >
+            {(() => {
+              const scale = Math.min(
+                window.innerWidth / 920,
+                window.innerHeight / 518,
+              );
 
-            return (
-              <div
-                style={{
-                  width: 920,
-                  height: 518,
-                  transform: `scale(${scale})`,
-                  transformOrigin: "center",
-                  background: "white",
-                }}
-              >
-                <JsxParser
-                  components={componentsMap}
-                  jsx={getComponentString(
-                    presentationSlides[currentSlide].canvas.generationTemplate,
-                    presentationSlides[currentSlide].canvas.templateID,
-                  )}
-                />
-              </div>
-            );
-          })()}
-        </div>
-      )}
+              const slide = presentationSlides[currentSlide];
+              if (!slide) return null;
+
+              return (
+                <div
+                  style={{
+                    width: 920,
+                    height: 518,
+                    transform: `scale(${scale})`,
+                    transformOrigin: "center",
+                    background: "white",
+                  }}
+                >
+                  <JsxParser
+                    components={componentsMap}
+                    jsx={getComponentString(
+                      slide.canvas.generationTemplate,
+                      slide.canvas.templateID,
+                    )}
+                  />
+                </div>
+              );
+            })()}
+          </div>
+        )}
       <AddSlideModal
         isOpen={showAddSlideModal}
         onClose={() => {
@@ -252,7 +294,7 @@ const PresentationPage = () => {
           const insertAfter = addSlideModalInfo?.insertAfterIndex ?? null;
           if (question == null || insertAfter == null) return;
 
-          setPresentationSlides(
+          setLocalSlides(
             addQuestionSlide(presentationSlides, question, insertAfter),
           );
           setShowAddSlideModal(false);

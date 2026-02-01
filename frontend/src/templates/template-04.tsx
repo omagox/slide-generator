@@ -23,13 +23,13 @@ export default function Template04(props: SafeTopicsWithSubtopicsProps) {
       style={{ transform: preview ? "scale(0.3)" : "" }}
       className="w-full aspect-video bg-white p-8 rounded-lg shadow-lg"
     >
-      <h1 className="text-3xl font-bold text-black mb-8 text-center">
+      <h1 className="text-3xl font-bold text-black mb-7 text-center">
         {title}
       </h1>
-      <div className="space-y-6">
+      <div className="space-y-5">
         {topics.map((topic, index) => (
           <div key={index}>
-            <div className="flex items-start space-x-4 mb-3">
+            <div className="flex items-center space-x-4 mb-2">
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
                 style={{ backgroundColor: colors[index] }}
@@ -37,13 +37,13 @@ export default function Template04(props: SafeTopicsWithSubtopicsProps) {
                 {index + 1}
               </div>
               <h2
-                className="text-xl font-semibold"
+                className="text-md font-semibold"
                 style={{ color: colors[index] }}
               >
                 {topic.title}
               </h2>
             </div>
-            <div className="ml-12 space-y-2">
+            <div className="ml-12 space-y-1 text-xs">
               {topic.subtopics.map((subtopic, subIndex) => (
                 <p key={subIndex} className="text-gray-600">
                   • {subtopic}

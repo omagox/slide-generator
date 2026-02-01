@@ -49,6 +49,8 @@ const HomePage = () => {
     } else {
       await handleDefaultGeneration(request);
     }
+
+    setLoading(false);
   };
 
   return (
