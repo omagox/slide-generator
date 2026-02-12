@@ -1,6 +1,11 @@
+import { useState } from "react";
 import type { SingleTopicProps } from "./types";
 
-type SafeSingleTopicProps = Partial<SingleTopicProps>;
+import { EditActions } from "../components/templateActionButtons";
+
+type EditableSingleTopicProps = Partial<SingleTopicProps> & {
+  onSave?: (data: Pick<SingleTopicProps, "title" | "content">) => void;
+};
 
 const defaultValues: SingleTopicProps = {
   title: "Título padrão",
@@ -8,20 +13,56 @@ const defaultValues: SingleTopicProps = {
   preview: false,
 };
 
-export default function Template01(props: SafeSingleTopicProps) {
-  const { title, content, preview } = { ...defaultValues, ...props };
+export default function Template01(props: EditableSingleTopicProps) {
+  const { onSave, ...rest } = props;
+  const { preview, title, content } = { ...defaultValues, ...rest };
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [draftTitle, setDraftTitle] = useState(title);
+  const [draftContent, setDraftContent] = useState(content);
+
+  function handleSave() {
+    setIsEditing(false);
+    onSave?.({
+      title: draftTitle,
+      content: draftContent,
+    });
+  }
 
   return (
     <div
       style={{ transform: preview ? "scale(0.3)" : "" }}
-      className="w-full aspect-video bg-white p-8 rounded-lg shadow-lg flex flex-col items-center justify-center"
+      className="relative w-full aspect-video bg-white p-8 rounded-lg shadow-lg flex flex-col items-center justify-center"
     >
-      <h1 className="text-3xl font-bold text-black mb-4 text-center">
-        {title}
-      </h1>
-      <p className="text-lg text-gray-600 text-center max-w-3xl mx-auto leading-relaxed">
-        {content}
-      </p>
+      <EditActions
+        isEditing={isEditing}
+        onEdit={() => setIsEditing(true)}
+        onSave={handleSave}
+      />
+
+      {isEditing ? (
+        <input
+          value={draftTitle}
+          onChange={(e) => setDraftTitle(e.target.value)}
+          className="text-3xl font-bold text-black mb-4 text-center w-full outline-none border border-transparent hover:border-gray-300 cursor-text"
+        />
+      ) : (
+        <h1 className="text-3xl font-bold text-black mb-4 text-center">
+          {draftTitle}
+        </h1>
+      )}
+
+      {isEditing ? (
+        <textarea
+          value={draftContent}
+          onChange={(e) => setDraftContent(e.target.value)}
+          className="text-lg text-gray-600 text-center w-full max-w-3xl mx-auto leading-relaxed resize-none outline-none border border-transparent hover:border-gray-300 cursor-text"
+        />
+      ) : (
+        <p className="text-lg text-gray-600 text-center w-full max-w-3xl mx-auto leading-relaxed">
+          {draftContent}
+        </p>
+      )}
     </div>
   );
 }
