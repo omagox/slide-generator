@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { DetailedTopicsProps } from "./types";
 import { EditActions } from "../components/templateActionButtons";
+import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableDetailedTopicsProps = Partial<DetailedTopicsProps> & {
   onSave?: (data: Pick<DetailedTopicsProps, "title" | "topics">) => void;
@@ -33,7 +34,7 @@ export default function Template05(props: EditableDetailedTopicsProps) {
   const [draftTitle, setDraftTitle] = useState(title);
   const [draftTopics, setDraftTopics] = useState(topics);
 
-  const colors = ["#1277bc", "#58a3a1", "#6b7280"];
+  const colors = ["#1277bc", "#58a3a1", "#6b7280", "#ef4444", "#f59e0b", "#10b981"];
 
   function handleTopicChange(
     index: number,
@@ -46,6 +47,18 @@ export default function Template05(props: EditableDetailedTopicsProps) {
       ),
     );
   }
+
+  const addTopic = () => {
+    setDraftTopics([
+      ...draftTopics,
+      { title: "Novo Tópico", content: "Novo conteúdo" },
+    ]);
+  };
+
+  const removeTopic = (index: number) => {
+    const newTopics = draftTopics.filter((_, i) => i !== index);
+    setDraftTopics(newTopics);
+  };
 
   function handleSave() {
     setIsEditing(false);
@@ -66,6 +79,16 @@ export default function Template05(props: EditableDetailedTopicsProps) {
         onSave={handleSave}
       />
 
+      {isEditing && draftTopics.length < 6 && (
+        <button
+          onClick={addTopic}
+          className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600 transition-colors cursor-pointer z-10"
+        >
+          <MdAddBox className="translate-y-px" />
+          Adicionar novo item
+        </button>
+      )}
+
       {isEditing ? (
         <input
           value={draftTitle}
@@ -78,12 +101,24 @@ export default function Template05(props: EditableDetailedTopicsProps) {
         </h1>
       )}
 
-      <div className="grid grid-cols-3 gap-6 w-full">
-        {draftTopics.slice(0, 3).map((topic, index) => {
+      <div
+        className={`grid ${draftTopics.length > 3 ? "grid-cols-3 grid-rows-2 gap-8" : "grid-cols-3 gap-6"} w-full`}
+      >
+        {draftTopics.map((topic, index) => {
           const color = colors[index % colors.length];
 
           return (
-            <div key={index} className="text-center">
+            <div key={index} className="text-center group relative">
+              {isEditing && draftTopics.length > 1 && (
+                <button
+                  onClick={() => removeTopic(index)}
+                  className="absolute top-0 right-0 text-red-500 hover:text-red-700 p-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  title="Remover tópico"
+                >
+                  <MdDelete />
+                </button>
+              )}
+
               <div
                 className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
                 style={{ backgroundColor: color }}
@@ -99,7 +134,7 @@ export default function Template05(props: EditableDetailedTopicsProps) {
                   onChange={(e) =>
                     handleTopicChange(index, "title", e.target.value)
                   }
-                  className="text-lg font-semibold mb-2 text-center w-full outline-none border border-transparent hover:border-gray-300"
+                  className="text-lg font-semibold mb-2 text-center w-full outline-none border border-transparent hover:border-gray-300 bg-transparent"
                   style={{ color }}
                 />
               ) : (
@@ -114,7 +149,7 @@ export default function Template05(props: EditableDetailedTopicsProps) {
                   onChange={(e) =>
                     handleTopicChange(index, "content", e.target.value)
                   }
-                  className="text-gray-600 text-sm text-center w-full resize-none outline-none border border-transparent hover:border-gray-300"
+                  className="text-gray-600 text-sm text-center w-full resize-none outline-none border border-transparent hover:border-gray-300 bg-transparent"
                   rows={3}
                 />
               ) : (

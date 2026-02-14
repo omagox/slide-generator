@@ -45,7 +45,6 @@ import Template44 from "./template-44";
 import Template45 from "./template-45";
 import Template46 from "./template-46";
 import Template47 from "./template-47";
-import Template48 from "./template-48";
 import Template50 from "./template-50";
 import Template51 from "./template-51";
 import Template52 from "./template-52";
@@ -100,7 +99,6 @@ const componentsMap: Record<string, any> = {
   Template45,
   Template46,
   Template47,
-  Template48,
   Template50,
   Template51,
   Template52,

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { MultipleTopicsProps } from "./types";
 import { EditActions } from "../components/templateActionButtons";
+import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableMultipleTopicsProps = Partial<MultipleTopicsProps> & {
   onSave?: (data: Pick<MultipleTopicsProps, "title" | "topics">) => void;
@@ -20,13 +21,22 @@ export default function Template03(props: EditableMultipleTopicsProps) {
   const [draftTitle, setDraftTitle] = useState(title);
   const [draftTopics, setDraftTopics] = useState(topics);
 
-  const colors = ["#1277bc", "#58a3a1", "#6b7280", "#1277bc", "#58a3a1"];
+  const colors = ["#1277bc", "#58a3a1", "#6b7280", "#1277bc", "#58a3a1", "#6b7280", "#1277bc", "#58a3a1", "#6b7280", "#1277bc", "#58a3a1", "#6b7280", "#1277bc", "#58a3a1", "#6b7280", "#1277bc"];
 
   function handleTopicChange(index: number, value: string) {
     setDraftTopics((prev) =>
       prev.map((topic, i) => (i === index ? value : topic)),
     );
   }
+
+  const addTopic = () => {
+    setDraftTopics([...draftTopics, "Novo Item"]);
+  };
+
+  const removeTopic = (index: number) => {
+    const newTopics = draftTopics.filter((_, i) => i !== index);
+    setDraftTopics(newTopics);
+  };
 
   function handleSave() {
     setIsEditing(false);
@@ -47,6 +57,16 @@ export default function Template03(props: EditableMultipleTopicsProps) {
         onSave={handleSave}
       />
 
+      {isEditing && draftTopics.length < 7 && (
+        <button
+          onClick={addTopic}
+          className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600 transition-colors cursor-pointer z-10"
+        >
+          <MdAddBox className="translate-y-px" />
+          Adicionar novo item
+        </button>
+      )}
+
       {/* Título */}
       {isEditing ? (
         <input
@@ -61,28 +81,40 @@ export default function Template03(props: EditableMultipleTopicsProps) {
       )}
 
       <div className="space-y-4">
-        {draftTopics.slice(0, 5).map((topic, index) => (
-          <div key={index} className="flex items-center space-x-4">
+        {draftTopics.map((topic, index) => (
+          <div key={index} className="flex items-center space-x-4 group">
             <div
               className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: colors[index] }}
+              style={{ backgroundColor: colors[index % colors.length] }}
             />
 
-            {isEditing ? (
-              <input
-                value={topic}
-                onChange={(e) => handleTopicChange(index, e.target.value)}
-                className="text-lg font-semibold w-full outline-none border border-transparent hover:border-gray-300"
-                style={{ color: colors[index] }}
-              />
-            ) : (
-              <h2
-                className="text-lg font-semibold"
-                style={{ color: colors[index] }}
-              >
-                {topic}
-              </h2>
-            )}
+            <div className="flex-1 flex items-center gap-2">
+              {isEditing ? (
+                <input
+                  value={topic}
+                  onChange={(e) => handleTopicChange(index, e.target.value)}
+                  className="text-lg font-semibold w-full outline-none border border-transparent hover:border-gray-300"
+                  style={{ color: colors[index % colors.length] }}
+                />
+              ) : (
+                <h2
+                  className="text-lg font-semibold"
+                  style={{ color: colors[index % colors.length] }}
+                >
+                  {topic}
+                </h2>
+              )}
+
+              {isEditing && draftTopics.length > 1 && (
+                <button
+                  onClick={() => removeTopic(index)}
+                  className="text-red-500 hover:text-red-700 p-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  title="Remover item"
+                >
+                  <MdDelete />
+                </button>
+              )}
+            </div>
           </div>
         ))}
       </div>

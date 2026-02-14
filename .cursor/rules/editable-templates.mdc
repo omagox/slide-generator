@@ -1,0 +1,67 @@
+---
+alwaysApply: false
+---
+# Criando Templates Editáveis
+
+Para tornar um template editável no projeto, siga o padrão de estado local e componentes de ação utilizado nos templates existentes.
+
+## Estrutura Básica
+
+1.  **Definição de Props Editáveis**: Crie um tipo que estenda as props originais como opcionais e inclua um callback `onSave`.
+2.  **Estado Local**: Utilize `useState` para controlar o modo de edição (`isEditing`) e os rascunhos dos campos (`draftTitle`, `draftContent`, etc).
+3.  **Componente EditActions**: Adicione o componente `<EditActions />` para alternar entre visualização e edição.
+4.  **Renderização Condicional**: Alterne entre elementos de exibição (`h1`, `p`) e elementos de entrada (`input`, `textarea`) baseando-se no estado `isEditing`.
+
+## Exemplo de Implementação
+
+```tsx
+import { useState } from "react";
+import { EditActions } from "../components/templateActionButtons";
+
+// 1. Definição de Props
+type EditableProps = Partial<OriginalProps> & {
+  onSave?: (data: Pick<OriginalProps, "title" | "content">) => void;
+};
+
+export default function MyTemplate(props: EditableProps) {
+  const { onSave, ...rest } = props;
+  const { title, content } = { ...defaultValues, ...rest };
+
+  // 2. Estado Local
+  const [isEditing, setIsEditing] = useState(false);
+  const [draftTitle, setDraftTitle] = useState(title);
+
+  function handleSave() {
+    setIsEditing(false);
+    onSave?.({ title: draftTitle });
+  }
+
+  return (
+    <div className="relative ...">
+      {/* 3. Botões de Ação */}
+      <EditActions
+        isEditing={isEditing}
+        onEdit={() => setIsEditing(true)}
+        onSave={handleSave}
+      />
+
+      {/* 4. Renderização Condicional */}
+      {isEditing ? (
+        <input
+          value={draftTitle}
+          onChange={(e) => setDraftTitle(e.target.value)}
+          className="outline-none border border-transparent hover:border-gray-300 cursor-text ..."
+        />
+      ) : (
+        <h1>{draftTitle}</h1>
+      )}
+    </div>
+  );
+}
+```
+
+## Recomendações de Estilo para Inputs
+
+- Use `outline-none` e `border border-transparent`.
+- Adicione `hover:border-gray-300` e `cursor-text` para indicar que o campo é editável.
+- Para `textarea`, use `resize-none` para manter o layout do slide fixo.

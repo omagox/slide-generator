@@ -1,0 +1,67 @@
+---
+alwaysApply: false
+---
+# Adição e Remoção de Itens em Templates
+
+Para permitir que listas de itens (tópicos, exemplos, cards) sejam dinamicamente alteradas em um template editável, siga estas diretrizes baseadas nos padrões dos templates 29 e 30.
+
+## 1. Funções de Manipulação de Estado
+
+Implemente funções para adicionar e remover itens do estado de rascunho (`draft`).
+
+```tsx
+// Exemplo de funções de manipulação
+const addTopic = () => {
+  setDraftTopics([...draftTopics, "Novo Item"]);
+};
+
+const removeTopic = (index: number) => {
+  const newTopics = draftTopics.filter((_, i) => i !== index);
+  setDraftTopics(newTopics);
+};
+```
+
+## 2. Botão de Adicionar
+
+O botão de adicionar deve:
+- Aparecer apenas no modo de edição (`isEditing`).
+- Ter um limite máximo de itens para evitar quebra de layout (ex: `draftTopics.length < 16`).
+- Estar posicionado de forma acessível (geralmente `absolute top-2 left-2`).
+
+```tsx
+{isEditing && draftTopics.length < 16 && (
+  <button
+    onClick={addTopic}
+    className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600 transition-colors cursor-pointer"
+  >
+    <MdAddBox className="translate-y-px"/>
+    Adicionar novo tópico
+  </button>
+)}
+```
+
+## 3. Botão de Remover
+
+O botão de remover deve:
+- Estar dentro do container de cada item.
+- Aparecer apenas no modo de edição (`isEditing`).
+- Ter uma trava de segurança para não permitir remover o último item (ex: `draftTopics.length > 1`).
+- Usar a classe `group-hover:opacity-100` para aparecer apenas quando o mouse estiver sobre o item.
+
+```tsx
+{isEditing && draftTopics.length > 1 && (
+  <button
+    onClick={() => removeTopic(index)}
+    className="text-red-500 hover:text-red-700 p-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+    title="Remover item"
+  >
+    <MdDelete />
+  </button>
+)}
+```
+
+## 4. Ícones Recomendados
+
+Utilize os ícones da biblioteca `react-icons/md`:
+- `MdAddBox` para adicionar.
+- `MdDelete` para remover.

@@ -21,7 +21,7 @@ import AddSlideModal from "../components/AddSlideModal";
 const PresentationPage = () => {
   const navigate = useNavigate();
 
-  const { slides } = useSlideGeneration();
+  const { slides, setIsFullscreen } = useSlideGeneration();
 
   const [localSlides, setLocalSlides] = useState<NormalizedSlide[]>([]);
 
@@ -92,9 +92,11 @@ const PresentationPage = () => {
     const handleFullscreenChange = () => {
       if (document.fullscreenElement) {
         window.addEventListener("keydown", handleKeyDown);
+        setIsFullscreen(true);
       } else {
         window.removeEventListener("keydown", handleKeyDown);
         setCurrentSlide(0);
+        setIsFullscreen(false);
       }
     };
 
@@ -123,6 +125,7 @@ const PresentationPage = () => {
     const elem = fullscreenDivRef.current;
 
     if (!document.fullscreenElement) {
+      setIsFullscreen(true);
       setCurrentSlide(0);
       if (elem) {
         const elemWithFullscreen = elem as HTMLElement & {
@@ -143,6 +146,7 @@ const PresentationPage = () => {
       }
     } else {
       document.exitFullscreen?.call(document);
+      setIsFullscreen(false);
     }
   };
 

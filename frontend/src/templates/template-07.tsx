@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { TwoTopicsProps } from "./types";
 import { EditActions } from "../components/templateActionButtons";
+import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableTwoTopicsProps = Partial<TwoTopicsProps> & {
   onSave?: (data: Pick<TwoTopicsProps, "title" | "topics">) => void;
@@ -23,7 +24,7 @@ export default function Template07(props: EditableTwoTopicsProps) {
   const [draftTitle, setDraftTitle] = useState(title);
   const [draftTopics, setDraftTopics] = useState(topics);
 
-  const colors = ["#1277bc", "#58a3a1"];
+  const colors = ["#1277bc", "#58a3a1", "#6b7280", "#ef4444"];
 
   function handleTopicChange(
     index: number,
@@ -36,6 +37,18 @@ export default function Template07(props: EditableTwoTopicsProps) {
       ),
     );
   }
+
+  const addTopic = () => {
+    setDraftTopics([
+      ...draftTopics,
+      { title: "Novo Tópico", content: "Nova descrição" },
+    ]);
+  };
+
+  const removeTopic = (index: number) => {
+    const newTopics = draftTopics.filter((_, i) => i !== index);
+    setDraftTopics(newTopics);
+  };
 
   function handleSave() {
     setIsEditing(false);
@@ -56,6 +69,16 @@ export default function Template07(props: EditableTwoTopicsProps) {
         onSave={handleSave}
       />
 
+      {isEditing && draftTopics.length < 4 && (
+        <button
+          onClick={addTopic}
+          className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600 transition-colors cursor-pointer z-10"
+        >
+          <MdAddBox className="translate-y-px" />
+          Adicionar novo item
+        </button>
+      )}
+
       {isEditing ? (
         <input
           value={draftTitle}
@@ -69,22 +92,32 @@ export default function Template07(props: EditableTwoTopicsProps) {
       )}
 
       <div className="space-y-6 w-full">
-        {draftTopics.slice(0, 2).map((topic, index) => {
+        {draftTopics.map((topic, index) => {
           const color = colors[index % colors.length];
 
           return (
             <div
               key={index}
-              className="border-l-4 pl-6"
+              className="border-l-4 pl-6 group relative"
               style={{ borderLeftColor: color }}
             >
+              {isEditing && draftTopics.length > 1 && (
+                <button
+                  onClick={() => removeTopic(index)}
+                  className="absolute top-0 right-0 text-red-500 hover:text-red-700 p-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  title="Remover tópico"
+                >
+                  <MdDelete />
+                </button>
+              )}
+
               {isEditing ? (
                 <input
                   value={topic.title}
                   onChange={(e) =>
                     handleTopicChange(index, "title", e.target.value)
                   }
-                  className="text-xl font-semibold mb-3 w-full outline-none border border-transparent hover:border-gray-300"
+                  className="text-xl font-semibold mb-3 w-full outline-none border border-transparent hover:border-gray-300 bg-transparent"
                   style={{ color }}
                 />
               ) : (
@@ -99,7 +132,7 @@ export default function Template07(props: EditableTwoTopicsProps) {
                   onChange={(e) =>
                     handleTopicChange(index, "content", e.target.value)
                   }
-                  className="text-gray-600 w-full resize-none outline-none border border-transparent hover:border-gray-300"
+                  className="text-gray-600 w-full resize-none outline-none border border-transparent hover:border-gray-300 bg-transparent"
                   rows={2}
                 />
               ) : (

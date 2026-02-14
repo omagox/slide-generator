@@ -192,6 +192,5 @@ export interface KeyPointsProps {
 export interface OptionalQuestionProps {
   statement: string;
   options: string[];
-  correct_answer: number;
   preview?: boolean;
 }

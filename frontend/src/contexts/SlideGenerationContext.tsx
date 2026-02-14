@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useRef,
-  useState,
-} from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
 
 import type { SlideRequest, Slide } from "../types/global";
 
@@ -20,6 +15,9 @@ interface SlideGenerationContextType {
     message: string;
     progress: number;
   } | null;
+
+  isFullscreen: boolean;
+  setIsFullscreen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SlideGenerationContext = createContext<SlideGenerationContextType | null>(
@@ -154,6 +152,8 @@ export const SlideGenerationProvider: React.FC<{
         error,
         setError,
         generationProgress,
+        isFullscreen,
+        setIsFullscreen,
       }}
     >
       {children}
