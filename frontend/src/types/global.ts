@@ -39,6 +39,5 @@ export interface AddSlideModalProps {
   isOpen: boolean;
   onClose: () => void;
   slide: AddSlideModalInfo | null;
-  handleAddQuestionSlide?: () => void;
-  handleAddImageSlide?: () => void;
+  onAddSlide: (templateId: number) => void;
 }

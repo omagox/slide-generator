@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 
 import type { AddSlideModalInfo, NormalizedSlide } from "../types/global";
-import { normalizeSlidesFromApi, addQuestionSlide } from "../lib/utils";
+import { normalizeSlidesFromApi, addQuestionSlide, addGenericSlide } from "../lib/utils";
 
 import { MdFullscreen, MdOutlineLibraryAdd } from "react-icons/md";
 import JsxParser from "react-jsx-parser";
@@ -101,12 +101,7 @@ const PresentationPage = () => {
     };
 
     const handleResize = () => {
-      const mainHeader = document.querySelector(
-        "#mainHeader-Navbar",
-      ) as HTMLElement | null;
-      const mainHeaderHeight = mainHeader?.offsetHeight ?? 0;
-      const totalHeight = window.innerHeight - mainHeaderHeight;
-      setTotalHeight(totalHeight);
+      setTotalHeight(window.innerHeight);
       setSlideDivWidth(window.innerWidth);
     };
 
@@ -119,7 +114,7 @@ const PresentationPage = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
     };
-  }, [handleKeyDown]);
+  }, [handleKeyDown, setIsFullscreen]);
 
   const handleToggleFullscreen = () => {
     const elem = fullscreenDivRef.current;
@@ -173,15 +168,14 @@ const PresentationPage = () => {
 
   return (
     <div
-      className="w-full flex justify-between relative overflow-x-hidden"
-      style={totalHeight ? { height: totalHeight + "px" } : {}}
+      className="w-full flex justify-between relative overflow-x-hidden h-screen overflow-y-auto"
     >
-      <div className="absolute top-2 right-6 z-[9999] flex !gap-2">
+      <div className="absolute top-2 right-6 z-9999 flex gap-2!">
         <button
-          className="button-transparent-opacity-red-border cursor-pointer !p-1.5 !h-fit"
+          className="button-transparent-opacity-red-border cursor-pointer p-1.5!"
           onClick={handleToggleFullscreen}
         >
-          <MdFullscreen className="!w-6 !h-6" />
+          <MdFullscreen className="w-6! h-6!" />
         </button>
       </div>
       <div
@@ -189,7 +183,6 @@ const PresentationPage = () => {
         style={{
           minWidth: slideDivWidth + "px",
           maxHeight: totalHeight + "px",
-          overflowY: presentationSlides.length >= 2 ? "scroll" : "hidden",
         }}
       >
         <div className="w-full flex flex-col items-center">
@@ -222,26 +215,24 @@ const PresentationPage = () => {
                     />
                   </div>
                 </div>
-                {(slide.image != null || slide.question != null) && (
-                  <div className="flex justify-center items-center">
-                    <button
-                      className="py-1.5 flex items-center justify-center rounded-md w-[70px] bg-[#dedfe2] hover:bg-[#caccd1] cursor-pointer transition-all"
-                      title="Adicionar slide"
-                      onClick={() => {
-                        setAddSlideModalInfo({
-                          image: slide.image ?? null,
-                          question: slide.question ?? null,
-                          insertAfterIndex: presentationSlides.findIndex(
-                            (s) => s.id === slide.id,
-                          ),
-                        });
-                        setShowAddSlideModal(true);
-                      }}
-                    >
-                      <MdOutlineLibraryAdd className="w-5 h-5 text-[#727272]" />
-                    </button>
-                  </div>
-                )}
+                <div className="flex justify-center items-center my-2">
+                  <button
+                    className="py-1.5 flex items-center justify-center rounded-md w-[70px] bg-[#dedfe2] hover:bg-[#caccd1] cursor-pointer transition-all"
+                    title="Adicionar slide"
+                    onClick={() => {
+                      setAddSlideModalInfo({
+                        image: slide.image ?? null,
+                        question: slide.question ?? null,
+                        insertAfterIndex: presentationSlides.findIndex(
+                          (s) => s.id === slide.id,
+                        ),
+                      });
+                      setShowAddSlideModal(true);
+                    }}
+                  >
+                    <MdOutlineLibraryAdd className="w-5 h-5 text-[#727272]" />
+                  </button>
+                </div>
               </React.Fragment>
             );
           })}
@@ -292,18 +283,25 @@ const PresentationPage = () => {
           setShowAddSlideModal(false);
           setAddSlideModalInfo(null);
         }}
-        handleAddQuestionSlide={() => {
-          const question = addSlideModalInfo?.question;
+        onAddSlide={(templateId) => {
           const insertAfter = addSlideModalInfo?.insertAfterIndex ?? null;
-          if (question == null || insertAfter == null) return;
+          if (insertAfter == null) return;
 
-          setLocalSlides(
-            addQuestionSlide(presentationSlides, question, insertAfter),
-          );
+          if (templateId === 54) {
+            const question = addSlideModalInfo?.question;
+            if (question) {
+              setLocalSlides(
+                addQuestionSlide(presentationSlides, question, insertAfter),
+              );
+            }
+          } else {
+            setLocalSlides(
+              addGenericSlide(presentationSlides, templateId, insertAfter),
+            );
+          }
           setShowAddSlideModal(false);
           setAddSlideModalInfo(null);
         }}
-        handleAddImageSlide={() => {}}
         slide={addSlideModalInfo}
       />
     </div>

@@ -7,7 +7,7 @@ const GenerationProgressToast = () => {
 
   return (
     <div
-      className="fixed bottom-7 left-1/2 transform -translate-x-1/2 z-[9999] w-100 bg-white p-2.5 pb-3 rounded-full flex flex-col items-center justify-center gap-1.5"
+      className="fixed bottom-7 left-1/2 transform -translate-x-1/2 z-9999 w-100 bg-white p-2.5 pb-3 rounded-full flex flex-col items-center justify-center gap-1.5"
       style={{
         boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
       }}

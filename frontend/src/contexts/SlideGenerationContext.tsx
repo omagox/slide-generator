@@ -29,6 +29,7 @@ export const SlideGenerationProvider: React.FC<{
 }> = ({ children }) => {
   const navigate = useNavigate();
 
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [slides, setSlides] = useState<Slide[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [generationProgress, setGenerationProgress] = useState<{
@@ -53,7 +54,7 @@ export const SlideGenerationProvider: React.FC<{
     });
 
     let currentStep = 0;
-    let totalSteps = request.n_slides + 3;
+    const totalSteps = request.n_slides + 3;
 
     try {
       let firstSlideReceived = false;
@@ -161,6 +162,7 @@ export const SlideGenerationProvider: React.FC<{
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSlideGeneration = () => {
   const ctx = useContext(SlideGenerationContext);
   if (!ctx) {

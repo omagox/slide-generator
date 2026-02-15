@@ -51,3 +51,23 @@ export function addQuestionSlide(
   nextSlides.splice(insertAfterIndex + 1, 0, newSlide);
   return nextSlides.map((slide, index) => ({ ...slide, id: index }));
 }
+
+export function addGenericSlide(
+  slides: NormalizedSlide[],
+  templateID: number,
+  insertAfterIndex: number,
+): NormalizedSlide[] {
+  const newSlide: NormalizedSlide = {
+    id: insertAfterIndex + 1,
+    canvas: {
+      templateID,
+      generationTemplate: {},
+    },
+    image: null,
+    question: null,
+  };
+
+  const nextSlides = [...slides];
+  nextSlides.splice(insertAfterIndex + 1, 0, newSlide);
+  return nextSlides.map((slide, index) => ({ ...slide, id: index }));
+}
