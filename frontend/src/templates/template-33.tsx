@@ -1,3 +1,4 @@
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import { MdAddBox, MdDelete } from "react-icons/md";
@@ -15,11 +16,12 @@ const defaultFormulaProps: FormulaProps = {
 };
 
 type EditableProps = Partial<FormulaProps> & {
-  onSave?: (data: Pick<FormulaProps, "title" | "formula" | "variables" | "example">) => void;
+  slideIndex: number;
 };
 
 export default function Template33(props: EditableProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const {
     title,
     formula,
@@ -41,7 +43,7 @@ export default function Template33(props: EditableProps) {
 
   const handleSave = () => {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       formula: draftFormula,
       variables: draftVariables,

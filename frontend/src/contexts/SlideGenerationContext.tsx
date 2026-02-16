@@ -1,4 +1,9 @@
-import React, { createContext, useContext, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 
 import type { SlideRequest, Slide } from "../types/global";
 
@@ -18,6 +23,9 @@ interface SlideGenerationContextType {
 
   isFullscreen: boolean;
   setIsFullscreen: React.Dispatch<React.SetStateAction<boolean>>;
+
+  handleAddSlide: (templateId: number, insertAfterIndex: number) => void;
+  handleUpdateSlide: (id: number, data: Record<string, unknown>) => void;
 }
 
 const SlideGenerationContext = createContext<SlideGenerationContextType | null>(
@@ -144,6 +152,42 @@ export const SlideGenerationProvider: React.FC<{
     }
   };
 
+  const handleUpdateSlide = (
+    slideIndex: number,
+    data: Record<string, unknown>,
+  ) => {
+    setSlides((prev) => {
+      const nextSlides = [...prev];
+      const updatedSlide = { ...nextSlides[slideIndex] };
+
+      if (data.title && typeof data.title === "string") {
+        updatedSlide.title = data.title;
+      }
+
+      updatedSlide.content.templateContent = data;
+
+      nextSlides[slideIndex] = updatedSlide;
+      return nextSlides;
+    });
+  };
+
+  const handleAddSlide = (templateId: number, insertAfterIndex: number) => {
+    const newSlide: Slide = {
+      type: "content",
+      title: "Título padrão",
+      content: {
+        templateID: templateId,
+        templateContent: {},
+      },
+    };
+
+    setSlides((prev) => {
+      const nextSlides = [...prev];
+      nextSlides.splice(insertAfterIndex + 1, 0, newSlide);
+      return nextSlides;
+    });
+  };
+
   return (
     <SlideGenerationContext.Provider
       value={{
@@ -155,6 +199,8 @@ export const SlideGenerationProvider: React.FC<{
         generationProgress,
         isFullscreen,
         setIsFullscreen,
+        handleAddSlide,
+        handleUpdateSlide,
       }}
     >
       {children}

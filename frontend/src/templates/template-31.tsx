@@ -1,3 +1,4 @@
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { useState } from "react";
 import { MdAddBox, MdDelete } from "react-icons/md";
 import { EditActions } from "../components/templateActionButtons";
@@ -15,11 +16,12 @@ const defaultComparisonProps: ComparisonProps = {
 };
 
 type EditableProps = Partial<ComparisonProps> & {
-  onSave?: (data: Pick<ComparisonProps, "title" | "items">) => void;
+  slideIndex: number;
 };
 
 export default function Template31(props: EditableProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const {
     title,
     items = [],
@@ -43,7 +45,7 @@ export default function Template31(props: EditableProps) {
 
   const handleSave = () => {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       items: draftItems,
     });

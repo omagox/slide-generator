@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { EditActions } from "../components/templateActionButtons";
 import type { ProcessProps } from "./types";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableProcessProps = Partial<ProcessProps> & {
-  onSave?: (data: Pick<ProcessProps, "title" | "steps">) => void;
+  slideIndex: number;
 };
 
 const defaults: ProcessProps = {
@@ -20,18 +21,26 @@ const defaults: ProcessProps = {
 };
 
 export default function Template19(props: EditableProcessProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, steps, preview } = { ...defaults, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(title);
   const [draftSteps, setDraftSteps] = useState(steps);
 
-  const colors = ["#1277bc", "#58a3a1", "#6b7280", "#ef4444", "#f59e0b", "#10b981"];
+  const colors = [
+    "#1277bc",
+    "#58a3a1",
+    "#6b7280",
+    "#ef4444",
+    "#f59e0b",
+    "#10b981",
+  ];
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({ title: draftTitle, steps: draftSteps });
+    handleUpdateSlide(slideIndex, { title: draftTitle, steps: draftSteps });
   }
 
   const handleStepChange = (
@@ -45,7 +54,10 @@ export default function Template19(props: EditableProcessProps) {
   };
 
   const addStep = () => {
-    setDraftSteps([...draftSteps, { title: "Novo Passo", content: "Novo conteúdo" }]);
+    setDraftSteps([
+      ...draftSteps,
+      { title: "Novo Passo", content: "Novo conteúdo" },
+    ]);
   };
 
   const removeStep = (index: number) => {
@@ -93,7 +105,7 @@ export default function Template19(props: EditableProcessProps) {
             className="flex items-start space-x-3 bg-gray-50 rounded-lg p-1 group relative"
           >
             <div
-              className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
+              className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-1"
               style={{ backgroundColor: colors[index % colors.length] }}
             >
               <span className="text-white text-sm">{index + 1}</span>

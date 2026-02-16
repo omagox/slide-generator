@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import type { MultipleTopicsProps } from "./types";
 import { EditActions } from "../components/templateActionButtons";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableMultipleTopicsProps = Partial<MultipleTopicsProps> & {
-  onSave?: (data: Pick<MultipleTopicsProps, "title" | "topics">) => void;
+  slideIndex: number;
 };
 
 const defaults: MultipleTopicsProps = {
@@ -14,14 +15,22 @@ const defaults: MultipleTopicsProps = {
 };
 
 export default function Template10(props: EditableMultipleTopicsProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, topics, preview } = { ...defaults, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(title);
   const [draftTopics, setDraftTopics] = useState(topics);
 
-  const colors = ["#1277bc", "#58a3a1", "#6b7280", "#ef4444", "#f59e0b", "#10b981"];
+  const colors = [
+    "#1277bc",
+    "#58a3a1",
+    "#6b7280",
+    "#ef4444",
+    "#f59e0b",
+    "#10b981",
+  ];
 
   function handleTopicChange(index: number, value: string) {
     setDraftTopics((prev) =>
@@ -40,7 +49,7 @@ export default function Template10(props: EditableMultipleTopicsProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       topics: draftTopics,
     });
@@ -88,7 +97,7 @@ export default function Template10(props: EditableMultipleTopicsProps) {
               style={{ borderColor: colors[index % colors.length] }}
             >
               <div
-                className="w-8 h-8 rounded border-2 flex items-center justify-center flex-shrink-0"
+                className="w-8 h-8 rounded border-2 flex items-center justify-center shrink-0"
                 style={{
                   borderColor: colors[index % colors.length],
                   backgroundColor: colors[index % colors.length],
@@ -105,7 +114,9 @@ export default function Template10(props: EditableMultipleTopicsProps) {
                     className="text-lg font-semibold text-gray-700 w-full outline-none border border-transparent hover:border-gray-300 bg-transparent"
                   />
                 ) : (
-                  <h2 className="text-lg font-semibold text-gray-700">{topic}</h2>
+                  <h2 className="text-lg font-semibold text-gray-700">
+                    {topic}
+                  </h2>
                 )}
 
                 {isEditing && draftTopics.length > 1 && (

@@ -1,10 +1,13 @@
 import { useState } from "react";
+
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
+
 import type { SingleTopicProps } from "./types";
 
 import { EditActions } from "../components/templateActionButtons";
 
 type EditableSingleTopicProps = Partial<SingleTopicProps> & {
-  onSave?: (data: Pick<SingleTopicProps, "title" | "content">) => void;
+  slideIndex: number;
 };
 
 const defaultValues: SingleTopicProps = {
@@ -14,7 +17,9 @@ const defaultValues: SingleTopicProps = {
 };
 
 export default function Template01(props: EditableSingleTopicProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+
+  const { slideIndex, ...rest } = props;
   const { preview, title, content } = { ...defaultValues, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
@@ -23,7 +28,8 @@ export default function Template01(props: EditableSingleTopicProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({
+
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       content: draftContent,
     });

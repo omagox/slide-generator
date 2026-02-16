@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import type { MultipleTopicsProps } from "./types";
 import { EditActions } from "../components/templateActionButtons";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableMultipleTopicsProps = Partial<MultipleTopicsProps> & {
-  onSave?: (data: Pick<MultipleTopicsProps, "title" | "topics">) => void;
+  slideIndex: number;
 };
 
 const defaults: MultipleTopicsProps = {
@@ -14,7 +15,8 @@ const defaults: MultipleTopicsProps = {
 };
 
 export default function Template06(props: EditableMultipleTopicsProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, topics, preview } = { ...defaults, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
@@ -40,7 +42,7 @@ export default function Template06(props: EditableMultipleTopicsProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       topics: draftTopics,
     });

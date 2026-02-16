@@ -1,12 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import type { MixedContentProps } from "./types";
 import { EditActions } from "../components/templateActionButtons";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableMixedContentProps = Partial<MixedContentProps> & {
-  onSave?: (
-    data: Pick<MixedContentProps, "title" | "topics" | "content">,
-  ) => void;
+  slideIndex: number;
 };
 
 const defaults: MixedContentProps = {
@@ -17,7 +16,8 @@ const defaults: MixedContentProps = {
 };
 
 export default function Template08(props: EditableMixedContentProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, topics, content, preview } = { ...defaults, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
@@ -25,7 +25,14 @@ export default function Template08(props: EditableMixedContentProps) {
   const [draftTopics, setDraftTopics] = useState(topics);
   const [draftContent, setDraftContent] = useState(content);
 
-  const colors = ["#1277bc", "#58a3a1", "#6b7280", "#ef4444", "#f59e0b", "#10b981"];
+  const colors = [
+    "#1277bc",
+    "#58a3a1",
+    "#6b7280",
+    "#ef4444",
+    "#f59e0b",
+    "#10b981",
+  ];
 
   function handleTopicChange(index: number, value: string) {
     setDraftTopics((prev) =>
@@ -44,7 +51,7 @@ export default function Template08(props: EditableMixedContentProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       topics: draftTopics,
       content: draftContent,
@@ -89,7 +96,7 @@ export default function Template08(props: EditableMixedContentProps) {
           {draftTopics.map((topic, index) => (
             <div key={index} className="flex items-start space-x-3 group">
               <div
-                className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
                 style={{ backgroundColor: colors[index % colors.length] }}
               >
                 <span className="text-white text-xs">{index + 1}</span>
@@ -103,7 +110,9 @@ export default function Template08(props: EditableMixedContentProps) {
                     className="text-lg font-semibold text-gray-700 w-full outline-none border border-transparent hover:border-gray-300 bg-transparent"
                   />
                 ) : (
-                  <h2 className="text-lg font-semibold text-gray-700">{topic}</h2>
+                  <h2 className="text-lg font-semibold text-gray-700">
+                    {topic}
+                  </h2>
                 )}
 
                 {isEditing && draftTopics.length > 1 && (

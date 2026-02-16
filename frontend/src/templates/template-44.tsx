@@ -1,3 +1,4 @@
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { useState } from "react";
 import { EditActions } from "../components/templateActionButtons";
 import type { TwoTopicsProps } from "./types";
@@ -14,11 +15,12 @@ const defaultTwoTopicsProps: TwoTopicsProps = {
 };
 
 type EditableProps = Partial<TwoTopicsProps> & {
-  onSave?: (data: Pick<TwoTopicsProps, "title" | "topics">) => void;
+  slideIndex: number;
 };
 
 export default function Template44(props: EditableProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, topics, preview } = {
     ...defaultTwoTopicsProps,
     ...rest,
@@ -32,7 +34,7 @@ export default function Template44(props: EditableProps) {
 
   const handleSave = () => {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       topics: draftTopics,
     });

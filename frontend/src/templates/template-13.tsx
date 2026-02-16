@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { EditActions } from "../components/templateActionButtons";
 import type { DetailedTopicsProps } from "./types";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableDetailedTopicsProps = Partial<DetailedTopicsProps> & {
-  onSave?: (data: Pick<DetailedTopicsProps, "title" | "topics">) => void;
+  slideIndex: number;
 };
 
 const defaults: DetailedTopicsProps = {
@@ -25,7 +26,8 @@ const defaults: DetailedTopicsProps = {
 };
 
 export default function Template13(props: EditableDetailedTopicsProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, topics, preview } = { ...defaults, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
@@ -36,7 +38,7 @@ export default function Template13(props: EditableDetailedTopicsProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({ title: draftTitle, topics: draftTopics });
+    handleUpdateSlide(slideIndex, { title: draftTitle, topics: draftTopics });
   }
 
   const handleTopicChange = (

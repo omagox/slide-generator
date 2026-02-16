@@ -1,3 +1,4 @@
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { useState } from "react";
 import { MdAddBox, MdDelete } from "react-icons/md";
 import { EditActions } from "../components/templateActionButtons";
@@ -16,11 +17,12 @@ const defaultExampleProps: ExampleProps = {
 };
 
 type EditableProps = Partial<ExampleProps> & {
-  onSave?: (data: Pick<ExampleProps, "title" | "concept" | "examples">) => void;
+  slideIndex: number;
 };
 
 export default function Template45(props: EditableProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, concept, examples, preview } = {
     ...defaultExampleProps,
     ...rest,
@@ -35,7 +37,7 @@ export default function Template45(props: EditableProps) {
 
   const handleSave = () => {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       concept: draftConcept,
       examples: draftExamples,

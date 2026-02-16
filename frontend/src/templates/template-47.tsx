@@ -1,3 +1,4 @@
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { useState } from "react";
 import { MdAddBox, MdDelete } from "react-icons/md";
 import { EditActions } from "../components/templateActionButtons";
@@ -11,13 +12,12 @@ const defaultCaseStudyProps: CaseStudyProps = {
 };
 
 type EditableProps = Partial<CaseStudyProps> & {
-  onSave?: (
-    data: Pick<CaseStudyProps, "title" | "scenario" | "questions">,
-  ) => void;
+  slideIndex: number;
 };
 
 export default function Template47(props: EditableProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, scenario, questions, preview } = {
     ...defaultCaseStudyProps,
     ...rest,
@@ -30,7 +30,7 @@ export default function Template47(props: EditableProps) {
 
   const handleSave = () => {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       scenario: draftScenario,
       questions: draftQuestions,

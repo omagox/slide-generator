@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { EditActions } from "../components/templateActionButtons";
 import type { LearningObjectivesProps } from "./types";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableLearningObjectivesProps = Partial<LearningObjectivesProps> & {
-  onSave?: (data: Pick<LearningObjectivesProps, "title" | "objectives">) => void;
+  slideIndex: number;
 };
 
 const defaultLearningObjectives: LearningObjectivesProps = {
@@ -14,7 +15,8 @@ const defaultLearningObjectives: LearningObjectivesProps = {
 };
 
 export default function Template27(props: EditableLearningObjectivesProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, objectives, preview } = {
     ...defaultLearningObjectives,
     ...rest,
@@ -26,7 +28,10 @@ export default function Template27(props: EditableLearningObjectivesProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({ title: draftTitle, objectives: draftObjectives });
+    handleUpdateSlide(slideIndex, {
+      title: draftTitle,
+      objectives: draftObjectives,
+    });
   }
 
   const handleObjectiveChange = (index: number, value: string) => {
@@ -88,7 +93,7 @@ export default function Template27(props: EditableLearningObjectivesProps) {
               className="flex items-start space-x-4 bg-gray-50 rounded-lg p-2 group"
             >
               <div
-                className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 mt-1"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold shrink-0 mt-1"
                 style={{
                   backgroundColor: index % 2 === 0 ? "#1277bc" : "#58a3a1",
                 }}
@@ -99,7 +104,9 @@ export default function Template27(props: EditableLearningObjectivesProps) {
                 {isEditing ? (
                   <textarea
                     value={objective}
-                    onChange={(e) => handleObjectiveChange(index, e.target.value)}
+                    onChange={(e) =>
+                      handleObjectiveChange(index, e.target.value)
+                    }
                     className="w-full text-gray-700 outline-none border border-transparent hover:border-gray-300 cursor-text bg-transparent resize-none"
                     rows={2}
                   />

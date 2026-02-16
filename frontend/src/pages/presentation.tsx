@@ -10,9 +10,20 @@ import { useNavigate } from "react-router-dom";
 import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 
 import type { AddSlideModalInfo, NormalizedSlide } from "../types/global";
-import { normalizeSlidesFromApi, addQuestionSlide, addGenericSlide } from "../lib/utils";
+import {
+  normalizeSlidesFromApi,
+  addQuestionSlide,
+  addGenericSlide,
+} from "../lib/utils";
 
-import { MdFullscreen, MdOutlineLibraryAdd } from "react-icons/md";
+import {
+  MdFullscreen,
+  MdOutlineLibraryAdd,
+  MdPictureAsPdf,
+} from "react-icons/md";
+
+import { toPng } from "html-to-image";
+import { jsPDF } from "jspdf";
 import JsxParser from "react-jsx-parser";
 
 import componentsMap from "../templates/templatesMap";
@@ -21,7 +32,7 @@ import AddSlideModal from "../components/AddSlideModal";
 const PresentationPage = () => {
   const navigate = useNavigate();
 
-  const { slides, setIsFullscreen } = useSlideGeneration();
+  const { slides, setIsFullscreen, handleAddSlide } = useSlideGeneration();
 
   const [localSlides, setLocalSlides] = useState<NormalizedSlide[]>([]);
 
@@ -31,8 +42,10 @@ const PresentationPage = () => {
   const [showAddSlideModal, setShowAddSlideModal] = useState(false);
   const [addSlideModalInfo, setAddSlideModalInfo] =
     useState<AddSlideModalInfo | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   const fullscreenDivRef = useRef(null);
+  const pdfContainerRef = useRef<HTMLDivElement>(null);
   const presentationSlidesRef = useRef<NormalizedSlide[]>([]);
   const slidesFromContextRef = useRef<NormalizedSlide[]>([]);
   const previousNormalizedSlidesRef = useRef<NormalizedSlide[]>([]);
@@ -145,9 +158,51 @@ const PresentationPage = () => {
     }
   };
 
+  const handleExportPDF = async () => {
+    if (!pdfContainerRef.current || isExporting) return;
+
+    try {
+      setIsExporting(true);
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "px",
+        format: [920, 518],
+      });
+
+      const slides = pdfContainerRef.current.children;
+
+      for (let i = 0; i < slides.length; i++) {
+        const slideElement = slides[i] as HTMLElement;
+
+        // Using html-to-image which handles modern CSS (like oklch) better than html2canvas
+        const imgData = await toPng(slideElement, {
+          quality: 1.0,
+          pixelRatio: 2, // Higher scale for better quality
+          backgroundColor: "#ffffff",
+          width: 920,
+          height: 518,
+        });
+
+        if (i > 0) {
+          pdf.addPage([920, 518], "landscape");
+        }
+
+        pdf.addImage(imgData, "PNG", 0, 0, 920, 518);
+      }
+
+      pdf.save("apresentacao.pdf");
+    } catch (error) {
+      console.error("Erro ao gerar PDF:", error);
+      alert("Houve um erro ao gerar o PDF. Tente novamente.");
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   function getComponentString(
     data: Record<string, unknown>,
-    id: number,
+    templateId: number,
+    slideIndex: number = 999,
     preview: boolean = false,
   ): string {
     const props = Object.entries(data).map(([key, value]) => {
@@ -159,18 +214,27 @@ const PresentationPage = () => {
     });
 
     const propsStr = props.join(" ");
-    const componentId = id < 10 ? `0${id}` : id;
+    const componentId = templateId < 10 ? `0${templateId}` : templateId;
 
     if (preview)
       return `<Template${componentId} preview={${preview}} ${propsStr}/>`;
-    else return `<Template${componentId} ${propsStr}/>`;
+    else
+      return `<Template${componentId} ${propsStr} slideIndex={${slideIndex}} />`;
   }
 
   return (
-    <div
-      className="w-full flex justify-between relative overflow-x-hidden h-screen overflow-y-auto"
-    >
-      <div className="absolute top-2 right-6 z-9999 flex gap-2!">
+    <div className="w-full flex justify-between relative overflow-x-hidden h-screen overflow-y-auto">
+      <div className="fixed top-2 right-6 z-9999 flex gap-2! bg-white rounded-md px-1 py-0.5">
+        <button
+          className="button-transparent-opacity-red-border cursor-pointer p-1.5! disabled:opacity-50"
+          onClick={handleExportPDF}
+          disabled={isExporting}
+          title="Exportar como PDF"
+        >
+          <MdPictureAsPdf
+            className={`w-6! h-6! ${isExporting ? "animate-pulse" : ""}`}
+          />
+        </button>
         <button
           className="button-transparent-opacity-red-border cursor-pointer p-1.5!"
           onClick={handleToggleFullscreen}
@@ -186,7 +250,7 @@ const PresentationPage = () => {
         }}
       >
         <div className="w-full flex flex-col items-center">
-          {presentationSlides.map((slide) => {
+          {presentationSlides.map((slide, index) => {
             const availW = (slideDivWidth ?? window.innerWidth) - 32;
             const availH = (totalHeight ?? window.innerHeight) - 32;
 
@@ -211,6 +275,7 @@ const PresentationPage = () => {
                       jsx={getComponentString(
                         slide.canvas.generationTemplate,
                         slide.canvas.templateID,
+                        index,
                       )}
                     />
                   </div>
@@ -299,11 +364,46 @@ const PresentationPage = () => {
               addGenericSlide(presentationSlides, templateId, insertAfter),
             );
           }
+          handleAddSlide(templateId, insertAfter);
+
           setShowAddSlideModal(false);
           setAddSlideModalInfo(null);
         }}
         slide={addSlideModalInfo}
       />
+
+      <div
+        ref={pdfContainerRef}
+        style={{
+          position: "absolute",
+          top: -10000,
+          left: -10000,
+          width: "920px",
+          pointerEvents: "none",
+        }}
+      >
+        {presentationSlides.map((slide) => (
+          <div
+            key={`pdf-${slide.id}`}
+            style={{
+              width: 920,
+              height: 518,
+              background: "white",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            <JsxParser
+              components={componentsMap}
+              jsx={getComponentString(
+                slide.canvas.generationTemplate,
+                slide.canvas.templateID,
+                slide.id,
+              )}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

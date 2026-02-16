@@ -1,12 +1,13 @@
 // Template fixo utilizado especificamente para mostrar questões geradas
 
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { useState } from "react";
 import { MdAddBox, MdDelete } from "react-icons/md";
 import { EditActions } from "../components/templateActionButtons";
 import type { OptionalQuestionProps } from "./types";
 
 type SafeOptionalQuestionProps = Partial<OptionalQuestionProps> & {
-  onSave?: (data: Pick<OptionalQuestionProps, "statement" | "options">) => void;
+  slideIndex: number;
 };
 
 const defaultValues: OptionalQuestionProps = {
@@ -19,7 +20,8 @@ const MAX_OPTIONS = 4;
 const OPTION_LETTERS = ["A", "B", "C", "D"];
 
 export default function Template54(props: SafeOptionalQuestionProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { statement, options, preview } = {
     ...defaultValues,
     ...rest,
@@ -33,7 +35,7 @@ export default function Template54(props: SafeOptionalQuestionProps) {
 
   const handleSave = () => {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       statement: draftStatement,
       options: draftOptions,
     });

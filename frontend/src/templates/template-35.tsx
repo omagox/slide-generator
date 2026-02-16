@@ -1,3 +1,4 @@
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { useState } from "react";
 import { MdAddBox, MdDelete } from "react-icons/md";
 import { EditActions } from "../components/templateActionButtons";
@@ -21,11 +22,12 @@ const defaultProcessProps: ProcessProps = {
 };
 
 type EditableProps = Partial<ProcessProps> & {
-  onSave?: (data: Pick<ProcessProps, "title" | "steps">) => void;
+  slideIndex: number;
 };
 
 export default function Template35(props: EditableProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, steps, preview } = {
     ...defaultProcessProps,
     ...rest,
@@ -39,7 +41,7 @@ export default function Template35(props: EditableProps) {
 
   const handleSave = () => {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       steps: draftSteps,
     });

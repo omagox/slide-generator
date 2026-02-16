@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { EditActions } from "../components/templateActionButtons";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
+
 import type { AgendaProps } from "./types";
+
+import { EditActions } from "../components/templateActionButtons";
 
 import { MdDelete, MdAddBox  } from "react-icons/md";
 
 type EditableAgendaProps = Partial<AgendaProps> & {
-  onSave?: (data: Pick<AgendaProps, "title" | "topics">) => void;
+  slideIndex: number;
 };
 
 const defaultAgendaProps: AgendaProps = {
@@ -15,7 +18,9 @@ const defaultAgendaProps: AgendaProps = {
 };
 
 export default function Template29(props: EditableAgendaProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+
+  const { slideIndex, ...rest } = props;
   const { title, topics, preview } = { ...defaultAgendaProps, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
@@ -24,7 +29,11 @@ export default function Template29(props: EditableAgendaProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({ title: draftTitle, topics: draftTopics });
+
+    handleUpdateSlide(slideIndex, {
+      title: draftTitle,
+      topics: draftTopics,
+    });
   }
 
   const handleTopicChange = (index: number, value: string) => {

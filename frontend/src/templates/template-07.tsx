@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import type { TwoTopicsProps } from "./types";
 import { EditActions } from "../components/templateActionButtons";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableTwoTopicsProps = Partial<TwoTopicsProps> & {
-  onSave?: (data: Pick<TwoTopicsProps, "title" | "topics">) => void;
+  slideIndex: number;
 };
 
 const defaults: TwoTopicsProps = {
@@ -17,7 +18,8 @@ const defaults: TwoTopicsProps = {
 };
 
 export default function Template07(props: EditableTwoTopicsProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, topics, preview } = { ...defaults, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
@@ -52,7 +54,7 @@ export default function Template07(props: EditableTwoTopicsProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       topics: draftTopics,
     });

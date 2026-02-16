@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { EditActions } from "../components/templateActionButtons";
 import type { DefinitionProps } from "./types";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableDefinitionProps = Partial<DefinitionProps> & {
-  onSave?: (data: Pick<DefinitionProps, "title" | "term" | "definition" | "examples">) => void;
+  slideIndex: number;
 };
 
 const defaultDefinitionProps: DefinitionProps = {
@@ -16,7 +17,8 @@ const defaultDefinitionProps: DefinitionProps = {
 };
 
 export default function Template28(props: EditableDefinitionProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, term, definition, examples, preview } = {
     ...defaultDefinitionProps,
     ...rest,
@@ -30,7 +32,7 @@ export default function Template28(props: EditableDefinitionProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       term: draftTerm,
       definition: draftDefinition,
@@ -108,7 +110,10 @@ export default function Template28(props: EditableDefinitionProps) {
             </>
           ) : (
             <>
-              <h2 className="text-2xl font-bold mb-2" style={{ color: "#1277bc" }}>
+              <h2
+                className="text-2xl font-bold mb-2"
+                style={{ color: "#1277bc" }}
+              >
                 {draftTerm}
               </h2>
               <p className="text-lg text-gray-700 mb-4 leading-relaxed">
@@ -129,14 +134,16 @@ export default function Template28(props: EditableDefinitionProps) {
                 {draftExamples.map((example, index) => (
                   <li key={index} className="flex items-center space-x-2 group">
                     <div
-                      className="w-2 h-2 rounded-full flex-shrink-0"
+                      className="w-2 h-2 rounded-full shrink-0"
                       style={{ backgroundColor: "#58a3a1" }}
                     ></div>
                     <div className="flex-1 flex items-center gap-2">
                       {isEditing ? (
                         <input
                           value={example}
-                          onChange={(e) => handleExampleChange(index, e.target.value)}
+                          onChange={(e) =>
+                            handleExampleChange(index, e.target.value)
+                          }
                           className="w-full text-gray-600 outline-none border border-transparent hover:border-gray-300 cursor-text bg-transparent"
                         />
                       ) : (

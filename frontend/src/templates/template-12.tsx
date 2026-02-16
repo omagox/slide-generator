@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import type { DetailedTopicsProps } from "./types";
 import { EditActions } from "../components/templateActionButtons";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableDetailedTopicsProps = Partial<DetailedTopicsProps> & {
-  onSave?: (data: Pick<DetailedTopicsProps, "title" | "topics">) => void;
+  slideIndex: number;
 };
 
 const defaults: DetailedTopicsProps = {
@@ -19,14 +20,22 @@ const defaults: DetailedTopicsProps = {
 };
 
 export default function Template12(props: EditableDetailedTopicsProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, topics, preview } = { ...defaults, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(title);
   const [draftTopics, setDraftTopics] = useState(topics);
 
-  const colors = ["#1277bc", "#58a3a1", "#6b7280", "#ef4444", "#f59e0b", "#10b981"];
+  const colors = [
+    "#1277bc",
+    "#58a3a1",
+    "#6b7280",
+    "#ef4444",
+    "#f59e0b",
+    "#10b981",
+  ];
 
   function handleTopicChange(
     index: number,
@@ -57,7 +66,7 @@ export default function Template12(props: EditableDetailedTopicsProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       topics: draftTopics,
     });
@@ -98,9 +107,12 @@ export default function Template12(props: EditableDetailedTopicsProps) {
 
       <div className="max-w-2xl mx-auto space-y-4 w-full">
         {draftTopics.map((topic, index) => (
-          <div key={index} className="flex items-start space-x-4 group relative">
+          <div
+            key={index}
+            className="flex items-start space-x-4 group relative"
+          >
             <div
-              className="min-w-8 max-w-8 min-h-8 max-h-8 rounded-full flex items-center justify-center flex-shrink-0"
+              className="min-w-8 max-w-8 min-h-8 max-h-8 rounded-full flex items-center justify-center shrink-0"
               style={{ backgroundColor: colors[index % colors.length] }}
             >
               <span className="text-white text-sm font-bold">

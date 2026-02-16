@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import type { TopicsWithSubtopicsProps } from "./types";
 import { EditActions } from "../components/templateActionButtons";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableTopicsWithSubtopicsProps = Partial<TopicsWithSubtopicsProps> & {
-  onSave?: (data: Pick<TopicsWithSubtopicsProps, "title" | "topics">) => void;
+  slideIndex: number;
 };
 
 const defaultValues: TopicsWithSubtopicsProps = {
@@ -19,7 +20,8 @@ const defaultValues: TopicsWithSubtopicsProps = {
 };
 
 export default function Template04(props: EditableTopicsWithSubtopicsProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, topics, preview } = { ...defaultValues, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
@@ -92,7 +94,7 @@ export default function Template04(props: EditableTopicsWithSubtopicsProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       topics: draftTopics,
     });
@@ -139,7 +141,7 @@ export default function Template04(props: EditableTopicsWithSubtopicsProps) {
             <div key={index} className="group relative">
               <div className="flex items-center space-x-4 mb-2">
                 <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0"
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold shrink-0"
                   style={{ backgroundColor: color }}
                 >
                   {index + 1}
@@ -175,14 +177,21 @@ export default function Template04(props: EditableTopicsWithSubtopicsProps) {
 
               <div className="ml-12 space-y-1 text-xs">
                 {topic.subtopics.map((subtopic, subIndex) => (
-                  <div key={subIndex} className="flex items-center gap-2 group/sub">
+                  <div
+                    key={subIndex}
+                    className="flex items-center gap-2 group/sub"
+                  >
                     {isEditing ? (
                       <div className="flex-1 flex items-center gap-2">
                         <span className="text-gray-400">•</span>
                         <input
                           value={subtopic}
                           onChange={(e) =>
-                            handleSubtopicChange(index, subIndex, e.target.value)
+                            handleSubtopicChange(
+                              index,
+                              subIndex,
+                              e.target.value,
+                            )
                           }
                           className="flex-1 text-gray-600 outline-none border border-transparent hover:border-gray-300 bg-transparent"
                         />

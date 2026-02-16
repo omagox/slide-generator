@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { EditActions } from "../components/templateActionButtons";
 import type { ExampleProps } from "./types";
 
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableExampleProps = Partial<ExampleProps> & {
-  onSave?: (data: Pick<ExampleProps, "title" | "concept" | "examples">) => void;
+  slideIndex: number;
 };
 
 const defaultExampleItem = {
@@ -21,7 +22,8 @@ const defaultExampleProps: ExampleProps = {
 };
 
 export default function Template30(props: EditableExampleProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const {
     title,
     concept,
@@ -41,7 +43,7 @@ export default function Template30(props: EditableExampleProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({
+    handleUpdateSlide(slideIndex, {
       title: draftTitle,
       concept: draftConcept,
       examples: draftExamples,

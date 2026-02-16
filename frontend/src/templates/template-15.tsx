@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { EditActions } from "../components/templateActionButtons";
 import type { TableProps } from "./types";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableTableProps = Partial<TableProps> & {
-  onSave?: (data: Pick<TableProps, "title" | "rows">) => void;
+  slideIndex: number;
 };
 
 const defaults: TableProps = {
@@ -18,7 +19,8 @@ const defaults: TableProps = {
 };
 
 export default function Template15(props: EditableTableProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, rows, preview } = { ...defaults, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
@@ -27,7 +29,7 @@ export default function Template15(props: EditableTableProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({ title: draftTitle, rows: draftRows });
+    handleUpdateSlide(slideIndex, { title: draftTitle, rows: draftRows });
   }
 
   const handleRowChange = (
@@ -41,7 +43,10 @@ export default function Template15(props: EditableTableProps) {
   };
 
   const addRow = () => {
-    setDraftRows([...draftRows, { topic: "Novo Tópico", details: "Novos detalhes" }]);
+    setDraftRows([
+      ...draftRows,
+      { topic: "Novo Tópico", details: "Novos detalhes" },
+    ]);
   };
 
   const removeRow = (index: number) => {

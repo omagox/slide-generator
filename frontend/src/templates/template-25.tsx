@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import { EditActions } from "../components/templateActionButtons";
 import type { TopicsWithSubtopicsProps } from "./types";
 import { MdDelete, MdAddBox } from "react-icons/md";
 
 type EditableTopicsWithSubtopicsProps = Partial<TopicsWithSubtopicsProps> & {
-  onSave?: (data: Pick<TopicsWithSubtopicsProps, "title" | "topics">) => void;
+  slideIndex: number;
 };
 
 const defaults: TopicsWithSubtopicsProps = {
@@ -17,7 +18,8 @@ const defaults: TopicsWithSubtopicsProps = {
 };
 
 export default function Template25(props: EditableTopicsWithSubtopicsProps) {
-  const { onSave, ...rest } = props;
+  const { handleUpdateSlide } = useSlideGeneration();
+  const { slideIndex, ...rest } = props;
   const { title, topics, preview } = { ...defaults, ...rest };
 
   const [isEditing, setIsEditing] = useState(false);
@@ -28,7 +30,7 @@ export default function Template25(props: EditableTopicsWithSubtopicsProps) {
 
   function handleSave() {
     setIsEditing(false);
-    onSave?.({ title: draftTitle, topics: draftTopics });
+    handleUpdateSlide(slideIndex, { title: draftTitle, topics: draftTopics });
   }
 
   const handleTopicChange = (index: number, value: string) => {
@@ -77,7 +79,9 @@ export default function Template25(props: EditableTopicsWithSubtopicsProps) {
     const newTopics = [...draftTopics];
     newTopics[topicIndex] = {
       ...newTopics[topicIndex],
-      subtopics: newTopics[topicIndex].subtopics.filter((_, i) => i !== subIndex),
+      subtopics: newTopics[topicIndex].subtopics.filter(
+        (_, i) => i !== subIndex,
+      ),
     };
     setDraftTopics(newTopics);
   };
@@ -132,7 +136,7 @@ export default function Template25(props: EditableTopicsWithSubtopicsProps) {
 
             <div className="flex items-start space-x-4 mb-1">
               <div
-                className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 mt-1"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold shrink-0 mt-1"
                 style={{ backgroundColor: colors[index % colors.length] }}
               >
                 {index + 1}
@@ -157,7 +161,10 @@ export default function Template25(props: EditableTopicsWithSubtopicsProps) {
             </div>
             <div className="ml-12 space-y-2">
               {topic.subtopics.map((subtopic, subIndex) => (
-                <div key={subIndex} className="flex items-start space-x-2 group/sub">
+                <div
+                  key={subIndex}
+                  className="flex items-start space-x-2 group/sub"
+                >
                   <span className="text-gray-600 mt-0.5">•</span>
                   <div className="flex-1 flex items-center gap-2">
                     {isEditing ? (
@@ -165,7 +172,11 @@ export default function Template25(props: EditableTopicsWithSubtopicsProps) {
                         <input
                           value={subtopic}
                           onChange={(e) =>
-                            handleSubtopicChange(index, subIndex, e.target.value)
+                            handleSubtopicChange(
+                              index,
+                              subIndex,
+                              e.target.value,
+                            )
                           }
                           className="w-full text-sm text-gray-600 outline-none border border-transparent hover:border-gray-300 cursor-text bg-transparent"
                         />
