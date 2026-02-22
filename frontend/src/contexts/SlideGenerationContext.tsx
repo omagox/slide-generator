@@ -21,8 +21,8 @@ interface SlideGenerationContextType {
     progress: number;
   } | null;
 
-  isFullscreen: boolean;
-  setIsFullscreen: React.Dispatch<React.SetStateAction<boolean>>;
+  hideActionButtons: boolean;
+  setHideActionButtons: React.Dispatch<React.SetStateAction<boolean>>;
 
   handleAddSlide: (templateId: number, insertAfterIndex: number) => void;
   handleUpdateSlide: (id: number, data: Record<string, unknown>) => void;
@@ -37,7 +37,7 @@ export const SlideGenerationProvider: React.FC<{
 }> = ({ children }) => {
   const navigate = useNavigate();
 
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [hideActionButtons, setHideActionButtons] = useState(false);
   const [slides, setSlides] = useState<Slide[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [generationProgress, setGenerationProgress] = useState<{
@@ -197,8 +197,8 @@ export const SlideGenerationProvider: React.FC<{
         error,
         setError,
         generationProgress,
-        isFullscreen,
-        setIsFullscreen,
+        hideActionButtons,
+        setHideActionButtons,
         handleAddSlide,
         handleUpdateSlide,
       }}

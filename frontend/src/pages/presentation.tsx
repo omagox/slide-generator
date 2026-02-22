@@ -32,7 +32,7 @@ import AddSlideModal from "../components/AddSlideModal";
 const PresentationPage = () => {
   const navigate = useNavigate();
 
-  const { slides, setIsFullscreen, handleAddSlide } = useSlideGeneration();
+  const { slides, setHideActionButtons, handleAddSlide } = useSlideGeneration();
 
   const [localSlides, setLocalSlides] = useState<NormalizedSlide[]>([]);
 
@@ -105,11 +105,11 @@ const PresentationPage = () => {
     const handleFullscreenChange = () => {
       if (document.fullscreenElement) {
         window.addEventListener("keydown", handleKeyDown);
-        setIsFullscreen(true);
+        setHideActionButtons(true);
       } else {
         window.removeEventListener("keydown", handleKeyDown);
         setCurrentSlide(0);
-        setIsFullscreen(false);
+        setHideActionButtons(false);
       }
     };
 
@@ -127,13 +127,13 @@ const PresentationPage = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
     };
-  }, [handleKeyDown, setIsFullscreen]);
+  }, [handleKeyDown, setHideActionButtons]);
 
   const handleToggleFullscreen = () => {
     const elem = fullscreenDivRef.current;
 
     if (!document.fullscreenElement) {
-      setIsFullscreen(true);
+      setHideActionButtons(true);
       setCurrentSlide(0);
       if (elem) {
         const elemWithFullscreen = elem as HTMLElement & {
@@ -154,7 +154,7 @@ const PresentationPage = () => {
       }
     } else {
       document.exitFullscreen?.call(document);
-      setIsFullscreen(false);
+      setHideActionButtons(false);
     }
   };
 
@@ -163,6 +163,7 @@ const PresentationPage = () => {
 
     try {
       setIsExporting(true);
+      setHideActionButtons(true);
       const pdf = new jsPDF({
         orientation: "landscape",
         unit: "px",
@@ -196,6 +197,7 @@ const PresentationPage = () => {
       alert("Houve um erro ao gerar o PDF. Tente novamente.");
     } finally {
       setIsExporting(false);
+      setHideActionButtons(false);
     }
   };
 
@@ -224,7 +226,7 @@ const PresentationPage = () => {
 
   return (
     <div className="w-full flex justify-between relative overflow-x-hidden h-screen overflow-y-auto">
-      <div className="fixed top-2 right-6 z-9999 flex gap-2! bg-white rounded-md px-1 py-0.5">
+      <div className="fixed bottom-4 right-4 z-9999 flex gap-1! bg-gray-800 rounded-md px-2 py-1">
         <button
           className="button-transparent-opacity-red-border cursor-pointer p-1.5! disabled:opacity-50"
           onClick={handleExportPDF}
@@ -232,14 +234,15 @@ const PresentationPage = () => {
           title="Exportar como PDF"
         >
           <MdPictureAsPdf
-            className={`w-6! h-6! ${isExporting ? "animate-pulse" : ""}`}
+            className={`w-6! h-6! text-white hover:text-gray-300 transition-colors ${isExporting ? "animate-pulse" : ""}`}
           />
         </button>
         <button
           className="button-transparent-opacity-red-border cursor-pointer p-1.5!"
           onClick={handleToggleFullscreen}
+          title="Alternar para tela cheia"
         >
-          <MdFullscreen className="w-6! h-6!" />
+          <MdFullscreen className="w-6! h-6! text-white hover:text-gray-300 transition-colors" />
         </button>
       </div>
       <div

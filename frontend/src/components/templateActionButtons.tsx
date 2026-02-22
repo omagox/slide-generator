@@ -9,9 +9,9 @@ type EditActionsProps = {
 };
 
 export function EditActions({ isEditing, onEdit, onSave }: EditActionsProps) {
-  const { isFullscreen } = useSlideGeneration();
+  const { hideActionButtons } = useSlideGeneration();
 
-  if (isFullscreen) return null;
+  if (hideActionButtons) return null;
 
   return (
     <div className="absolute top-2 right-2 flex gap-2">
