@@ -422,11 +422,6 @@
     }
   },
   {
-    "id": 29,
-    "templateDescription": "Template Indisponível",
-    "templateProps": {}
-  },
-  {
     "id": 30,
     "templateDescription": "Template de exemplos práticos, com um tópico principal no topo, uma explicação do conceito e quatro exemplos, cada exemplo com título e descrição.",
     "templateProps": {
@@ -607,6 +602,243 @@
           "content": "Texto explicativo principal do tópico 4."
         }
       ]
+    }
+  },
+  {
+    "id": 40,
+    "templateDescription": "Template com título principal, um tópico central com título e complemento, e uma lista de até quatro detalhes numerados.",
+    "templateProps": {
+      "title": "Título principal",
+      "topic": {
+        "title": "Título do tópico",
+        "content": "Conteúdo do tópico",
+        "details": ["Detalhe 1", "Detalhe 2", "Detalhe 3", "Detalhe 4"]
+      }
+    }
+  },
+  {
+    "id": 41,
+    "templateDescription": "Template para apresentar um processo com três etapas numeradas, cada uma com título, descrição e um complemento.",
+    "templateProps": {
+      "title": "Título principal",
+      "steps": [
+        {
+          "title": "Título do passo 1",
+          "content": "Descrição do passo 1",
+          "additional": "Informação adicional 1"
+        },
+        {
+          "title": "Título do passo 2",
+          "content": "Descrição do passo 2",
+          "additional": "Informação adicional 2"
+        },
+        {
+          "title": "Título do passo 3",
+          "content": "Descrição do passo 3",
+          "additional": "Informação adicional 3"
+        }
+      ]
+    }
+  },
+  {
+    "id": 42,
+    "templateDescription": "Template com objetivo de comparar dois tópicos principais, cada um com título e conteúdo.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Título do tópico 1",
+          "content": "Conteúdo do tópico 1"
+        },
+        {
+          "title": "Título do tópico 2",
+          "content": "Conteúdo do tópico 2"
+        }
+      ]
+    }
+  },
+  {
+    "id": 43,
+    "templateDescription": "Template com objetivo de apresentar um processo com até três etapas numeradas, cada uma com título e complemento.",
+    "templateProps": {
+      "title": "Título principal",
+      "steps": [
+        {
+          "title": "Título do passo 1",
+          "content": "Descrição do passo 1"
+        },
+        {
+          "title": "Título do passo 2",
+          "content": "Descrição do passo 2"
+        },
+        {
+          "title": "Título do passo 3",
+          "content": "Descrição do passo 3"
+        }
+      ]
+    }
+  },
+  {
+    "id": 44,
+    "templateDescription": "Template de comparação (Versus) entre dois tópicos principais, cada um com título e descrição complementar.",
+    "templateProps": {
+      "title": "Título principal",
+      "topics": [
+        {
+          "title": "Título do tópico 1",
+          "content": "Conteúdo do tópico 1"
+        },
+        {
+          "title": "Título do tópico 2",
+          "content": "Conteúdo do tópico 2"
+        }
+      ]
+    }
+  },
+  {
+    "id": 45,
+    "templateDescription": "Template para apresentar um conceito central com até quatro exemplos, cada um com título e descrição complementar.",
+    "templateProps": {
+      "title": "Título principal",
+      "concept": "Conceito Central",
+      "examples": [
+        {
+          "title": "Título do exemplo 1",
+          "description": "Descrição do exemplo 1"
+        },
+        {
+          "title": "Título do exemplo 2",
+          "description": "Descrição do exemplo 2"
+        },
+        {
+          "title": "Título do exemplo 3",
+          "description": "Descrição do exemplo 3"
+        },
+        {
+          "title": "Título do exemplo 4",
+          "description": "Descrição do exemplo 4"
+        }
+      ]
+    }
+  },
+  {
+    "id": 46,
+    "templateDescription": "Template de comparação entre três tópicos principais, cada um com título e uma lista de até quatro características complementares.",
+    "templateProps": {
+      "title": "Título principal",
+      "items": [
+        {
+          "title": "Título do item A",
+          "characteristics": ["Característica 1", "Característica 2", "Característica 3", "Característica 4"]
+        },
+        {
+          "title": "Título do item B",
+          "characteristics": ["Característica 1", "Característica 2", "Característica 3", "Característica 4"]
+        },
+        {
+          "title": "Título do item C",
+          "characteristics": ["Característica 1", "Característica 2", "Característica 3", "Característica 4"]
+        }
+      ]
+    }
+  },
+  {
+    "id": 47,
+    "templateDescription": "Template para apresentar um estudo de caso com um texto contendo o cenário detalhado e uma lista de até três perguntas para análise do cenário apresentado.",
+    "templateProps": {
+      "title": "Título principal",
+      "scenario": "Descrição detalhada do cenário apresentado para análise.",
+      "questions": [
+        "Questão 1 sobre o cenário",
+        "Questão 2 sobre o cenário",
+        "Questão 3 sobre o cenário"
+      ]
+    }
+  },
+  {
+    "id": 50,
+    "templateDescription": "Template para apresentar um processo com até três etapas, cada uma com título e complemento, além de um conteúdo adicional opcional.",
+    "templateProps": {
+      "title": "Título principal",
+      "steps": [
+        {
+          "title": "Título da etapa 1",
+          "description": "Descrição da etapa 1"
+        },
+        {
+          "title": "Título da etapa 2",
+          "description": "Descrição da etapa 2"
+        },
+        {
+          "title": "Título da etapa 3",
+          "description": "Descrição da etapa 3"
+        }
+      ],
+      "content": "Conteúdo adicional opcional"
+    }
+  },
+  {
+    "id": 51,
+    "templateDescription": "Template para apresentar um processo linear com até três etapas, cada uma com título, descrição e um complemento.",
+    "templateProps": {
+      "title": "Título principal",
+      "steps": [
+        {
+          "title": "Título do passo 1",
+          "content": "Descrição do passo 1",
+          "additional": "Informação adicional 1"
+        },
+        {
+          "title": "Título do passo 2",
+          "content": "Descrição do passo 2",
+          "additional": "Informação adicional 2"
+        }
+      ]
+    }
+  },
+  {
+    "id": 52,
+    "templateDescription": "Template para apresentar um tópico único com título e descrição complementar. Útil para trazer uma reflexão sobre o tópico apresentado.",
+    "templateProps": {
+      "title": "Título principal",
+      "content": "Conteúdo detalhado do tópico apresentado."
+    }
+  },
+  {
+    "id": 53,
+    "templateDescription": "Template para apresentar um processo com até quatro etapas, cada uma com título, descrição e um complemento.",
+    "templateProps": {
+      "title": "Título principal",
+      "steps": [
+        {
+          "title": "Título do item 1",
+          "content": "Descrição do item 1",
+          "additional": "Informação adicional 1"
+        },
+        {
+          "title": "Título do item 2",
+          "content": "Descrição do item 2",
+          "additional": "Informação adicional 2"
+        },
+        {
+          "title": "Título do item 3",
+          "content": "Descrição do item 3",
+          "additional": "Informação adicional 3"
+        },
+        {
+          "title": "Título do item 4",
+          "content": "Descrição do item 4",
+          "additional": "Informação adicional 4"
+        }
+      ]
+    }
+  },
+  {
+    "id": 54,
+    "templateDescription": "Template para apresentar uma atividade/questão com enunciado e uma lista de até quatro opções de resposta (A, B, C, D).",
+    "templateProps": {
+      "statement": "Enunciado da questão ou atividade proposta.",
+      "options": ["Alternativa A", "Alternativa B", "Alternativa C", "Alternativa D"]
     }
   }
 ]

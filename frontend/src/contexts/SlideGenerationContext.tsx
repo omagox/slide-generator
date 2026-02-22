@@ -38,7 +38,128 @@ export const SlideGenerationProvider: React.FC<{
   const navigate = useNavigate();
 
   const [hideActionButtons, setHideActionButtons] = useState(false);
-  const [slides, setSlides] = useState<Slide[]>([]);
+  const [slides, setSlides] = useState<Slide[]>([
+    {
+      type: "title",
+      title: "Título da apresentação",
+      content: {
+        templateID: 40,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 41",
+      content: {
+        templateID: 41,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 42",
+      content: {
+        templateID: 42,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 43",
+      content: {
+        templateID: 43,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 44",
+      content: {
+        templateID: 44,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 45",
+      content: {
+        templateID: 45,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 46",
+      content: {
+        templateID: 46,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 47",
+      content: {
+        templateID: 47,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 48",
+      content: {
+        templateID: 48,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 49",
+      content: {
+        templateID: 49,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 50",
+      content: {
+        templateID: 50,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 51",
+      content: {
+        templateID: 51,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 52",
+      content: {
+        templateID: 52,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 53",
+      content: {
+        templateID: 53,
+        templateContent: {},
+      },
+    },
+    {
+      type: "content",
+      title: "Slide 54",
+      content: {
+        templateID: 54,
+        templateContent: {},
+      },
+    },
+  ]);
   const [error, setError] = useState<string | null>(null);
   const [generationProgress, setGenerationProgress] = useState<{
     message: string;

@@ -6,7 +6,7 @@ import type { ComparisonProps } from "./types";
 
 const defaultComparisonItem = {
   title: "Título do item",
-  characteristics: ["Característica 1", "Característica 2"],
+  characteristics: ["Característica 1", "Característica 2", "Característica 3"],
 };
 
 const defaultComparisonProps: ComparisonProps = {

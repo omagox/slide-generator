@@ -12,7 +12,7 @@ const defaultExampleItem = {
 const defaultExampleProps: ExampleProps = {
   title: "Título padrão",
   concept: "Conceito Central",
-  examples: [defaultExampleItem, defaultExampleItem],
+  examples: [defaultExampleItem, defaultExampleItem, defaultExampleItem, defaultExampleItem],
   preview: false,
 };
 

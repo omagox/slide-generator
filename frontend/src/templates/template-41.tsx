@@ -12,7 +12,7 @@ const defaultStepItem = {
 
 const defaultProcessProps: ProcessProps = {
   title: "Título padrão",
-  steps: [defaultStepItem],
+  steps: [defaultStepItem, defaultStepItem, defaultStepItem],
   preview: false,
 };
 
