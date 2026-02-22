@@ -41,122 +41,272 @@ export const SlideGenerationProvider: React.FC<{
   const [slides, setSlides] = useState<Slide[]>([
     {
       type: "title",
-      title: "Título da apresentação",
+      title: "Movimentos Literários Brasileiros",
       content: {
-        templateID: 40,
-        templateContent: {},
+        templateID: 1,
+        templateContent: {
+          title: "Movimentos Literários Brasileiros",
+          content: "Apresentação sobre Movimentos Literários Brasileiros",
+        },
+      },
+    },
+    {
+      type: "agenda",
+      title: "Roteiro da Aula",
+      content: {
+        templateID: 29,
+        templateContent: {
+          title: "Roteiro da Aula",
+          topics: [
+            "Movimentos Literários Brasileiros: Uma Jornada Histórica",
+            "As Grandes Eras da Literatura Brasileira",
+            "Era Colonial: Primeiras Vozes do Brasil",
+            "Romantismo: A Busca pela Identidade Nacional",
+            "Romantismo: Duas Faces da Expressão",
+            "O Fim do Século XIX: Razão, Ciência e Forma",
+            "Entre o Misticismo e a Realidade Social",
+            "Modernismo: A Revolução da Arte Brasileira",
+            "Pós-Modernismo e o Legado Literário",
+          ],
+        },
       },
     },
     {
       type: "content",
-      title: "Slide 41",
+      title: "Movimentos Literários Brasileiros: Uma Jornada Histórica",
       content: {
-        templateID: 41,
-        templateContent: {},
+        templateID: 27,
+        templateContent: {
+          title: "Movimentos Literários Brasileiros: Uma Jornada Histórica",
+          objectives: [
+            "Compreender a evolução da literatura brasileira em seu contexto histórico.",
+            "Identificar as características principais e autores de cada movimento literário.",
+            "Analisar a relação intrínseca entre literatura, sociedade e cultura no Brasil.",
+            "Reconhecer a importância dos movimentos literários para a formação da identidade nacional.",
+          ],
+        },
       },
     },
     {
       type: "content",
-      title: "Slide 42",
+      title: "As Grandes Eras da Literatura Brasileira",
       content: {
-        templateID: 42,
-        templateContent: {},
+        templateID: 25,
+        templateContent: {
+          title: "As Grandes Eras da Literatura Brasileira",
+          topics: [
+            {
+              title: "Era Colonial (1500-1808)",
+              subtopics: [
+                "Início da colonização e formação cultural.",
+                "Literatura de registro, catequese e adaptação.",
+              ],
+            },
+            {
+              title: "Era Nacional (a partir de 1836)",
+              subtopics: [
+                "Busca por identidade e autonomia literária.",
+                "Diversidade de estilos e temáticas nacionais.",
+              ],
+            },
+          ],
+        },
       },
     },
     {
       type: "content",
-      title: "Slide 43",
-      content: {
-        templateID: 43,
-        templateContent: {},
-      },
-    },
-    {
-      type: "content",
-      title: "Slide 44",
-      content: {
-        templateID: 44,
-        templateContent: {},
-      },
-    },
-    {
-      type: "content",
-      title: "Slide 45",
-      content: {
-        templateID: 45,
-        templateContent: {},
-      },
-    },
-    {
-      type: "content",
-      title: "Slide 46",
+      title: "Era Colonial: Primeiras Vozes do Brasil",
       content: {
         templateID: 46,
-        templateContent: {},
+        templateContent: {
+          title: "Era Colonial: Primeiras Vozes do Brasil",
+          items: [
+            {
+              title: "Quinhentismo (1500-1601)",
+              characteristics: [
+                "Literatura de informação e catequese.",
+                "Registro da terra e do nativo.",
+                "Autores: Pero Vaz de Caminha, Pe. José de Anchieta.",
+              ],
+            },
+            {
+              title: "Barroco (1601-1768)",
+              characteristics: [
+                "Dualismo, contraste e rebuscamento.",
+                "Conceptismo (jogo de ideias) e Cultismo (jogo de palavras).",
+                "Autores: Gregório de Matos, Pe. Antônio Vieira.",
+              ],
+            },
+            {
+              title: "Arcadismo (1768-1808)",
+              characteristics: [
+                "Simplicidade, bucolismo (fugere urbem).",
+                "Carpe Diem (aproveitar o dia), Inutilia Truncat (cortar o inútil).",
+                "Autores: Cláudio Manuel da Costa, Tomás Antônio Gonzaga.",
+              ],
+            },
+          ],
+        },
       },
     },
     {
       type: "content",
-      title: "Slide 47",
+      title: "Romantismo: A Busca pela Identidade Nacional",
       content: {
-        templateID: 47,
-        templateContent: {},
+        templateID: 40,
+        templateContent: {
+          title: "Romantismo: A Busca pela Identidade Nacional",
+          topic: {
+            title: "Romantismo Brasileiro (1836-1881)",
+            content:
+              "Movimento que marcou a busca por uma identidade literária própria após a Independência, valorizando o subjetivismo, o sentimentalismo e o nacionalismo como pilares da expressão artística.",
+            details: [
+              "**Contexto:** Independência do Brasil, formação da nação e busca por símbolos.",
+              "**Características Gerais:** Subjetivismo, sentimentalismo, idealização do amor e da natureza, nacionalismo.",
+              "**Primeira Geração (Nacionalista/Indianista):** Exaltação da natureza brasileira e do índio como herói nacional.",
+              "**Autores e Obras:** Gonçalves Dias (Canção do Exílio, I-Juca-Pirama), José de Alencar (O Guarani, Iracema).",
+            ],
+          },
+        },
       },
     },
     {
       type: "content",
-      title: "Slide 48",
+      title: "Romantismo: Duas Faces da Expressão",
       content: {
-        templateID: 48,
-        templateContent: {},
+        templateID: 42,
+        templateContent: {
+          title: "Romantismo: Duas Faces da Expressão",
+          topics: [
+            {
+              title: "Segunda Geração (Ultrarromântica/Mal do Século)",
+              content:
+                "Marcada pelo egocentrismo, pessimismo, tédio, idealização da morte e do amor inatingível. Uma visão melancólica e angustiada da existência. Autores: Álvares de Azevedo (Lira dos Vinte Anos, Noite na Taverna), Casimiro de Abreu.",
+            },
+            {
+              title: "Terceira Geração (Condoreira/Social)",
+              content:
+                "Caracterizada pelo engajamento social e político, com temas como abolicionismo e republicanismo. Poesia grandiosa, oratória e de denúncia social. Autor: Castro Alves (O Navio Negreiro, Os Escravos).",
+            },
+          ],
+        },
       },
     },
     {
       type: "content",
-      title: "Slide 49",
+      title: "O Fim do Século XIX: Razão, Ciência e Forma",
       content: {
-        templateID: 49,
-        templateContent: {},
+        templateID: 46,
+        templateContent: {
+          title: "O Fim do Século XIX: Razão, Ciência e Forma",
+          items: [
+            {
+              title: "Realismo (1881-1893)",
+              characteristics: [
+                "Objetividade, crítica social e análise psicológica.",
+                "Anti-romantismo, linguagem direta e concisa.",
+                "Autor: Machado de Assis (Memórias Póstumas de Brás Cubas, Dom Casmurro).",
+              ],
+            },
+            {
+              title: "Naturalismo (1881-1893)",
+              characteristics: [
+                "Determinismo (meio, raça, momento) e zoomorfismo.",
+                "Foco em patologias sociais e descrições detalhadas.",
+                "Autor: Aluísio Azevedo (O Mulato, O Cortiço).",
+              ],
+            },
+            {
+              title: "Parnasianismo (1881-1893)",
+              characteristics: [
+                '"Arte pela arte", culto à forma e à perfeição.',
+                "Objetividade, descritivismo, vocabulário rebuscado, preferência por sonetos.",
+                "Autores: Olavo Bilac, Alberto de Oliveira, Raimundo Correia (Tríade Parnasiana).",
+              ],
+            },
+          ],
+        },
       },
     },
     {
       type: "content",
-      title: "Slide 50",
+      title: "Entre o Misticismo e a Realidade Social",
       content: {
-        templateID: 50,
-        templateContent: {},
+        templateID: 42,
+        templateContent: {
+          title: "Entre o Misticismo e a Realidade Social",
+          topics: [
+            {
+              title: "Simbolismo (1893-1922)",
+              content:
+                "Reação ao materialismo e cientificismo, valorizando o subjetivismo, misticismo, espiritualidade e a musicalidade da linguagem. Uso de sinestesia, aliteração e sugestão. Autores: Cruz e Sousa (Missal, Broquéis), Alphonsus de Guimarães.",
+            },
+            {
+              title: "Pré-Modernismo (1902-1922)",
+              content:
+                "Período de transição que denunciava problemas sociais e regionais do Brasil. Ruptura com o academicismo, linguagem mais simples e personagens marginalizadas. Autores: Euclides da Cunha (Os Sertões), Lima Barreto (Triste Fim de Policarpo Quaresma), Monteiro Lobato (Urupês).",
+            },
+          ],
+        },
       },
     },
     {
       type: "content",
-      title: "Slide 51",
+      title: "Modernismo: A Revolução da Arte Brasileira",
       content: {
-        templateID: 51,
-        templateContent: {},
+        templateID: 46,
+        templateContent: {
+          title: "Modernismo: A Revolução da Arte Brasileira",
+          items: [
+            {
+              title: "Primeira Fase (1922-1930)",
+              characteristics: [
+                "Fase Heroica: Ruptura radical com o passado.",
+                "Nacionalismo crítico, humor, ironia e liberdade formal.",
+                "Autores: Oswald de Andrade (Manifesto Antropofágico), Mário de Andrade (Macunaíma).",
+              ],
+            },
+            {
+              title: "Segunda Fase (1930-1945)",
+              characteristics: [
+                "Fase de Consolidação: Amadurecimento temático.",
+                "Temáticas sociais, psicológicas e regionalistas.",
+                "Autores: Carlos Drummond de Andrade, Graciliano Ramos (Vidas Secas), Rachel de Queiroz.",
+              ],
+            },
+            {
+              title: "Terceira Fase (1945-1960)",
+              characteristics: [
+                "Geração de 45: Retorno a formas mais tradicionais, rigor estético.",
+                "Experimentalismo linguístico, aprofundamento filosófico.",
+                "Autores: João Cabral de Melo Neto, Clarice Lispector (A Hora da Estrela), Guimarães Rosa (Grande Sertão: Veredas).",
+              ],
+            },
+          ],
+        },
       },
     },
     {
       type: "content",
-      title: "Slide 52",
+      title: "Pós-Modernismo e o Legado Literário",
       content: {
-        templateID: 52,
-        templateContent: {},
+        templateID: 1,
+        templateContent: {
+          title: "Pós-Modernismo e o Legado Literário",
+          content:
+            "A partir dos anos 1960/70, o Pós-Modernismo reflete a pluralidade e a complexidade do mundo contemporâneo, com diversidade de estilos, intertextualidade e experimentalismo. A literatura brasileira continua a evoluir, dialogando com o passado e abrindo novos caminhos para a expressão artística. Compreender esses movimentos é essencial para valorizar a riqueza e a profundidade de nossa cultura e identidade.",
+        },
       },
     },
     {
-      type: "content",
-      title: "Slide 53",
+      type: "conclusion",
+      title: "Fim...",
       content: {
-        templateID: 53,
-        templateContent: {},
-      },
-    },
-    {
-      type: "content",
-      title: "Slide 54",
-      content: {
-        templateID: 54,
-        templateContent: {},
+        templateID: 1,
+        templateContent: {
+          title: "Fim...",
+          content: "Até a próxima aula!",
+        },
       },
     },
   ]);
@@ -198,23 +348,6 @@ export const SlideGenerationProvider: React.FC<{
           } else {
             setSlides((prev) => [...prev, chunk.content]);
           }
-        }
-
-        if (chunk.type == "question") {
-          // It is necessary to add +2 because the question numbering does not count the introduction, agenda, and conclusion slides.
-          const slideIndex =
-            (chunk.content.slide_number ?? slides.length) - 1 + 2;
-          setSlides((prevSlides) => {
-            if (slideIndex < 0 || slideIndex >= prevSlides.length)
-              return prevSlides;
-
-            const updatedSlides = [...prevSlides];
-            updatedSlides[slideIndex] = {
-              ...updatedSlides[slideIndex],
-              question: chunk.content,
-            };
-            return updatedSlides;
-          });
         }
 
         if (!firstSlideReceived) {

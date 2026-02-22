@@ -12,7 +12,6 @@ import { useSlideGeneration } from "../contexts/SlideGenerationContext";
 import type { AddSlideModalInfo, NormalizedSlide } from "../types/global";
 import {
   normalizeSlidesFromApi,
-  addQuestionSlide,
   addGenericSlide,
 } from "../lib/utils";
 
@@ -289,8 +288,6 @@ const PresentationPage = () => {
                     title="Adicionar slide"
                     onClick={() => {
                       setAddSlideModalInfo({
-                        image: slide.image ?? null,
-                        question: slide.question ?? null,
                         insertAfterIndex: presentationSlides.findIndex(
                           (s) => s.id === slide.id,
                         ),
@@ -355,24 +352,14 @@ const PresentationPage = () => {
           const insertAfter = addSlideModalInfo?.insertAfterIndex ?? null;
           if (insertAfter == null) return;
 
-          if (templateId === 54) {
-            const question = addSlideModalInfo?.question;
-            if (question) {
-              setLocalSlides(
-                addQuestionSlide(presentationSlides, question, insertAfter),
-              );
-            }
-          } else {
-            setLocalSlides(
-              addGenericSlide(presentationSlides, templateId, insertAfter),
-            );
-          }
+          setLocalSlides(
+            addGenericSlide(presentationSlides, templateId, insertAfter),
+          );
           handleAddSlide(templateId, insertAfter);
 
           setShowAddSlideModal(false);
           setAddSlideModalInfo(null);
         }}
-        slide={addSlideModalInfo}
       />
 
       <div

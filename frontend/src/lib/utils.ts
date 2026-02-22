@@ -1,6 +1,4 @@
-import type { Slide, OptionalQuestion, NormalizedSlide } from "../types/global";
-
-const QUESTION_SLIDE_TEMPLATE = 54
+import type { Slide, NormalizedSlide } from "../types/global";
 
 export function normalizeSlidesFromApi(slides: Slide[]): NormalizedSlide[] {
   return slides.map((slide, index) => {
@@ -16,40 +14,8 @@ export function normalizeSlidesFromApi(slides: Slide[]): NormalizedSlide[] {
     return {
       id: index,
       canvas: { templateID, generationTemplate },
-      image: slide.image ?? null,
-      question: slide.question ?? null,
     };
   });
-}
-
-export function addQuestionSlide(
-  slides: NormalizedSlide[],
-  question: OptionalQuestion,
-  insertAfterIndex: number,
-): NormalizedSlide[] {
-  const nextSlides = slides.map((slide, i) => {
-    if (i === insertAfterIndex) {
-      return { ...slide, question: null };
-    }
-    return slide;
-  });
-
-  const newSlide: NormalizedSlide = {
-    id: insertAfterIndex + 1,
-    canvas: {
-      templateID: QUESTION_SLIDE_TEMPLATE,
-      generationTemplate: {
-        statement: question.statement,
-        options: question.options,
-        correct_answer: question.correct_answer,
-      },
-    },
-    image: null,
-    question: null,
-  };
-
-  nextSlides.splice(insertAfterIndex + 1, 0, newSlide);
-  return nextSlides.map((slide, index) => ({ ...slide, id: index }));
 }
 
 export function addGenericSlide(
@@ -63,8 +29,6 @@ export function addGenericSlide(
       templateID,
       generationTemplate: {},
     },
-    image: null,
-    question: null,
   };
 
   const nextSlides = [...slides];

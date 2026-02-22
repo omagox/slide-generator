@@ -5,7 +5,6 @@ import componentsMap from "../templates/templatesMap";
 const AddSlideModal = ({
   isOpen,
   onClose,
-  slide,
   onAddSlide,
 }: AddSlideModalProps) => {
   const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(
@@ -14,15 +13,7 @@ const AddSlideModal = ({
 
   if (!isOpen) return null;
 
-  const hasQuestion = slide?.question != null;
-
   const templates = Object.keys(componentsMap)
-    .filter((key) => {
-      if (key === "Template54") {
-        return hasQuestion;
-      }
-      return true;
-    })
     .sort((a, b) => {
       const idA = parseInt(a.replace("Template", ""));
       const idB = parseInt(b.replace("Template", ""));
@@ -65,14 +56,6 @@ const AddSlideModal = ({
               const Component = componentsMap[key];
               const isSelected = selectedTemplateId === id;
 
-              const previewProps =
-                id === 54 && hasQuestion
-                  ? {
-                      statement: slide?.question?.statement,
-                      options: slide?.question?.options,
-                    }
-                  : {};
-
               return (
                 <div
                   key={key}
@@ -94,7 +77,7 @@ const AddSlideModal = ({
                     >
                       <div className="w-full h-full flex items-center justify-center p-8">
                         <div className="w-full max-w-5xl aspect-video bg-white shadow-sm flex items-center justify-center">
-                           <Component {...previewProps} />
+                           <Component />
                         </div>
                       </div>
                     </div>

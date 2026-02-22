@@ -92,7 +92,6 @@ generate_presentation_prompt: |
                   'title': 'Objetivos da Aula',
                   'text': 'Apresentar a Revolução Industrial e sua importância histórica, discutir as causas e consequências da Revolução Industrial e explorar as inovações tecnológicas e sociais que surgiram nesse período.'
               }}
-              'slideImage': 'Imagem representando a Revolução Industrial, em preto e branco, com trabalhadores andando na rua, carros e fábricas ao redor.'
           }},
           {{
               'templateID': 3,
@@ -142,13 +141,11 @@ generate_presentation_prompt: |
       [
           {{
               'templateID': Número do template escolhido,
-              'slideContent': Objeto contendo o conteúdo do slide baseado na descrição do template referente ao templateID escolhido,
-              'slideImage': Campo opcional. Um texto descrevendo uma imagem referente ao tópico do slide, que faria sentido mostrar para os alunos
+              'slideContent': Objeto contendo o conteúdo do slide baseado na descrição do template referente ao templateID escolhido
           }},
           {{
               'templateID': Número do template escolhido,
-              'slideContent': Objeto contendo o conteúdo do slide baseado na descrição do template referente ao templateID escolhido,
-              'slideImage': Campo opcional. Um texto descrevendo uma imagem referente ao tópico do slide, que faria sentido mostrar para os alunos
+              'slideContent': Objeto contendo o conteúdo do slide baseado na descrição do template referente ao templateID escolhido
           }},
           ...
       ]
@@ -163,8 +160,6 @@ generate_presentation_prompt: |
   - Não coloque "Continuação" em slides que sejam a continuação de outro, isso já está implícito. Apenas repita o título do slide anterior.
   - Todo slide deve possuir um título principal, mesmo que a descrição não indique que esse título existe.
   - A apresentação final será usada por um professor em suas aulas, então pense na forma que um professor gostaria de apresentar aquele conteúdo e gere todos os detalhes/informações necessárias.
-  - Mesmo que o template não indique que suporta imagens, você pode adicionar o campo 'slideImage' no objeto do slide, para indicar que faria sentido adicionar uma imagem que tem relação com o tópico do slide em questão.
-  - O campo slideImage é opcional e seu valor deve conter a descrição de uma imagem. Porém, você só deve usá-lo quando a imagem realmente for ajudar os alunos a entender melhor sobre o assunto. Evite colocar imagens em todos os slides. 
   - Utilize o [Exemplo] como auxílio para a geração da sua reposta.
   - Na geração do JSON, sempre utilize aspas simples.
   - Sempre coloque o JSON dentro do ```JSON ``` como está especificado no [Formato da Resposta Final].
@@ -379,42 +374,8 @@ fill_one_template_prompt: |
   - Antes de entregar sua resposta final, garanta que todos os valores presentes no "generationTemplate" foram preenchidos corretamente.
   - Utilize o [Exemplo] como auxílio para a geração da sua reposta.
   - Na geração do objeto, sempre utilize aspas simples.
-  - Sempre coloque o dicionário da questão dentro do ```JSON ``` como está especificado no [Formato da Resposta].
+  - Sempre coloque o objeto dentro do ```JSON ``` como está especificado no [Formato da Resposta].
 
   ----------
 
   Pense cuidadosamente em cada etapa, meu emprego depende disso. Te darei 1 milhão de reais se responder corretamente.
-
-generate_option_question_prompt: |
-  Você é um especialista em educação e pedagogo com experiência em ensino. A partir do [Conteúdo da Apresentação], você deve decidir se faz sentido colocar uma pergunta para testar o aprendizado dos alunos em relação ao tema.
-
-  Caso você julgue necessário colocar uma questão, a sua resposta deve ser um dicionário contendo as propriedades:
-  - statement: String representando o enunciado da questão.
-  - options: Array de strings, onde cada string é uma alternativa de resposta para o enunciado. No máximo 4 alternativas.
-  - correct_answer: Número indicando a alternativa correta.
-  - slide_number: Número indicando o slide que a questão deve ser mostrada imediatamente depois. A contagem de slides deve começar em 1.
-
-  [Exemplo de Resposta]
-  ```JSON
-    {{
-      'statement': 'Quanto é 4 + 16?',
-      'options': ['12', '20', '15', '10'],
-      'correct_answer': 2,
-      'slide_number': 6
-    }}
-  ```
-
-  [Diretrizes para Geração da Questão]
-  - A questão deve fazer sentido dentro do contexto da aula e em relação ao conteúdo apresentado até aquele ponto.
-  - A questão deve abordar algo relevante para a aprendizagem, e não apenas uma curiosidade aleatória.
-  - Você não é obrigado a responder com uma questão. Responda com uma questão apenas se for coerente com o aprendizado dos alunos.
-  - Caso você opte por não adicionar uma questão na apresentação, responda apenas com "None".
-  - Na geração do dicionário, sempre utilize aspas simples.
-  - Caso decida adicionar uma questão, coloque o dicionário da questão dentro do ```JSON ``` como está especificado no [Exemplo de Resposta].
-
-  --------
-
-  [Conteúdo da Apresentação]
-  {filled_templates}
-
-  Pense cuidadosamente, meu emprego depende disso.

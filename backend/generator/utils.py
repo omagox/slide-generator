@@ -153,14 +153,6 @@ def get_templates_generation_content(templates_chunk: list[dict], start_slide_in
     generation_content = "\n".join(generation_content_string_array)
     return "[\n" +  generation_content + "\n]"
 
-def get_templates_generation_image(templates_chunk: list[dict]) -> list[str | None]:
-    generation_images_array = []
-
-    for template in templates_chunk:
-        generation_images_array.append(template.get("slideImage", None))
-
-    return generation_images_array
-
 def get_filled_templates_titles(filled_templates: list[dict]) -> list[str]:
     titles = []
     
@@ -221,12 +213,6 @@ def get_template_generation_content(template: dict) -> dict:
 
     return template_generation_content
 
-def streaming_optional_question_event(data: dict) -> str:
-    if hasattr(data, "model_dump"):
-        data = data.model_dump()
-
-    return f"|OPTIONAL_QUESTION: {json.dumps(data, ensure_ascii=False)}|\n"
-
 def streaming_new_slide_event(data: dict) -> str:
     if hasattr(data, "model_dump"):
         data = data.model_dump()
@@ -242,9 +228,7 @@ def stream_introduction_slide(class_topic):
         content={
             "templateID": introduction_slide["templateID"],
             "templateContent": introduction_slide["generationTemplate"]
-        },
-        image=None,
-        question=None
+        }
     )
     
     yield streaming_new_slide_event(introduction_slide_payload)
@@ -258,9 +242,7 @@ def stream_agenda_slide(agenda_topics):
         content={
             "templateID": agenda_slide["templateID"],
             "templateContent": agenda_slide["generationTemplate"]
-        },
-        image=None,
-        question=None
+        }
     )
     
     yield streaming_new_slide_event(agenda_slide_payload)
@@ -274,9 +256,7 @@ def stream_conclusion_slide():
         content={
             "templateID": conslusion_slide["templateID"],
             "templateContent": conslusion_slide["generationTemplate"]
-        },
-        image=None,
-        question=None
+        }
     )
     
     yield streaming_new_slide_event(conslusion_slide_payload)

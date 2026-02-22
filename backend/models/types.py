@@ -34,5 +34,3 @@ class Slide(BaseModel):
     type: SlideTypeEnum
     title: str = Field(..., min_length=1, description="Slide title")
     content: SlideContent
-    image: Optional[str] = Field(None, description="Search query for an image that fits the slide content")
-    question: Optional[OptionalQuestion] = None
