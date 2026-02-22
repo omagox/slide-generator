@@ -31,7 +31,7 @@ export default function Template41(props: EditableProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(title);
   const [draftSteps, setDraftSteps] = useState(
-    steps.map((step) => ({ ...defaultStepItem, ...step }))
+    steps.map((step) => ({ ...defaultStepItem, ...step })),
   );
 
   const handleSave = () => {
@@ -50,7 +50,11 @@ export default function Template41(props: EditableProps) {
     setDraftSteps(draftSteps.filter((_, i) => i !== index));
   };
 
-  const updateStep = (index: number, field: keyof typeof defaultStepItem, value: string) => {
+  const updateStep = (
+    index: number,
+    field: keyof typeof defaultStepItem,
+    value: string,
+  ) => {
     const newSteps = [...draftSteps];
     newSteps[index] = { ...newSteps[index], [field]: value };
     setDraftSteps(newSteps);
@@ -81,6 +85,16 @@ export default function Template41(props: EditableProps) {
         </h1>
       )}
 
+      {isEditing && draftSteps.length < 3 && (
+        <button
+          onClick={addStep}
+          className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600 transition-colors cursor-pointer"
+        >
+          <MdAddBox />
+          Adicionar novo item
+        </button>
+      )}
+
       <div className="grid grid-cols-3 gap-6 w-full">
         {draftSteps.slice(0, 3).map((step, index) => {
           const color = colors[index % colors.length];
@@ -102,13 +116,17 @@ export default function Template41(props: EditableProps) {
                   />
                   <textarea
                     value={step.content}
-                    onChange={(e) => updateStep(index, "content", e.target.value)}
+                    onChange={(e) =>
+                      updateStep(index, "content", e.target.value)
+                    }
                     className="w-full text-gray-600 text-sm text-center outline-none border border-transparent hover:border-gray-300 cursor-text bg-transparent resize-none"
                     rows={2}
                   />
                   <input
                     value={step.additional}
-                    onChange={(e) => updateStep(index, "additional", e.target.value)}
+                    onChange={(e) =>
+                      updateStep(index, "additional", e.target.value)
+                    }
                     placeholder="Adicional..."
                     className="w-full text-gray-500 text-xs mt-2 italic text-center outline-none border border-transparent hover:border-gray-300 cursor-text bg-transparent"
                   />
@@ -140,15 +158,6 @@ export default function Template41(props: EditableProps) {
             </div>
           );
         })}
-        {isEditing && draftSteps.length < 3 && (
-          <button
-            onClick={addStep}
-            className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg text-gray-400 hover:border-blue-500 hover:text-blue-500 transition-colors cursor-pointer"
-          >
-            <MdAddBox size={32} />
-            <span className="mt-2 font-semibold">Adicionar novo item</span>
-          </button>
-        )}
       </div>
     </div>
   );

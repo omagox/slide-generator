@@ -11,7 +11,7 @@ const defaultStepItem = {
 
 const defaultProcessProps: ProcessProps = {
   title: "Título padrão",
-  steps: [defaultStepItem, defaultStepItem, defaultStepItem, defaultStepItem],
+  steps: [defaultStepItem, defaultStepItem, defaultStepItem],
   preview: false,
 };
 
@@ -30,7 +30,7 @@ export default function Template43(props: EditableProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(title);
   const [draftSteps, setDraftSteps] = useState(
-    steps.map((step) => ({ ...defaultStepItem, ...step }))
+    steps.map((step) => ({ ...defaultStepItem, ...step })),
   );
 
   const handleSave = () => {
@@ -49,7 +49,11 @@ export default function Template43(props: EditableProps) {
     setDraftSteps(draftSteps.filter((_, i) => i !== index));
   };
 
-  const updateStep = (index: number, field: keyof typeof defaultStepItem, value: string) => {
+  const updateStep = (
+    index: number,
+    field: keyof typeof defaultStepItem,
+    value: string,
+  ) => {
     const newSteps = [...draftSteps];
     newSteps[index] = { ...newSteps[index], [field]: value };
     setDraftSteps(newSteps);
@@ -80,12 +84,25 @@ export default function Template43(props: EditableProps) {
         </h1>
       )}
 
+      {isEditing && draftSteps.length < 3 && (
+        <button
+          onClick={addStep}
+          className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600 transition-colors cursor-pointer"
+        >
+          <MdAddBox />
+          Adicionar novo item
+        </button>
+      )}
+
       <div className="flex justify-center">
         <div className="space-y-6 max-w-2xl w-full">
           {draftSteps.slice(0, 4).map((step, index) => {
             const color = colors[index % colors.length];
             return (
-              <div key={index} className="flex items-center space-x-6 relative group">
+              <div
+                key={index}
+                className="flex items-center space-x-6 relative group"
+              >
                 <div
                   className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0"
                   style={{ backgroundColor: color }}
@@ -97,13 +114,17 @@ export default function Template43(props: EditableProps) {
                     <>
                       <input
                         value={step.title}
-                        onChange={(e) => updateStep(index, "title", e.target.value)}
+                        onChange={(e) =>
+                          updateStep(index, "title", e.target.value)
+                        }
                         className="w-full text-lg font-semibold mb-2 outline-none border border-transparent hover:border-gray-300 cursor-text bg-transparent"
                         style={{ color: color }}
                       />
                       <textarea
                         value={step.content}
-                        onChange={(e) => updateStep(index, "content", e.target.value)}
+                        onChange={(e) =>
+                          updateStep(index, "content", e.target.value)
+                        }
                         className="w-full text-gray-600 outline-none border border-transparent hover:border-gray-300 cursor-text bg-transparent resize-none"
                         rows={1}
                       />
@@ -131,15 +152,6 @@ export default function Template43(props: EditableProps) {
               </div>
             );
           })}
-          {isEditing && draftSteps.length < 3 && (
-            <button
-              onClick={addStep}
-              className="w-full flex items-center justify-center py-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-400 hover:border-blue-500 hover:text-blue-500 transition-colors cursor-pointer gap-2"
-            >
-              <MdAddBox />
-              <span className="font-semibold">Adicionar novo item</span>
-            </button>
-          )}
         </div>
       </div>
     </div>

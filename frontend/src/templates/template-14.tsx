@@ -96,7 +96,7 @@ export default function Template14(props: EditableMixedContentProps) {
           <div className="flex items-center gap-2">
             <div
               key={index}
-              className="h-16 flex items-center justify-center rounded text-white font-semibold overflow-hidden group relative"
+              className="h-13 flex items-center justify-center rounded text-white font-semibold overflow-hidden group relative"
               style={{
                 backgroundColor: colors[index % colors.length],
                 width: `${8 + (index % 6) * 4}rem`,
@@ -133,7 +133,7 @@ export default function Template14(props: EditableMixedContentProps) {
                 value={draftContent}
                 onChange={(e) => setDraftContent(e.target.value)}
                 className="w-full text-gray-600 text-center bg-transparent outline-none border border-transparent hover:border-gray-300 cursor-text resize-none"
-                rows={3}
+                rows={2}
                 placeholder="Texto complementar..."
               />
             ) : (

@@ -94,7 +94,7 @@ export default function Template22(props: EditableDetailedTopicsProps) {
         {draftTopics.map((topic, index) => (
           <div
             key={index}
-            className="bg-gray-50 p-6 rounded-lg border-t-4 group relative"
+            className="bg-gray-50 p-4 rounded-lg border-t-4 group relative"
             style={{ borderTopColor: colors[index % colors.length] }}
           >
             {isEditing && draftTopics.length > 1 && (

@@ -76,7 +76,7 @@ export default function Template19(props: EditableProcessProps) {
         onSave={handleSave}
       />
 
-      {isEditing && draftSteps.length < 6 && (
+      {isEditing && draftSteps.length < 5 && (
         <button
           onClick={addStep}
           className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600 transition-colors cursor-pointer z-10"

@@ -80,6 +80,16 @@ export default function Template37(props: EditableProps) {
           {draftTitle}
         </h1>
       )}
+      
+      {isEditing && draftTopics.length < 3 && (
+        <button
+          onClick={addTopic}
+          className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600 transition-colors cursor-pointer"
+        >
+          <MdAddBox />
+          Adicionar novo item
+        </button>
+      )}
 
       <div className="space-y-3">
         {draftTopics.slice(0, 4).map((topic, index) => (
@@ -136,15 +146,6 @@ export default function Template37(props: EditableProps) {
             </div>
           </div>
         ))}
-        {isEditing && draftTopics.length < 3 && (
-          <button
-            onClick={addTopic}
-            className="w-full flex items-center justify-center py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-400 hover:border-blue-500 hover:text-blue-500 transition-colors cursor-pointer gap-2"
-          >
-            <MdAddBox />
-            <span className="text-sm font-semibold">Adicionar novo item</span>
-          </button>
-        )}
       </div>
     </div>
   );

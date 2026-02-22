@@ -136,7 +136,7 @@ export default function Template35(props: EditableProps) {
                     className="w-full text-gray-600 text-xs text-center outline-none border border-transparent hover:border-gray-300 cursor-text bg-transparent resize-none"
                     rows={2}
                   />
-                  {draftSteps.length > 1 && (
+                  {draftSteps.length > 2 && (
                     <button
                       onClick={() => removeStep(index)}
                       className="absolute -top-2 -right-2 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer bg-white rounded-full shadow-sm p-0.5"

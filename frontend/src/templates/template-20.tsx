@@ -93,7 +93,7 @@ export default function Template20(props: EditableDetailedTopicsProps) {
       )}
 
       <div
-        className={`grid ${draftTopics.length > 3 ? "grid-cols-3 grid-rows-2" : "grid-cols-3"} gap-6 w-full`}
+        className={`grid ${draftTopics.length > 3 ? "grid-cols-3 grid-rows-2" : "grid-cols-3"} gap-2 w-full`}
       >
         {draftTopics.map((topic, index) => (
           <div key={index} className="text-center group relative">
