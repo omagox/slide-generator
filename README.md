@@ -106,9 +106,7 @@ Gera o deck de slides por meio de streaming, retornando slide por slide de forma
 | `n_slides` | int    | Número de slides de conteúdo (30)  |
 
 **Resposta:**
-A resposta é enviada como stream de texto, contendo blocos nos formatos:
-- `|OPTIONAL_QUESTION: {dicionário da questão}|` para retornar a questão opcional. (Tipo: `OptionalQuestion`)
-- `|NEW_SLIDE: {dicionário do slide}|` para retornar o conteúdo de um slide. (Tipo: `Slide`)
+A resposta é enviada como stream de texto, contendo blocos no formato `|NEW_SLIDE: {dicionário do slide}|`.
 
 ## Estrutura do projeto
 
@@ -140,12 +138,9 @@ slide-generator/
 1. **Criação do plano de aula**: Um plano de aula é criado de acordo com o tema, o nível de ensino e eventuais instruções recebidas na requisição. (`generate_lesson_plan`)
 2. **Planejamento da apresentação**: Com base nesse plano de aula, é estruturado um planejamento da apresentação: uma lista de objetos, onde cada objeto representa um slide e inclui o ID do template e o conteúdo principal do slide. (`generate_presentation_content`)
 3. **Adaptação aos templates**: O conteúdo desses slides inicialmente pode não estar perfeitamente no formato dos templates. Por isso, cada slide passa por uma etapa de adaptação para preencher corretamente todos os campos do template correspondente. (`generate_templates_content`)
-4. **Questão avaliativa opcional**: Com todos os templates devidamente preenchidos, a apresentação está praticamente pronta. Para finalizar, o conteúdo é analisado por uma LLM que avalia se faz sentido incluir uma questão avaliativa no decorrer da apresentação. Caso seja pertinente, a questão é gerada e inserida na apresentação no momento apropriado. (`generate_optional_question`)
 
 ## Possíveis Melhorias Futuras
 - Implementar um tratamento mais eficiente para a criação da agenda, especialmente em casos de slides extensos. Avaliar a possibilidade de utilizar uma chamada específica à LLM para divisão em tópicos mais concisos.
 - Implementar retries em caso de falhas na geração de slides.
 - Integrar com um banco de dados para armazenar os resultados das gerações.
-- Aperfeiçoar os templates para garantir uma estilização 100% consistente.
-- Disponibilizar funcionalidade para exportação de apresentação.
 - Ajustar os prompts para evitar o uso de markdown ou adaptar o frontend para interpretar corretamente delimitadores de formatação (por exemplo, **valor** para negrito).
