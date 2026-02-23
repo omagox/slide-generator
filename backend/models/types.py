@@ -8,6 +8,13 @@ class SlideTypeEnum(str, Enum):
     CONTENT = "content"
     CONCLUSION = "conclusion"
 
+class SlideContentInput(BaseModel):
+    templateID: int = Field(..., description="ID do template escolhido")
+    slideContent: dict[str, Any] = Field(..., description="Conteúdo do slide baseado no templateID")
+
+class PresentationContent(BaseModel):
+    slides: list[SlideContentInput] = Field(..., description="Lista de slides gerados a partir do plano de aula")
+
 class SlideContent(BaseModel):
     templateID: int = Field(..., description="ID of the chosen template for the slide")
     templateContent: dict[str, Any] = Field(..., description="Slide content in the format of the chosen template")

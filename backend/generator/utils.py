@@ -126,33 +126,6 @@ def get_templates_descriptions() -> str:
         
     return "\n".join(f"{slide['id']} - {slide['templateDescription']}" for slide in slides)
 
-def get_templates_generation_content(templates_chunk: list[dict], start_slide_index: int) -> str:
-    slidesTemplates = []
-    generation_content_array = []
-    file_path = os.path.join(os.path.dirname(__file__), 'templates', 'slidesTemplates.json')
-    
-    with open(file_path, 'r', encoding='utf-8') as file:
-        slidesTemplates = json.load(file)
-
-    slide_index = start_slide_index + 1
-    for template in templates_chunk:
-        template_generation_content = {
-            "templateID": template["templateID"],
-            "generationTemplate": {},
-            "slideContent": template["slideContent"]
-        }
-
-        template = next((item for item in slidesTemplates if item["id"] == template["templateID"]), None)
-
-        if template:
-            template_generation_content["generationTemplate"] = template['templateProps']
-            generation_content_array.append(template_generation_content)
-            slide_index += 1
-
-    generation_content_string_array = [str(item) for item in generation_content_array]
-    generation_content = "\n".join(generation_content_string_array)
-    return "[\n" +  generation_content + "\n]"
-
 def get_filled_templates_titles(filled_templates: list[dict]) -> list[str]:
     titles = []
     
@@ -192,26 +165,6 @@ def get_conclusion_slide() -> dict:
     }
 
 ### STREAMING AUXILIARY FUNCTIONS ###
-
-def get_template_generation_content(template: dict) -> dict:
-    slidesTemplates = []
-    file_path = os.path.join(os.path.dirname(__file__), 'templates', 'slidesTemplates.json')
-
-    template_generation_content = {
-        "templateID": template["templateID"],
-        "generationTemplate": {},
-        "slideContent": template["slideContent"]
-    }
-
-    with open(file_path, 'r', encoding='utf-8') as file:
-        slidesTemplates = json.load(file)
-
-    template = next((item for item in slidesTemplates if item["id"] == template["templateID"]), None)
-
-    if template:
-        template_generation_content["generationTemplate"] = template['templateProps']
-
-    return template_generation_content
 
 def streaming_new_slide_event(data: dict) -> str:
     if hasattr(data, "model_dump"):

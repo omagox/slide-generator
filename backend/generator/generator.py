@@ -1,24 +1,25 @@
 import json
+from time import sleep
 
 from pydantic import ValidationError
-from models.types import Slide, SlideTypeEnum
+from models.types import (
+    Slide, 
+    SlideTypeEnum, 
+    PresentationContent
+)
+from models.templates import TEMPLATE_MODELS
 
 from src.logger import logger
 
 from generator.config import (
     TAVILY_API_KEY,
     GENERATOR_AGENT_CONFIG_PATH,
-    FILL_TEMPLATES_CHUNK_SIZE,
     SLIDE_INDEX_TITLE,
     SLIDE_INDEX_AGENDA
 )
 from generator.utils import (
     read_yaml,
-    extract_object_array,
-    extract_dictionary,
     get_templates_descriptions,
-    get_template_generation_content,
-    get_templates_generation_content,
     get_filled_templates_titles,
     get_introduction_slide,
     get_agenda_slide,
@@ -41,7 +42,6 @@ class SlideGenerator:
 
         self.lesson_plan_prompt: str = self.agent_config["lesson_plan_prompt"]
         self.generate_presentation_prompt: str = self.agent_config["generate_presentation_prompt"]
-        self.fill_templates_prompt: str = self.agent_config["fill_templates_prompt"]
         self.fill_one_template_prompt: str = self.agent_config["fill_one_template_prompt"]
 
         self.llm = ChatGoogleGenerativeAI(
@@ -77,7 +77,7 @@ class SlideGenerator:
 
         return response.content
 
-    def generate_presentation_content(self, lesson_plan: str, class_topic: str, templates_description: str, number_of_slides: int) -> str:
+    def generate_presentation_content(self, lesson_plan: str, class_topic: str, templates_description: str, number_of_slides: int) -> list:
         logger.info("Generating the presentation content...")
         prompt = self.generate_presentation_prompt.format(
             class_topic=class_topic,
@@ -88,33 +88,38 @@ class SlideGenerator:
 
         messages = [
             SystemMessage(
-                content="Você é um especialista em criação de apresentações. A partir do plano de aula recebido, divida o conteúdo em slides para uma apresentação e gere um JSON."
+                content="Você é um especialista em criação de apresentações. A partir do plano de aula recebido, divida o conteúdo em slides para uma apresentação."
             ),
             HumanMessage(content=prompt),
         ]
 
-        response = self.llm.invoke(messages)
+        response = self.llm.with_structured_output(PresentationContent).invoke(messages)
 
-        return response.content
+        return [slide.model_dump() for slide in response.slides]
 
-    def generate_templates_content(self, slides_content: str, class_topic: str) -> str:
-        prompt = self.fill_templates_prompt.format(
-            class_topic=class_topic,
-            slides_content=slides_content
-        )
+    def generate_templates_content(self, slides_content: list[dict], class_topic: str) -> list[dict]:
+        filled_templates = []
+        
+        for slide in slides_content:
+            try:
+                filled = self.generate_one_template_content(slide, class_topic)
+                filled_templates.append(filled)
+            except Exception as e:
+                logger.error(f"Error generating template content for slide {slide.get('templateID')}: {e}")
+                continue
 
-        messages = [
-            SystemMessage(
-                content="Você é um especialista em criação de apresentações. Você deve preencher os valores do objeto com o conteúdo dos slides."
-            ),
-            HumanMessage(content=prompt),
-        ]
+        return filled_templates
 
-        response = self.llm.invoke(messages)
+    def generate_one_template_content(self, slide_info: dict, class_topic: str) -> dict:
+        template_id = slide_info.get("templateID")
+        slide_content = slide_info.get("slideContent", slide_info)
+        
+        TargetModel = TEMPLATE_MODELS.get(template_id)
 
-        return response.content
+        if not TargetModel:
+            logger.error(f"Model not found for template {template_id}")
+            raise ValueError(f"Model not found for template {template_id}")
 
-    def generate_one_template_content(self, slide_content: dict, class_topic: str) -> str:
         prompt = self.fill_one_template_prompt.format(
             class_topic=class_topic,
             slide_content=slide_content
@@ -122,33 +127,28 @@ class SlideGenerator:
 
         messages = [
             SystemMessage(
-                content="Você é um especialista em criação de apresentações. Você deve preencher os valores da propriedade 'generationTemplate' com as informações definidas da propriedade 'slideContent' do objeto."
+                content="Você é um especialista em criação de apresentações. Estruture o conteúdo recebido para o formato do template solicitado."
             ),
             HumanMessage(content=prompt),
         ]
 
-        response = self.llm.invoke(messages)
+        response = self.llm.with_structured_output(TargetModel).invoke(messages)
 
-        return response.content
+        return {
+            "templateID": template_id,
+            "generationTemplate": response.model_dump()
+        }
 
     def generate_presentation(self, lesson_plan: str, class_topic: str, number_of_slides: int) -> list[Slide]:
         templates_description = get_templates_descriptions()
-        presentation_content = self.generate_presentation_content(lesson_plan, class_topic, templates_description, number_of_slides)
-        presentation_content_array = extract_object_array(presentation_content)
+        presentation_content_array = self.generate_presentation_content(lesson_plan, class_topic, templates_description, number_of_slides)
 
-        filled_templates = []
-        for i in range(0, len(presentation_content_array), FILL_TEMPLATES_CHUNK_SIZE):
-            templates_array_chunk = presentation_content_array[i:i + FILL_TEMPLATES_CHUNK_SIZE]
-
-            templates_generation_content_chunk = get_templates_generation_content(templates_array_chunk, i)
-            
-            logger.info("Filling presentation templates %s to %s.", i, i + FILL_TEMPLATES_CHUNK_SIZE)
-            filled_templates_chunk = self.generate_templates_content(templates_generation_content_chunk, class_topic)
-            filled_templates_chunk_json = extract_object_array(filled_templates_chunk)
-
-            filled_templates.extend(filled_templates_chunk_json)
+        logger.info("Filling presentation templates...")
+        
+        filled_templates = self.generate_templates_content(presentation_content_array, class_topic)
         
         logger.info("Adding mandatory slides (introduction, agenda and conclusion) to presentation...")
+
         templates_titles = get_filled_templates_titles(filled_templates)
 
         introduction_slide = get_introduction_slide(class_topic, f"Apresentação sobre {class_topic}")
@@ -186,22 +186,14 @@ class SlideGenerator:
         yield from stream_introduction_slide(class_topic)
 
         templates_description = get_templates_descriptions()
-        presentation_content = self.generate_presentation_content(lesson_plan, class_topic, templates_description, number_of_slides)
-        presentation_content_array = extract_object_array(presentation_content)
+        presentation_content_array = self.generate_presentation_content(lesson_plan, class_topic, templates_description, number_of_slides)
         
         templates_titles = []
         filled_templates = []
         for idx, template in enumerate(presentation_content_array):
             logger.info("Filling presentation template %s.", idx + 1)
             
-            template_generation_content = get_template_generation_content(template)
-
-            filled_template = self.generate_one_template_content(template_generation_content, class_topic)
-            filled_template_dict = extract_dictionary(filled_template)
-
-            if filled_template_dict is None:
-                logger.error("Failed to extract dictionary for slide %s, skipping.", idx + 1)
-                continue
+            filled_template_dict = self.generate_one_template_content(template, class_topic)
 
             templates_titles.append(filled_template_dict["generationTemplate"]["title"])
             filled_templates.append(filled_template_dict)

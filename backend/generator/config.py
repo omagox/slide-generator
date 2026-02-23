@@ -6,7 +6,6 @@ GENERATOR_FOLDER = Path(__file__).resolve().parent
 load_dotenv(GENERATOR_FOLDER.parent / "credentials.env")
 
 GENERATOR_AGENT_CONFIG_PATH = GENERATOR_FOLDER / "agent_config.yaml"
-FILL_TEMPLATES_CHUNK_SIZE = 5
 SLIDE_INDEX_TITLE = 0
 SLIDE_INDEX_AGENDA = 1
 
